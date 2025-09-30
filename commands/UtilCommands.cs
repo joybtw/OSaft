@@ -1,4 +1,5 @@
 ﻿using System;
+using Sys = Cosmos.System;
 
 namespace OSaft.commands
 {
@@ -21,8 +22,22 @@ namespace OSaft.commands
 
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("Goodbye.");
+            Console.WriteLine("Shutdown in 5s. Goodbye!");
+            System.Threading.Thread.Sleep(5000);
             Cosmos.System.Power.Shutdown();
         }
     }
+
+
+    public class VersionCommand : Command
+    {
+        public VersionCommand(string name) : base(name) { }
+
+        internal override void Execute(string[] args)
+        {
+            Console.WriteLine("OSaft v0.1 - early alpha");
+        }
+    }
+
+
 }

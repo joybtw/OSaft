@@ -24,7 +24,7 @@ namespace OSaft.commands
                 commands.Add(command.name, command);
             } else
             {
-                Console.WriteLine("Fehler: Befehl " + command.name  + " nicht gefunden.");
+                Console.WriteLine("Befehl " + command.name  + " nicht gefunden");
             }
         }
 
@@ -36,8 +36,9 @@ namespace OSaft.commands
             }
             catch (KeyNotFoundException e)
             {
-                Console.WriteLine("404: Command not found (" + e.Message.ToString() + ")");
+                Console.WriteLine("Befehl nicht gefunden: (" + e.Message.ToString() + ")");
             }
         }
+
     }
 }

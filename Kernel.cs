@@ -12,21 +12,25 @@ namespace CosmosKernel1
         protected override void BeforeRun()
         {
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
-            Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            Console.WriteLine("OSaft - OperatingSystem - All For Techies");
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine("OSaft booted correctly");
+            long availableSpace = fs.GetAvailableFreeSpace(@"0:\");
+            Console.WriteLine("Available Space: " + availableSpace);
             Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
+            Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
         }
 
         protected override void Run()
         {
-            // Input Handling // Lucas Test commit
+            // Input Handling
             Console.Write("Input: ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input, input.Split(" "));
 
-            // Get Available Space
-            long availableSpace = fs.GetAvailableFreeSpace(@"0:\");
-            Console.WriteLine("Available Space: " + availableSpace);
+            
+            
 
         }
     }
