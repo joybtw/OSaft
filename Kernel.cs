@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Sys = Cosmos.System;
+using Commands = OSaft.commands;
 
 namespace CosmosKernel1
 {
@@ -12,6 +13,8 @@ namespace CosmosKernel1
         {
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
             Console.WriteLine("Cosmos booted successfully. Type a line of text to get it echoed back.");
+            Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
         }
 
         protected override void Run()
@@ -19,14 +22,7 @@ namespace CosmosKernel1
             // Input Handling
             Console.Write("Input: ");
             String input = Console.ReadLine();
-
-            switch (input)
-            {
-                case "shutdown":
-                    Cosmos.System.Power.Shutdown();
-                    break;
-            }
-
+            Commands.CommandHelper.ExecuteCommand(input, input.Split(" "));
 
             // Get Available Space
             long availableSpace = fs.GetAvailableFreeSpace(@"0:\");
