@@ -1,0 +1,5 @@
+﻿blank_issues_enabled: true
+contact_links:
+  - name: ⭐ Feature Request melden
+    url: https://github.com/<org>/<repo>/issues/new?template=feature_request.yml
+    about: Für Feature Request bitte das Template nutzen

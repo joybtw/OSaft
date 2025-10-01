@@ -1,0 +1,201 @@
+﻿name: "✨ Feature Request"
+description: "Neues Feature vorschlagen oder bestehende Funktionalität erweitern"
+title: "[Feature] Kurzer, prägnanter Titel"
+labels:
+  - "type: feature"
+  - "status: triage"
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für deinen Vorschlag! Bitte fülle alle relevanten Felder aus,
+        damit wir Aufwand, Risiko und Auswirkungen gut einschätzen können.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Zusammenfassung
+      description: Kurze Beschreibung des gewünschten Features in 2–3 Sätzen.
+      placeholder: "Was soll hinzugefügt werden und warum?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Use-Case
+      description: Beschreibe das zugrunde liegende Problem bzw. den Anwendungsfall und wer betroffen ist.
+      placeholder: "Welche Aufgabe ist derzeit schwer/unmöglich? Wer leidet darunter?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Vorschlag / Lösungsidee
+      description: Skizziere, wie das Feature aussehen/arbeiten soll. Gern mit Pseudocode, API-Signaturen, UI-Mockups.
+      placeholder: |
+        - API/ABI (öffentliche Schnittstellen, Syscalls, Kernel/Driver-Interfaces)
+        - UX/CLI/GUI
+        - Konfig/Dateiformate
+        - Telemetrie/Logging
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativen
+      description: Welche Alternativen wurden erwogen? Warum wurden sie verworfen?
+      placeholder: "Alternative A, B … Vor- und Nachteile"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Umfang (Scope)
+      description: Markiere, was voraussichtlich betroffen ist.
+      options:
+        - label: Kernel (Scheduler, Memory, IPC, Syscalls)
+        - label: Treiber (Storage, Netz, Input/Output)
+        - label: Dateisystem
+        - label: Boot/Loader
+        - label: Userspace / Runtime / Libs
+        - label: Shell/CLI
+        - label: GUI/Window Manager
+        - label: Packaging/Build/Tooling
+        - label: Doku/Beispiele
+        - label: Tests/CI
+    validations:
+      required: false
+
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Out of Scope
+      description: Was gehört **bewusst nicht** zu diesem Feature?
+      placeholder: "Klar abgrenzen, damit der Umfang stabil bleibt."
+    validations:
+      required: false
+
+  - type: textarea
+    id: compat
+    attributes:
+      label: Kompatibilität (ABI/API, Backwards)
+      description: Bricht die Änderung bestehende Schnittstellen? Migrationspfad?
+      placeholder: "Breaking Changes? Deprecation-Plan? Feature Flags?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: security
+    attributes:
+      label: Sicherheit & Privatsphäre
+      description: Mögliche Angriffsflächen, Berechtigungen, Sandbox/Isolation, Datenflüsse.
+      placeholder: "Threat-Model, Rechte, Capabilities, sichere Defaults"
+    validations:
+      required: false
+
+  - type: textarea
+    id: performance
+    attributes:
+      label: Performance & Ressourcen
+      description: Erwartete Auswirkungen auf CPU, RAM, IO, Bootzeit; Messplan.
+      placeholder: "Budget/SLAs, Benchmarks, Messmethoden"
+    validations:
+      required: false
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risiken & Edge-Cases
+      description: Was könnte schiefgehen? Wie mitigieren?
+      placeholder: "Deadlocks, Race Conditions, Datenkorruption, Recovery-Strategien"
+    validations:
+      required: false
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Abhängigkeiten
+      description: Interne/Externe Abhängigkeiten, Versionen, Zielplattformen.
+      placeholder: "Module, 3rd-Party, Hardware-Anforderungen"
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Akzeptanzkriterien (Given/When/Then)
+      description: Prüfkriterien, wann das Feature als „fertig“ gilt.
+      placeholder: |
+        - Given …
+        - When …
+        - Then …
+    validations:
+      required: true
+
+  - type: textarea
+    id: testplan
+    attributes:
+      label: Testplan
+      description: Unit-/Kernel-Tests, Integration, Fuzzing, Kompat-Tests; CI-Checkliste.
+      placeholder: "Welche Tests decken welche Szenarien ab?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Metriken & Telemetrie
+      description: Welche Metriken/Logs helfen beim Betrieb und bei Regressionen?
+      placeholder: "Counters, Traces, Events (und wie deaktivierbar?)"
+    validations:
+      required: false
+
+  - type: textarea
+    id: rollout
+    attributes:
+      label: Rollout / Migration
+      description: Phasen, Feature-Flags, Default-Änderungen, Downgrade-Strategie.
+      placeholder: "Canary, Staged Rollout, Fallback"
+    validations:
+      required: false
+
+  - type: input
+    id: related
+    attributes:
+      label: Verwandte Issues/PRs
+      description: Referenzen mit #123 oder Links.
+      placeholder: "#42, #1337"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorität
+      options:
+        - P0 – Kritisch
+        - P1 – Hoch
+        - P2 – Mittel
+        - P3 – Niedrig
+      default: 2
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-Flight-Check
+      options:
+        - label: Duplikate gesucht (Issues/PRs)
+          required: true
+        - label: Minimaler, reproduzierbarer Use-Case beschrieben
+          required: true
+        - label: Akzeptanzkriterien definiert
+          required: true
+        - label: Sicherheits-/Performance-Aspekte bedacht
+          required: false
