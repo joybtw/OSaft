@@ -4,23 +4,29 @@ using System.Text;
 using Sys = Cosmos.System;
 using Commands = OSaft.commands;
 
-namespace CosmosKernel1
+namespace OSaftKernel
 {
     public class Kernel : Sys.Kernel
     {
-        readonly Sys.FileSystem.CosmosVFS fs = new();
+        public Sys.FileSystem.CosmosVFS FS { get; } = new();
+        public static Kernel Instance { get; private set; }
+
+        public Kernel() {
+            Instance = this;
+        }
+
         protected override void BeforeRun()
         {
-            Sys.FileSystem.VFS.VFSManager.RegisterVFS(fs);
+
+            Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS);
             Console.WriteLine("OSaft - OperatingSystem - All For Techies");
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
-            long availableSpace = fs.GetAvailableFreeSpace(@"0:\");
-            Console.WriteLine("Available Space: " + availableSpace);
             Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
+            Commands.CommandHelper.RegisterCommand(new Commands.DiskSpaceCommand("diskspace"));
         }
 
         protected override void Run()

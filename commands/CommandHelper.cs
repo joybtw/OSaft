@@ -5,12 +5,12 @@ namespace OSaft.commands
 {
     public abstract class Command
     {
-        internal readonly string name;
-        internal Command(string name)
-        {
-            this.name = name;
-        }
+        public string Name { get; }
 
+        public Command(string name)
+        {
+            this.Name = name;
+        }
         internal abstract void Execute(string[] args);
     }
     public class CommandHelper
@@ -19,12 +19,12 @@ namespace OSaft.commands
 
         public static void RegisterCommand(Command command)
         {
-            if (!commands.ContainsKey(command.name))
+            if (!commands.ContainsKey(command.Name))
             {
-                commands.Add(command.name, command);
+                commands.Add(command.Name, command);
             } else
             {
-                Console.WriteLine("Befehl " + command.name  + " nicht gefunden");
+                Console.WriteLine("Befehl " + command.Name + " nicht gefunden");
             }
         }
 

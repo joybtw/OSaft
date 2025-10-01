@@ -10,7 +10,7 @@ namespace OSaft.commands
             Console.WriteLine("Alle Befehle: ");
             foreach (Command command in CommandHelper.commands.Values)
             {
-                Console.WriteLine(command.name + " - {description}");
+                Console.WriteLine(command.Name + " - {description}");
             }
         }
     }
@@ -44,6 +44,15 @@ namespace OSaft.commands
         {
             Console.WriteLine("Goodbye. See you soon!");
             Cosmos.System.Power.Reboot();
+        }
+    }
+
+    public class DiskSpaceCommand: Command
+    {
+        public DiskSpaceCommand(string name): base(name) { }
+        internal override void Execute(string[] args)
+        {
+            Console.WriteLine("Available Space: " + OSaftKernel.Kernel.Instance.FS.GetAvailableFreeSpace("0:"));
         }
     }
 }
