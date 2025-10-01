@@ -22,7 +22,11 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
-            Commands.CommandHelper.RegisterCommand(new Commands.DiskSpaceCommand("diskspace"));
+            Commands.CommandHelper.RegisterCommand(new Commands.FSInfoCommand("fsinfo"));
+            Commands.CommandHelper.RegisterCommand(new Commands.LSCommand("lscommand"));
+            Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
+            Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
+            Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
         }
 
         protected override void Run()
