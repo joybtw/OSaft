@@ -28,6 +28,7 @@ namespace OSaft.commands
         }
     }
 
+<<<<<<< Updated upstream
 
     public class VersionCommand : Command
     {
@@ -40,4 +41,16 @@ namespace OSaft.commands
     }
 
 
+=======
+    public class RebootCommand: Command
+    {
+        public RebootCommand(string name) : base(name) { }
+
+        internal override void Execute(string[] args)
+        {
+            Console.WriteLine("Goodbye. See you soon!");
+            Cosmos.System.Power.Reboot();
+        }
+    }
+>>>>>>> Stashed changes
 }
