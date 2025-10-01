@@ -1,67 +1,172 @@
-name: Auto-Label Priority
+name: Auto-set Project Priority (User Project)
 
 on:
   issues:
-    types: [opened, edited, reopened]
+    types: [opened]   # nur neue Issues, wie gewünscht
 
 permissions:
-  issues: write
+  contents: read
+  issues: read
+  # Für Projects v2 braucht der Token "projects: write".
+  # Wenn der GITHUB_TOKEN das bei User-Projekten nicht hat: nutze ein PAT als Secret PROJECTS_TOKEN.
+  # repository-projects: write (klassisch) reicht NICHT für Projects v2.
+
+env:
+  USER_LOGIN: joybtw         # <- von deiner URL
+  PROJECT_NUMBER: 3          # <- von deiner URL
+  PRIORITY_FIELD_NAME: Priority  # Name des Single-Select-Felds im Project
+  # Passe die Options-Texte exakt an die im Project vorhandenen Optionen an:
+  P0_TEXT: "P0 – Kritisch"
+  P1_TEXT: "P1 – Hoch"
+  P2_TEXT: "P2 – Mittel"
+  P3_TEXT: "P3 – Niedrig"
 
 jobs:
   set-priority:
     runs-on: ubuntu-latest
     steps:
-      - name: Set priority label from issue form
+      - name: Extract priority from markdown body
+        id: compute
         uses: actions/github-script@v7
         with:
           script: |
-            const issue = context.payload.issue;
+            const body = context.payload.issue.body || "";
 
-            // Body der Issue-Form durchsuchen.
-            // Typisches Muster bei Issue Forms:
-            // "### Priorität\n\nP1 – Hoch"
-            const body = issue.body || "";
-            const match = body.match(/#+\s*Priorit[aä]t\s*\n+([^\n]+)/i);
-            let selected = match ? match[1].trim() : null;
-
-            // Mappings und erlaubte Labels
-            const allowed = [
-              "P0 – Kritisch",
-              "P1 – Hoch",
-              "P2 – Mittel",
-              "P3 – Niedrig"
-            ];
-
-            // Falls jemand nur "P1" schreibt, normalisieren
-            if (selected && /^P[0-3]\b/.test(selected)) {
-              const map = {P0: allowed[0], P1: allowed[1], P2: allowed[2], P3: allowed[3]};
-              selected = map[selected.substring(0,2)] || selected;
+            // Aus dem Markdown-Template `feature_request.md`:
+            // Wir erwarten einen Abschnitt "## Priorität" und die erste Zeile danach mit P0–P3.
+            // Beispiel im Issue:
+            // ## Priorität
+            // P1 – Hoch
+            function readMarkdownSection(title){
+              const rx = new RegExp(String.raw`^##\s*${title}\s*$[\\r\\n]+([^#\\r\\n].*)`, 'mi');
+              const m = body.match(rx);
+              return m ? m[1].trim() : "";
             }
 
-            if (!selected || !allowed.includes(selected)) {
-              core.info("Keine gültige Priorität gefunden – Workflow beendet.");
-              return;
+            let selected = readMarkdownSection("Priorit(?:ä|a)t"); // unterstützt ä/a
+
+            // Falls nur "P1" etc. steht, auf vollen Text normalisieren:
+            function normalize(p){
+              if (!p) return "";
+              const short = (p.match(/^(P[0-3])\\b/i)||[])[1];
+              if (!short) return "";
+              const map = {
+                "P0": process.env.P0_TEXT,
+                "P1": process.env.P1_TEXT,
+                "P2": process.env.P2_TEXT,
+                "P3": process.env.P3_TEXT
+              };
+              return map[short.toUpperCase()] || "";
             }
 
-            // Existierende P*-Labels entfernen, dann ausgewähltes setzen
-            const existing = issue.labels.map(l => typeof l === 'string' ? l : l.name);
-            const toRemove = existing.filter(n => /^P[0-3]\s/.test(n));
-            for (const name of toRemove) {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issue.number,
-                name
-              }).catch(()=>{});
+            // 1) Direkte Option wie "P1 – Hoch" erkannt?
+            const fullMatch = [process.env.P0_TEXT, process.env.P1_TEXT, process.env.P2_TEXT, process.env.P3_TEXT]
+              .find(opt => selected.toLowerCase().startsWith(opt.toLowerCase()));
+            let priority = fullMatch || normalize(selected);
+
+            // 2) Fallback: Wenn im Body irgendwo "P0"/"P1"/... auftaucht, nimm das erste
+            if (!priority) {
+              const any = (body.match(/\\bP[0-3]\\b/i)||[])[0];
+              if (any) {
+                const map = { "P0": process.env.P0_TEXT, "P1": process.env.P1_TEXT, "P2": process.env.P2_TEXT, "P3": process.env.P3_TEXT };
+                priority = map[any.toUpperCase()];
+              }
             }
 
-            if (!existing.includes(selected)) {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issue.number,
-                labels: [selected]
-              });
+            core.setOutput('priority', priority || '');
+            if (!priority) core.info('Keine Priorität gefunden (erwarte Abschnitt "## Priorität").');
+
+      - name: Stop if no priority detected
+        if: steps.compute.outputs.priority == ''
+        run: echo "No project priority set (missing in issue body)."
+
+      - name: Add to Project & set Priority field
+        if: steps.compute.outputs.priority != ''
+        uses: actions/github-script@v7
+        env:
+          TOKEN: ${{ secrets.PROJECTS_TOKEN || github.token }}
+          PRIORITY: ${{ steps.compute.outputs.priority }}
+        with:
+          github-token: ${{ env.TOKEN }}
+          script: |
+            const USER_LOGIN = process.env.USER_LOGIN;
+            const PROJECT_NUMBER = parseInt(process.env.PROJECT_NUMBER,10);
+            const PRIORITY_FIELD_NAME = process.env.PRIORITY_FIELD_NAME;
+            const PRIORITY = process.env.PRIORITY;
+            const contentId = context.payload.issue.node_id;
+
+            // 1) User-Project + Single-Select-Feld abrufen
+            const proj = await github.graphql(`
+              query($user:String!, $number:Int!){
+                user(login:$user){
+                  projectV2(number:$number){
+                    id
+                    fields(first:50){
+                      nodes{
+                        ... on ProjectV2SingleSelectField {
+                          id
+                          name
+                          options { id name }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            `, { user: USER_LOGIN, number: PROJECT_NUMBER });
+
+            const project = proj.user?.projectV2;
+            if (!project) throw new Error(`Project ${USER_LOGIN}#${PROJECT_NUMBER} nicht gefunden.`);
+
+            const field = project.fields.nodes.find(f => f && f.name === PRIORITY_FIELD_NAME);
+            if (!field) throw new Error(`Feld "${PRIORITY_FIELD_NAME}" nicht gefunden.`);
+
+            const option = field.options.find(o => o.name === PRIORITY);
+            if (!option) throw new Error(`Option "${PRIORITY}" im Feld "${PRIORITY_FIELD_NAME}" nicht gefunden.`);
+
+            // 2) Issue ins Project aufnehmen (idempotent; Fehler bei Duplikat ignorieren)
+            let itemId = null;
+            try {
+              const add = await github.graphql(`
+                mutation($projectId:ID!, $contentId:ID!){
+                  addProjectV2ItemById(input:{projectId:$projectId, contentId:$contentId}){
+                    item { id }
+                  }
+                }
+              `, { projectId: project.id, contentId });
+              itemId = add.addProjectV2ItemById.item.id;
+            } catch (e) {
+              core.info("addProjectV2ItemById: " + e.message);
             }
 
-            core.info(`Priorität gesetzt: ${selected}`);
+            // 3) Falls itemId noch fehlt, versuche sie über Items zu finden
+            if (!itemId) {
+              const items = await github.graphql(`
+                query($projectId:ID!){
+                  node(id:$projectId){
+                    ... on ProjectV2 {
+                      items(first:100){
+                        nodes{ id content{ ... on Issue { id } } }
+                      }
+                    }
+                  }
+                }
+              `, { projectId: project.id });
+              const match = items.node.items.nodes.find(n => n.content && n.content.id === contentId);
+              if (!match) throw new Error("Project-Item für dieses Issue nicht gefunden.");
+              itemId = match.id;
+            }
+
+            // 4) Priority-Option setzen
+            await github.graphql(`
+              mutation($projectId:ID!, $itemId:ID!, $fieldId:ID!, $optionId:String!){
+                updateProjectV2ItemFieldValue(input:{
+                  projectId:$projectId,
+                  itemId:$itemId,
+                  fieldId:$fieldId,
+                  value:{ singleSelectOptionId:$optionId }
+                }) { projectV2Item { id } }
+              }
+            `, { projectId: project.id, itemId, fieldId: field.id, optionId: option.id });
+
+            core.info(`Priority gesetzt: ${PRIORITY}`);
