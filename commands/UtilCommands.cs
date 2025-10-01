@@ -1,5 +1,4 @@
 ﻿using System;
-using Sys = Cosmos.System;
 
 namespace OSaft.commands
 {
@@ -27,9 +26,6 @@ namespace OSaft.commands
             Cosmos.System.Power.Shutdown();
         }
     }
-
-<<<<<<< Updated upstream
-
     public class VersionCommand : Command
     {
         public VersionCommand(string name) : base(name) { }
@@ -40,8 +36,6 @@ namespace OSaft.commands
         }
     }
 
-
-=======
     public class RebootCommand: Command
     {
         public RebootCommand(string name) : base(name) { }
@@ -52,5 +46,4 @@ namespace OSaft.commands
             Cosmos.System.Power.Reboot();
         }
     }
->>>>>>> Stashed changes
 }

@@ -19,11 +19,8 @@ namespace CosmosKernel1
             Console.WriteLine("Available Space: " + availableSpace);
             Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
-<<<<<<< Updated upstream
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
-=======
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
->>>>>>> Stashed changes
         }
 
         protected override void Run()
@@ -32,10 +29,6 @@ namespace CosmosKernel1
             Console.Write("Input: ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input, input.Split(" "));
-
-            
-            
-
         }
     }
 }
