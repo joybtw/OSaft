@@ -1,32 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Sys = Cosmos.System;
 using Commands = OSaft.commands;
+using OSaft.filesystem;
 
 namespace OSaftKernel
 {
     public class Kernel : Sys.Kernel
     {
-        public Sys.FileSystem.CosmosVFS FS { get; } = new();
-        public static Kernel Instance { get; private set; }
-
-        public Kernel() {
-            Instance = this;
-        }
-
         protected override void BeforeRun()
         {
-
-            Sys.FileSystem.VFS.VFSManager.RegisterVFS(FS);
+            // Welcome Messages
             Console.WriteLine("OSaft - OperatingSystem - All For Techies");
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
+
+            // FileSystem
+            Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
+
+            // Commands Registry
             Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
-            Commands.CommandHelper.RegisterCommand(new Commands.DiskSpaceCommand("diskspace"));
+            Commands.CommandHelper.RegisterCommand(new Commands.FSInfoCommand("fsinfo"));
+            Commands.CommandHelper.RegisterCommand(new Commands.LSCommand("lscommand"));
+            Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
+            Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
+            Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
         }
 
         protected override void Run()

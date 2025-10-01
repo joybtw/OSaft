@@ -24,7 +24,7 @@ namespace OSaft.commands
                 commands.Add(command.Name, command);
             } else
             {
-                Console.WriteLine("Befehl " + command.Name + " nicht gefunden");
+                Console.WriteLine("Befehl " + command.Name + " existiert bereits.");
             }
         }
 

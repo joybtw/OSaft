@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using OSaft.filesystem;
 
 namespace OSaft.commands
 {
@@ -47,12 +49,84 @@ namespace OSaft.commands
         }
     }
 
-    public class DiskSpaceCommand: Command
+    public class FSInfoCommand: Command
     {
-        public DiskSpaceCommand(string name): base(name) { }
+        public FSInfoCommand(string name): base(name) { }
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("Available Space: " + OSaftKernel.Kernel.Instance.FS.GetAvailableFreeSpace("0:"));
+            Console.WriteLine("Available Space: " + FileSystem.Instance.GetAvailableFreeSpace(@"0:\"));
+            Console.WriteLine("File System Type: " + FileSystem.Instance.GetFileSystemType(@"0:\"));
         }
     }
+    
+    // @todo Parameterliste
+    public class LSCommand: Command
+    {
+        public LSCommand(string name): base(name) { }
+        internal override void Execute(string[] args)
+        {
+
+            foreach (string filename in Directory.GetDirectories(@"0:\"))
+            {
+                Console.Write("Directories: " + filename + ", ");
+            }
+            Console.WriteLine("");
+            foreach (string filename in Directory.GetFiles(@"0:\"))
+            {
+                Console.Write("Files: " + filename + ", ");
+            }
+            Console.WriteLine("");
+        }
+    }
+
+    public class TouchCommand : Command
+    {
+        public TouchCommand(string name) : base(name) { }
+        internal override void Execute(string[] args)
+        {
+            if (args.Length == 1)
+            {
+                string path = "";
+                if (args.Length == 2) { path = args[1]; }
+                FileSystem.CreateFile(args[1], path);
+            } else
+            {
+                Console.WriteLine("Please specify a filename");
+            }
+        }
+    }
+
+    public class MKDirCommand: Command
+    {
+        public MKDirCommand(string name) : base(name) {}
+        internal override void Execute(string[] args)
+        {
+            if (args.Length == 1)
+            {
+                string path = "";
+                if (args.Length == 2) { path = args[1]; }
+                FileSystem.CreateDirectory(args[1], path);
+            }
+            else
+            {
+                Console.WriteLine("Please specify a Foldername");
+            }
+        }
+    }
+
+    public class RMCommand: Command
+    {
+        public RMCommand(string name) : base(name) { }
+        internal override void Execute(string[] args) {
+            if (args.Length == 1)
+            {
+                FileSystem.DeleteFileOrDirectory(args[1]);
+            }
+            else
+            {
+                Console.WriteLine("Please specify a Foldername");
+            }
+        }
+    }
+
 }
