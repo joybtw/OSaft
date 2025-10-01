@@ -1,4 +1,5 @@
 ﻿using System;
+using OSaft.filesystem;
 
 namespace OSaft.commands
 {
@@ -52,7 +53,7 @@ namespace OSaft.commands
         public DiskSpaceCommand(string name): base(name) { }
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("Available Space: " + OSaftKernel.Kernel.Instance.FS.GetAvailableFreeSpace("0:"));
+            Console.WriteLine("Available Space: " + FileSystem.Instance.GetAvailableFreeSpace(@"0:\"));
         }
     }
 }
