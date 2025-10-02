@@ -21,7 +21,7 @@ namespace OSaft.users
         public User(string new_name, string password, bool root, uint id)
         {
             this.name = new_name;
-            this.password_hash = HashPassword(password);
+            // this.password_hash = HashPassword(password);
             this.is_root = root;
             this.uid = id;
         }
