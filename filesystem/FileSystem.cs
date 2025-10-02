@@ -33,17 +33,23 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void DeleteFileOrDirectory(string path)
+        public static void DeleteDirectory(string path)
         {
             try
             {
-                if (path.Contains('.'))
-                {
-                    IO.File.Delete(@":\" + path);
-                } else
-                {
-                    IO.Directory.Delete(path);
-                }
+                IO.Directory.Delete(@"0:\" + path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("DeleteFileOrDirectory: Exception thrown: " + e.Message);
+            }
+        }
+
+        public static void DeleteFile(string path)
+        {
+            try
+            {
+                IO.File.Delete(@"0:\" + path);
             }
             catch (Exception e)
             {

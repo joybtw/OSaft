@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using OSaft.filesystem;
 
 namespace OSaft.commands
@@ -113,13 +112,21 @@ namespace OSaft.commands
         internal override void Execute(string[] args) {
             if (args.Length == 2)
             {
-                //siehe #22: directory, path and file validation notwendig!
-                string path = args[1];
-                FileSystem.DeleteFileOrDirectory(path);
+                if (args[0] == "-d")
+                {
+                    FileSystem.DeleteDirectory(args[1]);
+                    //siehe #22: directory, path and file validation notwendig für path in args[1]
+                }
+                else if (args[0] == "-f")
+                {
+                    FileSystem.DeleteFile(args[1]);
+                    //siehe #22: directory, path and file validation notwendig für path in args[1]
+                }
+
             }
             else
             {
-                Console.WriteLine("Please specify a Foldername");
+                Console.WriteLine("Error: Syntax: rm <arg> <path>");
             }
         }
     }
