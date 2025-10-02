@@ -1,38 +1,42 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace OSaft.usersystem
 {
-
     public class User
     {
-        string name { get; set; }
-        uint uid { get; set; }
-        bool is_root { get; set; }
-        string password_hash { get; set; }
-        private static readonly int max_nlen = 32;
+        public string Name { get; private set; }
+        public uint Uid { get; private set; }
+        public bool IsRoot { get; private set; }
+        private string passwordHash { get; set; }
 
-        public User()
+        private static readonly int MaxNameLength = 32;
+
+        public User(string newName, string password, bool root, uint id)
         {
-            if (name.Length > max_nlen) throw new Exception("Username too long");
+            if (string.IsNullOrWhiteSpace(newName) || newName.Length > MaxNameLength)
+                throw new ArgumentException("Invalid username");
+
+            this.Name = newName;
+            this.passwordHash = ComputeSHA256(password);
+            this.IsRoot = root;
+            this.Uid = id;
         }
 
-        public User(string new_name, string password, bool root, uint id)
+        private string ComputeSHA256(string input)
         {
-            this.name = new_name;
-            this.password_hash = ComputeHMACSHA256(password);
-            this.is_root = root;
-            this.uid = id;
-        }
-
-        private string ComputeHMACSHA256(string input)
-        {
-            using (var hmac = new HMACSHA256())
+            using (var sha256 = SHA256.Create())
             {
-                byte[] hashBytes = hmac.ComputeHash(System.Text.Encoding.UTF32.GetBytes(input));
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
                 return Convert.ToBase64String(hashBytes);
             }
+        }
+
+        public bool VerifyPassword(string password)
+        {
+            string attemptHash = ComputeSHA256(password);
+            return attemptHash == this.passwordHash;
         }
     }
 }
