@@ -65,17 +65,10 @@ namespace OSaft.commands
         public LSCommand(string name): base(name) { }
         internal override void Execute(string[] args)
         {
-
-            foreach (string filename in Directory.GetDirectories(@"0:\"))
-            {
-                Console.Write("Directories: " + filename + ", ");
-            }
-            Console.WriteLine("");
-            foreach (string filename in Directory.GetFiles(@"0:\"))
-            {
-                Console.Write("Files: " + filename + ", ");
-            }
-            Console.WriteLine("");
+            string[] directories = Directory.GetDirectories(@"0:\");
+            string[] files = Directory.GetFiles(@"0:\");
+            Console.WriteLine("Directories: " + string.Join(", ", directories));
+            Console.WriteLine("Files: " + string.Join(", ", files));
         }
     }
 
@@ -88,8 +81,10 @@ namespace OSaft.commands
             {
                 string path = "";
                 if (args.Length == 2) { path = args[1]; }
-                FileSystem.CreateFile(args[1], path);
-            } else
+                FileSystem.CreateFile(args[0], path);
+            }
+            
+            else
             {
                 Console.WriteLine("Please specify a filename");
             }
@@ -118,9 +113,11 @@ namespace OSaft.commands
     {
         public RMCommand(string name) : base(name) { }
         internal override void Execute(string[] args) {
-            if (args.Length == 1)
+            if (args.Length == 2)
             {
-                FileSystem.DeleteFileOrDirectory(args[1]);
+                //siehe #22: directory, path and file validation notwendig!
+                string path = args[1];
+                FileSystem.DeleteFileOrDirectory(path);
             }
             else
             {
