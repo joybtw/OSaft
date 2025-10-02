@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using OSaft.filesystem;
 
 namespace OSaft.commands
@@ -65,8 +66,9 @@ namespace OSaft.commands
         public LSCommand(string name): base(name) { }
         internal override void Execute(string[] args)
         {
-            string[] directories = Directory.GetDirectories(@"0:\");
-            string[] files = Directory.GetFiles(@"0:\");
+            string path = (args == null) ? "" : args[0];
+            string[] directories = Directory.GetDirectories(@"0:\" + path);
+            string[] files = Directory.GetFiles(@"0:\" + path);
             Console.WriteLine("Directories: " + string.Join(", ", directories));
             Console.WriteLine("Files: " + string.Join(", ", files));
         }
@@ -79,9 +81,7 @@ namespace OSaft.commands
         {
             if (args.Length == 1)
             {
-                string path = "";
-                if (args.Length == 2) { path = args[1]; }
-                FileSystem.CreateFile(args[0], path);
+                FileSystem.CreateFile(args[0]);
             }
             
             else
@@ -98,9 +98,7 @@ namespace OSaft.commands
         {
             if (args.Length == 1)
             {
-                string path = "";
-                if (args.Length == 2) { path = args[1]; }
-                FileSystem.CreateDirectory(args[1], path);
+                FileSystem.CreateDirectory(args[0]);
             }
             else
             {
