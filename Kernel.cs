@@ -23,7 +23,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
             Commands.CommandHelper.RegisterCommand(new Commands.FSInfoCommand("fsinfo"));
-            Commands.CommandHelper.RegisterCommand(new Commands.LSCommand("lscommand"));
+            Commands.CommandHelper.RegisterCommand(new Commands.LSCommand("ls"));
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
@@ -34,7 +34,7 @@ namespace OSaftKernel
             // Input Handling
             Console.Write("Input: ");
             String input = Console.ReadLine();
-            Commands.CommandHelper.ExecuteCommand(input, input.Split(" "));
+            Commands.CommandHelper.ExecuteCommand(input);
         }
     }
 }
