@@ -9,7 +9,7 @@ namespace OSaft.usersystem
         public string Name { get; private set; }
         public uint Uid { get; private set; }
         public bool IsRoot { get; private set; }
-        private string passwordHash { get; set; }
+        public string passwordHash { get; set; }
 
         private static readonly int MaxNameLength = 32;
 
@@ -19,7 +19,7 @@ namespace OSaft.usersystem
                 throw new ArgumentException("Invalid username");
 
             this.Name = newName;
-            this.passwordHash = ComputeSHA256(password);
+            // this.passwordHash = ComputeSHA256(password);
             this.IsRoot = root;
             this.Uid = id;
         }

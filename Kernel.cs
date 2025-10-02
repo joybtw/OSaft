@@ -1,7 +1,8 @@
-﻿using System;
-using Sys = Cosmos.System;
+﻿using OSaft.filesystem;
+using OSaft.usersystem;
+using System;
 using Commands = OSaft.commands;
-using OSaft.filesystem;
+using Sys = Cosmos.System;
 
 namespace OSaftKernel
 {
@@ -27,6 +28,9 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
+
+           // User user = new("test12234432228", "test123", false, 123);
+           // Console.WriteLine(user.Name);
         }
 
         protected override void Run()
