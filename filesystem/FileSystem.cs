@@ -8,10 +8,10 @@ namespace OSaft.filesystem {
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
 
-        public static IO.FileStream CreateFile(string filename, string where) {
+        public static IO.FileStream CreateFile(string path) {
             try
             {
-                return IO.File.Create(@"0:\" + where + @"\" + filename);
+                return IO.File.Create(@"0:\" + path);
             } catch(Exception e)
             {
                 Console.WriteLine("CreateFile: Exception thrown: " + e.Message);
@@ -32,23 +32,30 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void DeleteFileOrDirectory(string path)
+        public static void DeleteDirectory(string path)
         {
             try
             {
-                if (path.Contains('.'))
-                {
-                    IO.File.Delete(path);
-                } else
-                {
-                    IO.Directory.Delete(path);
-                }
+                IO.Directory.Delete(@"0:\" + path);
             }
             catch (Exception e)
             {
                 Console.WriteLine("DeleteFileOrDirectory: Exception thrown: " + e.Message);
             }
         }
+
+        public static void DeleteFile(string path)
+        {
+            try
+            {
+                IO.File.Delete(@"0:\" + path);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("DeleteFileOrDirectory: Exception thrown: " + e.Message);
+            }
+        }
+
 
     }
 }
