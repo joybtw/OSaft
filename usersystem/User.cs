@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace OSaft.users
+namespace OSaft.usersystem
 {
 
     public class User
