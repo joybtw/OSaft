@@ -65,8 +65,9 @@ namespace OSaft.commands
         public LSCommand(string name): base(name) { }
         internal override void Execute(string[] args)
         {
-            string[] directories = Directory.GetDirectories(@"0:\");
-            string[] files = Directory.GetFiles(@"0:\");
+            string path = (args == null) ? "" : args[0];
+            string[] directories = Directory.GetDirectories(@"0:\" + path);
+            string[] files = Directory.GetFiles(@"0:\" + path);
             Console.WriteLine("Directories: " + string.Join(", ", directories));
             Console.WriteLine("Files: " + string.Join(", ", files));
         }
@@ -77,10 +78,8 @@ namespace OSaft.commands
         public TouchCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
-            if (args.Length > 0)
+            if (args.Length == 1)
             {
-                string path = "";
-                if (args.Length == 1) { path = args[0]; }
                 FileSystem.CreateFile(args[0]);
             }
             
@@ -98,9 +97,7 @@ namespace OSaft.commands
         {
             if (args.Length == 1)
             {
-                string path = "";
-                if (args.Length == 2) { path = args[1]; }
-                FileSystem.CreateDirectory(args[1], path);
+                FileSystem.CreateDirectory(args[0]);
             }
             else
             {
