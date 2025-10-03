@@ -29,7 +29,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
 
-          User user = new("test12234432228", "test123", false, 0);
+          User user = new("test", "penis", false, 0);
            Console.WriteLine(user.Name);
            Console.WriteLine(user.PasswordHash);
         }
