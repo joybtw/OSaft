@@ -29,7 +29,8 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
 
-          User user = new("test", "penis", false, 0);
+            Console.WriteLine("testuser added, his name and hashed password:");
+          User user = new("test", "working pw", false, 0);
            Console.WriteLine(user.Name);
            Console.WriteLine(user.PasswordHash);
         }
