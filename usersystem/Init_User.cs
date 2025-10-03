@@ -20,7 +20,7 @@ namespace OSaft.usersystem
             }
 
             Console.WriteLine("Welcome to OSaft");
-            Console.WriteLine("OSaft needs you to create a root_user");
+            Console.WriteLine("OSaft needs you to create a user");
         name:
             Console.Write("Enter user name: ");
             String name = Console.ReadLine();
@@ -46,7 +46,7 @@ namespace OSaft.usersystem
             FileSystem.CreateDirectory("users", "");
             FileSystem.CreateDirectory(name, "users");
             FileSystem.CreateFile("root_init", "system"); 
-            Console.WriteLine("sudo_user created");
+            Console.WriteLine("sudo user created");
             Console.WriteLine("Your name is: " + name);
             Console.WriteLine("--------------------------------");
             return;
