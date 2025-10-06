@@ -4,11 +4,12 @@ using OSaft.filesystem;
 
 namespace OSaft.commands
 {
-    public class HelpCommand: Command
+    public class HelpCommand : Command
     {
-        public HelpCommand(string name): base(name) {}
+        public HelpCommand(string name) : base(name) { }
 
-        internal override void Execute(string[] args) {
+        internal override void Execute(string[] args)
+        {
             Console.WriteLine("Alle Befehle: ");
             foreach (Command command in CommandHelper.commands.Values)
             {
@@ -17,9 +18,9 @@ namespace OSaft.commands
         }
     }
 
-    public class ShutdownCommand: Command
+    public class ShutdownCommand : Command
     {
-        public ShutdownCommand(string name): base(name) {}
+        public ShutdownCommand(string name) : base(name) { }
 
         internal override void Execute(string[] args)
         {
@@ -38,7 +39,7 @@ namespace OSaft.commands
         }
     }
 
-    public class RebootCommand: Command
+    public class RebootCommand : Command
     {
         public RebootCommand(string name) : base(name) { }
 
@@ -49,20 +50,20 @@ namespace OSaft.commands
         }
     }
 
-    public class FSInfoCommand: Command
+    public class FSInfoCommand : Command
     {
-        public FSInfoCommand(string name): base(name) { }
+        public FSInfoCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
             Console.WriteLine("Available Space: " + FileSystem.Instance.GetAvailableFreeSpace(@"0:\"));
             Console.WriteLine("File System Type: " + FileSystem.Instance.GetFileSystemType(@"0:\"));
         }
     }
-    
+
     // @todo Parameterliste
-    public class LSCommand: Command
+    public class LSCommand : Command
     {
-        public LSCommand(string name): base(name) { }
+        public LSCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
             string path = (args == null) ? "" : args[0];
@@ -82,7 +83,7 @@ namespace OSaft.commands
             {
                 FileSystem.CreateFile(args[0]);
             }
-            
+
             else
             {
                 Console.WriteLine("Please specify a filename");
@@ -90,9 +91,9 @@ namespace OSaft.commands
         }
     }
 
-    public class MKDirCommand: Command
+    public class MKDirCommand : Command
     {
-        public MKDirCommand(string name) : base(name) {}
+        public MKDirCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
             if (args.Length == 1)
@@ -106,29 +107,43 @@ namespace OSaft.commands
         }
     }
 
-    public class RMCommand: Command
+    public class RMCommand : Command
     {
         public RMCommand(string name) : base(name) { }
-        internal override void Execute(string[] args) {
-            if (args.Length == 2)
+        internal override void Execute(string[] args)
+        {
+
+            if (args != null)
             {
-                if (args[0] == "-d")
+                string flag = args[0];
+                string path = args[1];
+
+                if (args.Length == 2)
                 {
-                    FileSystem.DeleteDirectory(args[1]);
-                    //siehe #22: directory, path and file validation notwendig für path in args[1]
+                    if (flag == "-d")
+                    {
+                        FileSystem.DeleteDirectory(path);
+                        //siehe #22: directory, path and file validation notwendig für path in args[1]
+                    }
+
+                    else if (flag == "-f")
+                    {
+                        FileSystem.DeleteFile(path);
+                        //siehe #22: directory, path and file validation notwendig für path in args[1]
+                    }
+
                 }
-                else if (args[0] == "-f")
+                else
                 {
-                    FileSystem.DeleteFile(args[1]);
-                    //siehe #22: directory, path and file validation notwendig für path in args[1]
+                    Console.WriteLine("Error: Syntax: rm <arg> <path>");
+
                 }
 
             }
-            else
-            {
-                Console.WriteLine("Error: Syntax: rm <arg> <path>");
-            }
+            
+
+            
+
         }
     }
-
 }
