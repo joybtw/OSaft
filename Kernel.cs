@@ -11,9 +11,10 @@ namespace OSaftKernel
     {
         protected override void BeforeRun()
         {
+            SetKeyboardScanMap(new DE_Standard());
+
             // Welcome Messages
             Console.WriteLine("OSaft - OperatingSystem - All For Techies");
-            SetKeyboardScanMap(new DE_Standard());
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
 
