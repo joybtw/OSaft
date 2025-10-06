@@ -112,37 +112,52 @@ namespace OSaft.commands
         public RMCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
+            string flag = null;
+            string path = null;
 
-            if (args != null)
+            if (args == null || args.Length == 0)
             {
-                string flag = args[0];
-                string path = args[1];
-
-                if (args.Length == 2)
-                {
-                    if (flag == "-d")
-                    {
-                        FileSystem.DeleteDirectory(path);
-                        //siehe #22: directory, path and file validation notwendig für path in args[1]
-                    }
-
-                    else if (flag == "-f")
-                    {
-                        FileSystem.DeleteFile(path);
-                        //siehe #22: directory, path and file validation notwendig für path in args[1]
-                    }
-
-                }
-                else
-                {
-                    Console.WriteLine("Error: Syntax: rm <arg> <path>");
-
-                }
-
+                Console.WriteLine("rm: Syntax: rm < -f|-d > {PATH}");
+                return;
             }
-            
+            else if (args.Length == 1)
+            {
+                flag = args[0];
+            }
+            else if (args.Length == 2)
+            {
+                flag = args[0];
+                path = args[1];
+            } 
 
-            
+
+            if (flag != null && path != null)
+            {
+                if (flag == "-d")
+                {
+                    FileSystem.DeleteDirectory(path);
+                    //siehe #22: directory, path and file validation notwendig für path in args[1]test
+                }
+
+                else if (flag == "-f")
+                {
+                    FileSystem.DeleteFile(path);
+                    //siehe #22: directory, path and file validation notwendig für path in args[1]
+                }
+            }
+
+            else if (flag == "--help" || flag == "-h")
+            {
+                Console.WriteLine("HELP-CENTER");
+                Console.WriteLine("----------------");
+                Console.WriteLine("rm: Remove a file or directory.");
+                Console.WriteLine("Syntax: rm < -f|-d > {PATH}");
+            }
+
+            else
+            {
+                Console.WriteLine("rm: Syntax: rm < -f|-d > {PATH}");
+            }
 
         }
     }
