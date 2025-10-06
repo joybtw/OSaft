@@ -9,7 +9,7 @@ namespace OSaft.usersystem
 {
     public class Init_User
     {
-        private string path = @"0:\system\root_init";
+        private string path = @"0:\system\root_init.sys";
 
         public void Initialize()
         {
@@ -45,8 +45,8 @@ namespace OSaft.usersystem
             }
             FileSystem.CreateDirectory("users");
             FileSystem.CreateDirectory(@"users\" + name);
-            FileSystem.CreateFile(@"root_init\"); 
-            Console.WriteLine("sudo user created");
+            FileSystem.CreateFile(@"system\root_init.sys");
+            Console.WriteLine("Sudo user created");
             Console.WriteLine("Your name is: " + name);
             Console.WriteLine("--------------------------------");
             return;
