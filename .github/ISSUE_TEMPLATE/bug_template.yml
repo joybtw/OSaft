@@ -1,0 +1,73 @@
+﻿name: "🐞 Bug report"
+description: "Fehlerhaftes Verhalten im Betriebssystem"
+title: "[Bug] "
+labels:
+  - "type: bug"
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bitte fülle alle relevanten Felder aus,
+        damit wir Aufwand, Risiko und Auswirkungen gut einschätzen können.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Zusammenfassung
+      description: Beschreibe den Fehler
+      placeholder: "Was ist passiert? z. B. Command rm funktioniert nicht"
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Reproduktion
+      description: Wie kann der Fehler nachgestellt werden?
+      placeholder: |
+        - 1. Command ausführen
+        - 2. Nichts passiert mit oder ohne Fehlermeldung
+        - 3. Fehlermeldung
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+      description: Was soll eigentlich passieren?
+      placeholder: |
+        - 1. Command ausführen
+        - 2. Datei wird entfernt
+        - 3. Bestätigung des Entfernen
+    validations:
+      required: true
+      
+  - type: input
+    id: screenvids
+    attributes:
+      label: Screenshot/Videos
+      description: Videos per Link (medal upload oder discord gruppe)
+      placeholder: "https://cdn.discordapp.com/attachments/1389862766109523969/1422649027400569025/image.png?ex=68e40827&is=68e2b6a7&hm=05bc7bb479feae3a2c45aae90ccca954e7efbc976a821e51ddd77ef043fa00cd&"
+    validations:
+      required: false
+
+  - type: textarea
+    id: otherbug
+    attributes:
+      label: Sonstiges
+      description: Bei weiteren Anmerkungen/Folgeproblemen gerne hinzufügen
+      placeholder: "..."
+    validations:
+      required: false
+
+  - type: input
+    id: related
+    attributes:
+      label: Verwandte Issues/PRs
+      description: Referenzen mit #123 oder Links.
+      placeholder: "#42, #1337"
+    validations:
+      required: false
+

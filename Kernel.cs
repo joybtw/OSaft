@@ -1,8 +1,9 @@
 ﻿using OSaft.filesystem;
-using OSaft.usersystem;
+using Usys= OSaft.usersystem;
 using System;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
+using OSaft.usersystem;
 
 namespace OSaftKernel
 {
@@ -29,8 +30,12 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
 
-           // User user = new("test12234432228", "test123", false, 123);
-           // Console.WriteLine(user.Name);
+            // User System
+            Usys.Init_User init_user = new Usys.Init_User();
+            init_user.Initialize();
+            //root_user creation working
+            //login in progress
+            //user safe missing
         }
 
         protected override void Run()
