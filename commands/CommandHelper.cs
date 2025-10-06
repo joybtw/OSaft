@@ -42,7 +42,7 @@ namespace OSaft.commands
             }
             catch (KeyNotFoundException e)
             {
-                Console.WriteLine("Befehl nicht gefunden: (" + e.Message.ToString() + ")");
+                Console.WriteLine("Befehl nicht gefunden: ( Fehler: " + e.Message.ToString() + ")");
             }
         }
 

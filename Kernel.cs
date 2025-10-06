@@ -4,7 +4,6 @@ using OSaft.usersystem;
 using System;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
-using Usys= OSaft.usersystem;
 
 namespace OSaftKernel
 {
@@ -33,8 +32,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
 
             // User System
-            Usys.Init_User init_user = new Usys.Init_User();
-            init_user.Initialize();
+            Init_User.Initialize();
             //root_user creation working
             //login in progress
             //user safe missing
