@@ -1,41 +1,32 @@
 using System;
 using OSaft.filesystem;
-using OSaft.usersystem;
 using System.IO;
-using Commands = OSaft.commands;
-using OSaft.commands;
+using System.Collections.Generic;
 
 namespace OSaft.usersystem
 {
-    public class Init_User
+    public class UserHelper
     {
-        private string path = @"0:\system\root_init.sys";
-
-        public void Initialize()
+        internal readonly static Dictionary<string, User> users = new();
+        public static void Initialize()
         {
-            if (File.Exists(path))
-            {
-                //LoginUser;
-                return;
-            }
+            if (File.Exists(@"0:\system\root_init.sys")){ return; }
 
-            Console.WriteLine("Welcome to OSaft");
-            Console.WriteLine("OSaft needs you to create a user");
-        name:
+
             Console.Write("Enter user name: ");
             String name = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(name))
+            while (string.IsNullOrWhiteSpace(name))
             {
-                Console.WriteLine("No input or only whitespaces, return!");
-                goto name;
+                Console.Write("Enter user name: ");
+                name = Console.ReadLine();
             }
-        password:
+
             Console.Write("Enter password: ");
             String password = Console.ReadLine();
-            if (password == null)
+            while (string.IsNullOrWhiteSpace(password))
             {
-                Console.WriteLine("No input, return!");
-                goto password;
+                Console.Write("Enter a password for user " + name + "");
+                password = Console.ReadLine();
             }
 
             User root_u = new(name, password, true, 0);
@@ -53,22 +44,20 @@ namespace OSaft.usersystem
         }
     }
 
-    // work still in progress
+
     public class Login
     {
-        public void LoginUser()
+        public static void LoginUser()
         {
-        Login:
             Console.Write("Enter user name: ");
             String name = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(name))
+            while (string.IsNullOrWhiteSpace(name))
             {
-                Console.WriteLine("No input or only whitespaces, return!");
-                //user reg missing
-                goto Login;
+                Console.Write("Enter user name: ");
+                name = Console.ReadLine();
             }
 
-        
+            // ... Login a user
         }
     }
 }

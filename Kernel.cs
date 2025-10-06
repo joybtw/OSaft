@@ -4,7 +4,6 @@ using OSaft.usersystem;
 using System;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
-using Usys= OSaft.usersystem;
 
 namespace OSaftKernel
 {
@@ -12,13 +11,15 @@ namespace OSaftKernel
     {
         protected override void BeforeRun()
         {
-            // Welcome Messages
-            Console.WriteLine("OSaft - OperatingSystem - All For Techies");
             SetKeyboardScanMap(new DE_Standard());
+
+            // Welcome Messages
+            Console.Clear();    
+            Console.WriteLine("OSaft - OperatingSystem - All For Techies");
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
 
-            // FileSystem
+            // Filesystem
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
 
             // Commands Registry 
@@ -32,9 +33,8 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
 
-            // User System
-            Usys.Init_User init_user = new Usys.Init_User();
-            init_user.Initialize();
+            // Usersystem
+            UserHelper.Initialize();
             //root_user creation working
             //login in progress
             //user safe missing
