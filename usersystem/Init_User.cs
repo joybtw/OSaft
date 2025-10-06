@@ -41,11 +41,11 @@ namespace OSaft.usersystem
             User root_u = new(name, password, true, 0);
             if (!Directory.Exists("system"))
             {
-                FileSystem.CreateDirectory("system", "");
+                FileSystem.CreateDirectory("system");
             }
-            FileSystem.CreateDirectory("users", "");
-            FileSystem.CreateDirectory(name, "users");
-            FileSystem.CreateFile("root_init", "system"); 
+            FileSystem.CreateDirectory("users");
+            FileSystem.CreateDirectory(@"users\" + name);
+            FileSystem.CreateFile(@"root_init\"); 
             Console.WriteLine("sudo user created");
             Console.WriteLine("Your name is: " + name);
             Console.WriteLine("--------------------------------");

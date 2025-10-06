@@ -12,12 +12,19 @@ namespace OSaft.filesystem {
         public static IO.FileStream CreateFile(string path) {
             try
             {
-                return IO.File.Create(@"0:\" + path);
+                if (!IO.File.Exists(path) && path.Contains('.'))
+                {
+                    return IO.File.Create(@"0:\" + path);
+                } else
+                {
+                    Console.WriteLine("CreateFile: " + path + " already exists or is not a file");
+                }
+                
             } catch(Exception e)
             {
                 Console.WriteLine("CreateFile: Exception thrown: " + e.Message);
-                return null;
             }
+            return null;
         }
 
 
