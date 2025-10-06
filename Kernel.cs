@@ -14,6 +14,7 @@ namespace OSaftKernel
             SetKeyboardScanMap(new DE_Standard());
 
             // Welcome Messages
+            Console.Clear();    
             Console.WriteLine("OSaft - OperatingSystem - All For Techies");
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
