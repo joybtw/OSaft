@@ -1,16 +1,16 @@
 using System;
 using OSaft.filesystem;
 using System.IO;
+using System.Collections.Generic;
 
 namespace OSaft.usersystem
 {
-    public class Init_User
+    public class UserHelper
     {
+        internal readonly static Dictionary<string, User> users = new();
         public static void Initialize()
         {
             if (File.Exists(@"0:\system\root_init.sys")){ return; }
-            Console.WriteLine("Welcome to OSaft");
-            Console.WriteLine("OSaft needs you to create a user");
 
 
             Console.Write("Enter user name: ");

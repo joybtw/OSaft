@@ -17,7 +17,7 @@ namespace OSaftKernel
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
 
-            // FileSystem
+            // Filesystem
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
 
             // Commands Registry 
@@ -31,8 +31,8 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
 
-            // User System
-            Init_User.Initialize();
+            // Usersystem
+            UserHelper.Initialize();
             //root_user creation working
             //login in progress
             //user safe missing

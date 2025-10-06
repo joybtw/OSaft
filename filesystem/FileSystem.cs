@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using IO = System.IO;
 using Sys = Cosmos.System;
 
@@ -90,6 +93,27 @@ namespace OSaft.filesystem {
                 Console.WriteLine("ReadFile: Exception thrown: " + e.Message);
                 return null;
             }
+        }
+
+        // @todo implement this correctly
+        public static string[] FindFile(string filename, string startPath)
+        {
+            //List<string> paths = new();
+            //List<string> directories = Directory.GetDirectories(@"0:\" + startPath).ToList();
+            //directories.Insert(0, "");
+            //foreach (string dir in directories)
+            //{
+            //    foreach(string f in Directory.GetFiles(@"0:\" + dir))
+            //    {
+            //        if (f == filename) {
+            //            paths.Add(@"0:\" + dir + @"\" + filename);
+            //        }
+            //    }
+            //    directories = directories.Concat(directories, Directory.GetDirectories(@"0:\" + dir);
+            //}
+
+            //return paths.ToArray();
+            return null;
         }
 
     }
