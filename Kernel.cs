@@ -1,9 +1,10 @@
-﻿using OSaft.filesystem;
-using Usys= OSaft.usersystem;
+﻿using Cosmos.System.ScanMaps;
+using OSaft.filesystem;
+using OSaft.usersystem;
 using System;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
-using OSaft.usersystem;
+using Usys= OSaft.usersystem;
 
 namespace OSaftKernel
 {
@@ -13,13 +14,14 @@ namespace OSaftKernel
         {
             // Welcome Messages
             Console.WriteLine("OSaft - OperatingSystem - All For Techies");
+            SetKeyboardScanMap(new DE_Standard());
             Console.WriteLine("--------------------------------");
             Console.WriteLine("OSaft booted correctly");
 
             // FileSystem
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
 
-            // Commands Registry
+            // Commands Registry 
             Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
