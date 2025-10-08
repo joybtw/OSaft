@@ -32,6 +32,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
+            Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
 
             // Usersystem
             UserHelper.Initialize();

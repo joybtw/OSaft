@@ -140,10 +140,20 @@ namespace OSaft.commands
                 }
 
             }
-            
+        }
+    }
 
-            
+    public class FindCommand : Command
+    {
+        public FindCommand(string name) : base(name) { }
 
+        internal override void Execute(string[] args) {
+            if (args.Length > 0) {
+                Console.WriteLine(string.Join("\n", FileSystem.FindFile(args[0], args.Length > 1 ? args[1] : null)));
+            } else
+            {
+                Console.WriteLine("Error: Syntax: find <filename> <path>");
+            }
         }
     }
 }

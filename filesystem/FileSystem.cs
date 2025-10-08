@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using IO = System.IO;
 using Sys = Cosmos.System;
 
 namespace OSaft.filesystem {
 
-    public class FileSystem
+    public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
 
@@ -96,24 +95,32 @@ namespace OSaft.filesystem {
         }
 
         // @todo implement this correctly
-        public static string[] FindFile(string filename, string startPath)
+        public static string[] FindFile(string filename, string path)
         {
-            //List<string> paths = new();
-            //List<string> directories = Directory.GetDirectories(@"0:\" + startPath).ToList();
-            //directories.Insert(0, "");
-            //foreach (string dir in directories)
-            //{
-            //    foreach(string f in Directory.GetFiles(@"0:\" + dir))
-            //    {
-            //        if (f == filename) {
-            //            paths.Add(@"0:\" + dir + @"\" + filename);
-            //        }
-            //    }
-            //    directories = directories.Concat(directories, Directory.GetDirectories(@"0:\" + dir);
-            //}
+            if (string.IsNullOrEmpty(path)) { path = "0:\\"; } 
+            List<string> paths = new List<string>();
 
-            //return paths.ToArray();
-            return null;
+            try
+            {
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    if (filename == file)
+                    {
+                        paths.Add(path + "\\" + file);
+                    }
+                }
+
+                string[] directories = Directory.GetDirectories(path);
+                foreach (string dir in directories)
+                {
+                    paths.AddRange(FindFile(filename, path + "\\" + dir));
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine("Error: Accessing path: " + path + " (" + (string.IsNullOrEmpty(e.Message) ? "IO Error" : e.Message) + ")");
+            }
+
+            return paths.ToArray();
         }
 
     }
