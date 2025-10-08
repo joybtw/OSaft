@@ -117,9 +117,19 @@ namespace OSaft.commands
             {
                 string flag = args[0];
                 string path = args[1];
+                string[] illegal_path = {"system/root_init.sys", "system/users.db"  };
 
                 if (args.Length == 2)
                 {
+                    foreach (string s in illegal_path)
+                    {
+                        if (path == s)
+                        {
+                            Console.WriteLine("YOU SHALL NOT SPILL JUICE! MOM WOULD BE DISAPPOINTED!");
+                            return;
+                        }
+                    }
+
                     if (flag == "-d")
                     {
                         FileSystem.DeleteDirectory(path);

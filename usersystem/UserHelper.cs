@@ -14,6 +14,7 @@ namespace OSaft.usersystem
         {
             if (File.Exists(@"0:\system\root_init.sys")) { return; }
 
+            Console.WriteLine("This is the first boot of OSaft. Please create a user.");
             Console.Write("Enter user name: ");
             String name = Console.ReadLine();
             while (string.IsNullOrWhiteSpace(name))
@@ -40,7 +41,7 @@ namespace OSaft.usersystem
             FileSystem.CreateFile(@"system\root_init.sys");
             User_Database.SaveUser(root_u);
             Console.WriteLine("Sudo user created");
-            Console.WriteLine("Your name is: " + root_u.Name);
+            Console.WriteLine("Welcome " + root_u.Name + "!");
             //Console.WriteLine(root_u.PasswordHash);
             Console.WriteLine("--------------------------------");
             return;
@@ -94,14 +95,14 @@ namespace OSaft.usersystem
 
             byte[] finalData = new byte[data.Length + 1];
             data.CopyTo(finalData, 0);
-            finalData[^1] = checksum; // Checksumme im letzten Element speichern
+            finalData[^1] = checksum;
 
             DBInit();
-            /* testing failed
-             
-            var file = File.OpenWrite(user_db_path);
-            file.Seek(0, SeekOrigin.End);
-            file.Write(finalData, 0, finalData.Length);
+            /*
+            using (FileStream stream = new FileStream(user_db_path, FileMode.Append, FileAccess.Write))
+            {
+                stream.Write(data, 0, data.Length);
+            }
             return;
             */
         }
