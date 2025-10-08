@@ -1,8 +1,9 @@
 ﻿using Cosmos.System.ScanMaps;
+using OSaft.fileeditor;
 using OSaft.filesystem;
 using OSaft.usersystem;
-using OSaft.fileeditor;
 using System;
+using System.IO;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
 
@@ -43,7 +44,7 @@ namespace OSaftKernel
 
         protected override void Run()
         {
-            //FileEditor.EditFile();
+            //FileEditor.EditFile("root.txt");
             // Input Handling
             Console.Write("Input: ");
             String input = Console.ReadLine();
