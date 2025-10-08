@@ -1,5 +1,6 @@
-﻿using System;
-using OSaft.filesystem;
+﻿using OSaft.filesystem;
+using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OSaft.fileeditor
 {
@@ -7,7 +8,8 @@ namespace OSaft.fileeditor
     {
         public static void EditFile(string path)
         {
-            string file = FileSystem.ReadFile(path);
+            string file;
+            string[] lines = FileSystem.ReadFile(path).Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             int row = 0;
             int column = 1;
 
@@ -25,6 +27,7 @@ namespace OSaft.fileeditor
                     //File Handling
                     case ConsoleKey.S when ctrl:
                         Console.WriteLine("Save current file");
+                        file = string.Join("\r\n", lines);
                         FileSystem.WriteFile(path, file);
                         return;
                     case ConsoleKey.X when ctrl:
@@ -88,21 +91,38 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.LeftArrow:
                         if(row < 1) {
-                            row = 0;
+                            if(column>1)
+                            {
+                                column--;
+                                row = lines[column - 1].Length;
+                            } else
+                            {
+                                column = 1;
+                                row = 0;
+                            }
                         } else {
                             row--;
                         }
                             Console.WriteLine("One character backward");
                         break;
                     case ConsoleKey.RightArrow:
-                        row++;
+                        if(row+1< lines[column - 1].Length) {
+                            row++;
+                        } else{
+                            if(column-1>lines.Length) {
+                                row = 0;
+                                column++;
+                            }
+                        }
                         Console.WriteLine("One character forward");
                         break;
                     case ConsoleKey.A when ctrl:
                         Console.WriteLine("To start of line");
+                        row = 0;
                         break;
                     case ConsoleKey.E when ctrl:
                         Console.WriteLine("To end of line");
+                        row = lines[column-1].Length;
                         break;
                     case ConsoleKey.P when ctrl:
                         if (column < 2) {
@@ -141,6 +161,7 @@ namespace OSaft.fileeditor
                         Console.WriteLine(key.KeyChar);
                         break;
                 }
+                file = string.Join("\r\n", lines);
                 Console.WriteLine(file);
                 Console.SetCursorPosition(row,column);
             }
