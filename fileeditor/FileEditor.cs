@@ -1,6 +1,6 @@
 ﻿using OSaft.filesystem;
 using System;
-using static System.Net.Mime.MediaTypeNames;
+using System.Collections.Generic;
 
 namespace OSaft.fileeditor
 {
@@ -8,10 +8,15 @@ namespace OSaft.fileeditor
     {
         public static void EditFile(string path)
         {
-            string file;
-            string[] lines = FileSystem.ReadFile(path).Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            string file = FileSystem.ReadFile(path);
+            if (file == null) {return;}
+            string[] lines = file.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             int row = 0;
-            int column = 1;
+            int column = 0;
+            Console.Clear();
+            Console.WriteLine("Input: ");
+            Console.WriteLine(file);
+            Console.SetCursorPosition(row, column + 1);
 
             while (true)
             {
@@ -90,51 +95,58 @@ namespace OSaft.fileeditor
                         Console.WriteLine("One word forward");
                         break;
                     case ConsoleKey.LeftArrow:
-                        if(row < 1) {
-                            if(column>1)
+                        Console.WriteLine("One character backward");
+                        if(row < 1)
+                        {
+                            if(column > 0)
                             {
                                 column--;
-                                row = lines[column - 1].Length;
-                            } else
-                            {
-                                column = 1;
-                                row = 0;
+                                row = lines[column].Length;
                             }
                         } else {
                             row--;
                         }
-                            Console.WriteLine("One character backward");
                         break;
                     case ConsoleKey.RightArrow:
-                        if(row+1< lines[column - 1].Length) {
+                        Console.WriteLine("One character forward");
+                        if(row < lines[column].Length)
+                        {
                             row++;
-                        } else{
-                            if(column-1>lines.Length) {
-                                row = 0;
+                        } else
+                        {
+                            if(column < (lines.Length - 1))
+                            {
                                 column++;
+                                row = 0;
                             }
                         }
-                        Console.WriteLine("One character forward");
-                        break;
+                            break;
                     case ConsoleKey.A when ctrl:
                         Console.WriteLine("To start of line");
                         row = 0;
                         break;
                     case ConsoleKey.E when ctrl:
                         Console.WriteLine("To end of line");
-                        row = lines[column-1].Length;
+                        row = lines[column].Length;
                         break;
                     case ConsoleKey.P when ctrl:
-                        if (column < 2) {
-                            column = 1;
-                        } else {
+                        Console.WriteLine("One line up");
+                        if (column > 0) {
                             column--;
+                        } else {
+                            column = 0;
                         }
-                            Console.WriteLine("One line up");
                         break;
                     case ConsoleKey.N when ctrl:
                         Console.WriteLine("One line down");
-                        column++;
+                        if(lines.Length > column)
+                        {
+                            column++;
+                            if (lines[column].Length < row)
+                            {
+                                row = lines[column].Length;
+                            }
+                        }
                         break;
                     case ConsoleKey.UpArrow when ctrl:
                         Console.WriteLine("To previous block");
@@ -157,13 +169,40 @@ namespace OSaft.fileeditor
                     //Special Movement
                     //Information
                     //Various
+                    case ConsoleKey.Backspace:
+                        Console.WriteLine("Delete character");
+                        if (row > 0) {
+                            lines[column].Remove(row, 1);
+                        } else {
+                            if(column > 0) {
+                                lines[column-1] = lines[column-1] + lines[column];
+                                lines = (new List<string>(lines)).ToArray();
+                                column--;
+                                row = lines[column].Length;
+                            }
+                        }
+                            break;
+                    case ConsoleKey.Enter:
+                        Console.WriteLine("Add a line break");
+                        string currentLine = lines[column];
+                        string before = currentLine.Substring(0, row);
+                        string after = currentLine.Substring(row);
+                        lines[column] = before;
+                        var newLines = new List<string>(lines);
+                        newLines.Insert(column + 1, after);
+                        lines = newLines.ToArray();
+                        column++;
+                        row = 0;
+                        break;
                     default:
-                        Console.WriteLine(key.KeyChar);
+                        lines[column] = lines[column].Insert(row, key.KeyChar.ToString());
+                        row++;
+                        Console.WriteLine(key.ToString());
                         break;
                 }
                 file = string.Join("\r\n", lines);
                 Console.WriteLine(file);
-                Console.SetCursorPosition(row,column);
+                Console.SetCursorPosition(row, column + 1);
             }
         }
     }

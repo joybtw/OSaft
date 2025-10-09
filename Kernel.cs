@@ -34,6 +34,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
+            Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
 
             // Usersystem
             UserHelper.Initialize();
@@ -44,7 +45,6 @@ namespace OSaftKernel
 
         protected override void Run()
         {
-            FileEditor.EditFile("root.txt");
             // Input Handling
             Console.Write("Input: ");
             String input = Console.ReadLine();

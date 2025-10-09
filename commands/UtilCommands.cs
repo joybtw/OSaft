@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using OSaft.filesystem;
+using OSaft.fileeditor;
 
 namespace OSaft.commands
 {
@@ -57,6 +58,16 @@ namespace OSaft.commands
         {
             Console.WriteLine("Available Space: " + FileSystem.Instance.GetAvailableFreeSpace(@"0:\"));
             Console.WriteLine("File System Type: " + FileSystem.Instance.GetFileSystemType(@"0:\"));
+        }
+    }
+
+    public class FileEditCommand : Command
+    {
+        public FileEditCommand(string name) : base(name) { }
+
+        internal override void Execute(string[] args)
+        {
+            FileEditor.EditFile(args[0]);
         }
     }
 
