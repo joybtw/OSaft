@@ -24,6 +24,7 @@ namespace OSaft.fileeditor
                 bool ctrl = (key.Modifiers & ConsoleModifiers.Control) != 0;
                 bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
                 bool alt = (key.Modifiers & ConsoleModifiers.Alt) != 0;
+                string buffer;
 
                 Console.Clear();
                 Console.Write("Input: ");
@@ -37,7 +38,7 @@ namespace OSaft.fileeditor
                         return;
                     case ConsoleKey.X when ctrl:
                         Console.WriteLine("Close buffer, exit from nano");
-                        break;
+                        return;
                     //Editing
                     case ConsoleKey.K when ctrl:
                         Console.WriteLine("Cut current line into cutbuffer");
@@ -139,11 +140,9 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.N when ctrl:
                         Console.WriteLine("One line down");
-                        if(lines.Length > column)
-                        {
+                        if(column < lines.Length -1 ) {
                             column++;
-                            if (lines[column].Length < row)
-                            {
+                            if (lines[column].Length < row) {
                                 row = lines[column].Length;
                             }
                         }
@@ -151,8 +150,30 @@ namespace OSaft.fileeditor
                     case ConsoleKey.UpArrow when ctrl:
                         Console.WriteLine("To previous block");
                         break;
+                    case ConsoleKey.UpArrow:
+                        Console.WriteLine("One line up");
+                        if (column > 0)
+                        {
+                            column--;
+                        }
+                        else
+                        {
+                            column = 0;
+                        }
+                        break;
                     case ConsoleKey.DownArrow when ctrl:
                         Console.WriteLine("To next block");
+                        break;
+                    case ConsoleKey.DownArrow:
+                        Console.WriteLine("One line down");
+                        if (column < lines.Length - 1)
+                        {
+                            column++;
+                            if (lines[column].Length < row)
+                            {
+                                row = lines[column].Length;
+                            }
+                        }
                         break;
                     case ConsoleKey.Home when alt:
                         Console.WriteLine("To first row in viewport");
@@ -172,16 +193,20 @@ namespace OSaft.fileeditor
                     case ConsoleKey.Backspace:
                         Console.WriteLine("Delete character");
                         if (row > 0) {
-                            lines[column].Remove(row, 1);
+                            lines[column] = lines[column].Remove(row - 1, 1);
+                            row--;
                         } else {
                             if(column > 0) {
                                 lines[column-1] = lines[column-1] + lines[column];
-                                lines = (new List<string>(lines)).ToArray();
+                                List<string> temp = new List<string>(lines);
+                                temp.RemoveAt(column);
+                                lines = temp.ToArray();
+                                
                                 column--;
                                 row = lines[column].Length;
                             }
                         }
-                            break;
+                        break;
                     case ConsoleKey.Enter:
                         Console.WriteLine("Add a line break");
                         string currentLine = lines[column];
