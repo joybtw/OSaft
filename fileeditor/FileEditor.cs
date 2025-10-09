@@ -9,6 +9,11 @@ namespace OSaft.fileeditor
         private static void PrintViewport(string[] lines, int viewportX, int viewportY,int cursorX,int cursorY, int MAX_HEIGHT, int MAX_WIDTH)
         {
             Console.SetCursorPosition(0, 1);
+            //Clear the viewport
+            for (int i = 0; i < MAX_HEIGHT; i++) {
+                Console.WriteLine(new string(' ', MAX_WIDTH));
+            }
+            Console.SetCursorPosition(0, 1);
             // Print only characeters in the viewport
             viewportX = Math.Max(0, viewportX);
             viewportY = Math.Max(0, Math.Min(viewportY, Math.Max(0, lines.Length - MAX_HEIGHT)));
@@ -45,9 +50,13 @@ namespace OSaft.fileeditor
             int viewportX = 0;
             int viewportY = 0;
 
+            string buffer;
+
             Console.Clear();
             Console.WriteLine("Input: ");
             PrintViewport(lines, viewportX, viewportY, cursorX, cursorY, MAX_HEIGHT, MAX_WIDTH);
+            Console.SetCursorPosition(0, 0);
+
 
             while (true)
             {
@@ -55,73 +64,74 @@ namespace OSaft.fileeditor
                 bool ctrl = (key.Modifiers & ConsoleModifiers.Control) != 0;
                 bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
                 bool alt = (key.Modifiers & ConsoleModifiers.Alt) != 0;
-                string buffer;
 
-                Console.Clear();
-                Console.Write("Input: ");
                 switch (key.Key)
                 {
                     //File Handling
                     case ConsoleKey.S when ctrl:
-                        Console.WriteLine("Save current file");
+                        Console.SetCursorPosition(0, 0);
+                        Console.WriteLine("Input: Save current file");
                         file = string.Join("\r\n", lines);
                         FileSystem.WriteFile(path, file);
+                        Console.Clear();
                         return;
                     case ConsoleKey.X when ctrl:
-                        Console.WriteLine("Close buffer, exit from nano");
+                        Console.WriteLine("Input: Close buffer, exit from nano");
+                        Console.Clear();
                         return;
                     //Editing
                     case ConsoleKey.K when ctrl:
-                        Console.WriteLine("Cut current line into cutbuffer");
+                        Console.WriteLine("Input: Cut current line into cutbuffer");
+                        buffer = lines[cursorY];
                         break;
                     case ConsoleKey.D6 when alt:
-                        Console.WriteLine("Copy current line into cutbuffer");
+                        Console.WriteLine("Input: Copy current line into cutbuffer");
                         break;
                     case ConsoleKey.U when ctrl:
-                        Console.WriteLine("Paste contents of cutbuffer");
+                        Console.WriteLine("Input: Paste contents of cutbuffer");
                         break;
                     case ConsoleKey.U when alt:
-                        Console.WriteLine("Undo last action");
+                        Console.WriteLine("Input: Undo last action");
                         break;
                     case ConsoleKey.E when alt:
-                        Console.WriteLine("Redo last undone action");
+                        Console.WriteLine("Input: Redo last undone action");
                         break;
                     //Search and Replace
                     case ConsoleKey.B when ctrl:
-                        Console.WriteLine("Start backward search");
+                        Console.WriteLine("Input: Start backward search");
                         break;
                     case ConsoleKey.F when ctrl:
-                        Console.WriteLine("Start forward search");
+                        Console.WriteLine("Input: Start forward search");
                         break;
                     case ConsoleKey.B when alt:
-                        Console.WriteLine("Find next occurrence backward");
+                        Console.WriteLine("Input: Find next occurrence backward");
                         break;
                     case ConsoleKey.F when alt:
-                        Console.WriteLine("Find next occurrence forward");
+                        Console.WriteLine("Input: Find next occurrence forward");
                         break;
                     case ConsoleKey.R when alt:
-                        Console.WriteLine("Start a replacing session");
+                        Console.WriteLine("Input: Start a replacing session");
                         break;
                     //Deletion
                     case ConsoleKey.H when ctrl:
-                        Console.WriteLine("Delete character before cursor");
+                        Console.WriteLine("Input: Delete character before cursor");
                         break;
                     case ConsoleKey.D when ctrl:
-                        Console.WriteLine("Delete character under cursor");
+                        Console.WriteLine("Input: Delete character under cursor");
                         break;
                     case ConsoleKey.Backspace when alt:
-                        Console.WriteLine("Delete word to the left");
+                        Console.WriteLine("Input: Delete word to the left");
                         break;
                     case ConsoleKey.Delete when ctrl:
-                        Console.WriteLine("Delete word to the right");
+                        Console.WriteLine("Input: Delete word to the right");
                         break;
                     case ConsoleKey.Delete when alt:
-                        Console.WriteLine("Delete current line");
+                        Console.WriteLine("Input: Delete current line");
                         break;
                     //Operations
                     //Moving around
                     case ConsoleKey.LeftArrow when ctrl:
-                        Console.WriteLine("One word backward");
+                        Console.WriteLine("Input: One word backward");
                         if (cursorX < 1)
                         {
                             cursorY--;
@@ -134,10 +144,10 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.RightArrow when ctrl:
-                        Console.WriteLine("One word forward");
+                        Console.WriteLine("Input: One word forward");
                         break;
                     case ConsoleKey.LeftArrow:
-                        Console.WriteLine("One character backward");
+                        Console.WriteLine("Input: One character backward");
                         if (cursorX < 1)
                         {
                             if (cursorY > 0)
@@ -150,7 +160,7 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.RightArrow:
-                        Console.WriteLine("One character forward");
+                        Console.WriteLine("Input: One character forward");
                         if (cursorX < lines[cursorY].Length)
                         {
                             cursorX++;
@@ -164,15 +174,15 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.A when ctrl:
-                        Console.WriteLine("To start of line");
+                        Console.WriteLine("Input: To start of line");
                         cursorX = 0;
                         break;
                     case ConsoleKey.E when ctrl:
-                        Console.WriteLine("To end of line");
+                        Console.WriteLine("Input: To end of line");
                         cursorX = lines[cursorY].Length;
                         break;
                     case ConsoleKey.P when ctrl:
-                        Console.WriteLine("One line up");
+                        Console.WriteLine("Input: One line up");
                         if (cursorY > 0) {
                             cursorY--;
                         } else {
@@ -180,7 +190,7 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.N when ctrl:
-                        Console.WriteLine("One line down");
+                        Console.WriteLine("Input: One line down");
                         if (cursorY < lines.Length - 1) {
                             cursorY++;
                             if (lines[cursorY].Length < cursorX) {
@@ -189,10 +199,10 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.UpArrow when ctrl:
-                        Console.WriteLine("To previous block");
+                        Console.WriteLine("Input: To previous block");
                         break;
                     case ConsoleKey.UpArrow:
-                        Console.WriteLine("One line up");
+                        Console.WriteLine("Input: One line up");
                         if (cursorY > 0)
                         {
                             cursorY--;
@@ -203,10 +213,10 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.DownArrow when ctrl:
-                        Console.WriteLine("To next block");
+                        Console.WriteLine("Input: To next block");
                         break;
                     case ConsoleKey.DownArrow:
-                        Console.WriteLine("One line down");
+                        Console.WriteLine("Input: One line down");
                         if (cursorY < lines.Length - 1)
                         {
                             cursorY++;
@@ -217,16 +227,16 @@ namespace OSaft.fileeditor
                         }
                         break;
                     case ConsoleKey.Home when alt:
-                        Console.WriteLine("To first row in viewport");
+                        Console.WriteLine("Input: To first row in viewport");
                         break;
                     case ConsoleKey.End when alt:
-                        Console.WriteLine("To last row in viewport");
+                        Console.WriteLine("Input: To last row in viewport");
                         break;
                     case ConsoleKey.Y when ctrl:
-                        Console.WriteLine("One page up");
+                        Console.WriteLine("Input: One page up");
                         break;
                     case ConsoleKey.V when ctrl:
-                        Console.WriteLine("One page down");
+                        Console.WriteLine("Input: One page down");
                         break;
                     //Special Movement
                     //Information
@@ -281,8 +291,6 @@ namespace OSaft.fileeditor
                 }
 
                 PrintViewport(lines, viewportX, viewportY, cursorX, cursorY, MAX_HEIGHT, MAX_WIDTH);
-
-                file = string.Join("\r\n", lines);
             }
         }
     }
