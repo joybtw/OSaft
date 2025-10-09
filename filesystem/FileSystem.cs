@@ -1,22 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using IO = System.IO;
 using Sys = Cosmos.System;
 
 namespace OSaft.filesystem {
-
-    public class FileSystem
+    public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
+        private static string currentDrive = "0:\\";
+        private static string currentPath = "";
+        private static string ValidatePath(string inputPath)
+        {
+            if (string.IsNullOrWhiteSpace(inputPath)) { return "0:\\"; }
+            
+            inputPath = inputPath.Trim().Replace('/', '\\');
 
-        public static IO.FileStream CreateFile(string path) {
+            if (!inputPath.Contains(":\\"))
+            {
+                inputPath = inputPath.TrimStart('\\');
+                inputPath = Path.Combine(currentDrive, inputPath);
+            }
+
+            string normalized = Path.GetFullPath(inputPath);
+
+            return normalized;
+        }
+
+        public static FileStream CreateFile(string path) {
+            path = ValidatePath(currentPath + path ?? "");
             try
             {
-                if (!IO.File.Exists(path) && path.Contains('.'))
+                if (!File.Exists(path) && path.Contains('.'))
                 {
-                    return IO.File.Create(@"0:\" + path);
+                    return File.Create(path);
                 } else
                 {
                     Console.WriteLine("CreateFile: " + path + " already exists or is not a file");
@@ -30,10 +46,11 @@ namespace OSaft.filesystem {
         }
 
 
-        public static IO.DirectoryInfo CreateDirectory(string path) {
+        public static DirectoryInfo CreateDirectory(string path) {
+            path = ValidatePath(currentPath + path ?? "");
             try
             {
-                return IO.Directory.CreateDirectory(@"0:\" + path);
+                return Directory.CreateDirectory(@"0:\" + path);
             }
             catch (Exception e)
             {
@@ -44,9 +61,10 @@ namespace OSaft.filesystem {
 
         public static void DeleteDirectory(string path)
         {
+            path = ValidatePath(currentPath + path ?? "");
             try
             {
-                IO.Directory.Delete(@"0:\" + path);
+                Directory.Delete(@"0:\" + path);
             }
             catch (Exception e)
             {
@@ -56,9 +74,10 @@ namespace OSaft.filesystem {
 
         public static void DeleteFile(string path)
         {
+            path = ValidatePath(currentPath + path ?? "");
             try
             {
-                IO.File.Delete(@"0:\" + path);
+                File.Delete(path);
             }
             catch (Exception e)
             {
@@ -67,9 +86,10 @@ namespace OSaft.filesystem {
         }
 
         public static void WriteFile(string path, string content) {
+            path = ValidatePath(currentPath + path ?? "");
             try
             {
-               IO.File.WriteAllText(@"0:\" + path, content);
+               File.WriteAllText(path, content);
             } catch (Exception e) 
             {
                 Console.WriteLine("WriteFile: Exception thrown: " + e.Message);
@@ -78,6 +98,7 @@ namespace OSaft.filesystem {
 
         public static void WriteFile(string path, string[] content)
         {
+            path = ValidatePath(currentPath + path ?? "");
             foreach(string s in content)
             {
                 WriteFile(path, s);
@@ -85,9 +106,10 @@ namespace OSaft.filesystem {
         }
 
         public static string ReadFile(string path) {
+            path = ValidatePath(currentPath + path ?? "");
             try
             {
-                return IO.File.ReadAllText(@"0:\" + path);
+                return File.ReadAllText(path);
             } catch (Exception e)
             {
                 Console.WriteLine("ReadFile: Exception thrown: " + e.Message);
@@ -95,25 +117,32 @@ namespace OSaft.filesystem {
             }
         }
 
-        // @todo implement this correctly
-        public static string[] FindFile(string filename, string startPath)
+        public static string[] FindFile(string filename, string path)
         {
-            //List<string> paths = new();
-            //List<string> directories = Directory.GetDirectories(@"0:\" + startPath).ToList();
-            //directories.Insert(0, "");
-            //foreach (string dir in directories)
-            //{
-            //    foreach(string f in Directory.GetFiles(@"0:\" + dir))
-            //    {
-            //        if (f == filename) {
-            //            paths.Add(@"0:\" + dir + @"\" + filename);
-            //        }
-            //    }
-            //    directories = directories.Concat(directories, Directory.GetDirectories(@"0:\" + dir);
-            //}
+            path = ValidatePath(currentPath + path ?? "");
+            List<string> paths = new List<string>();
 
-            //return paths.ToArray();
-            return null;
+            try
+            {
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    if (filename == file)
+                    {
+                        paths.Add(path + "\\" + file);
+                    }
+                }
+
+                string[] directories = Directory.GetDirectories(path);
+                foreach (string dir in directories)
+                {
+                    paths.AddRange(FindFile(filename, path + "\\" + dir));
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine("Error: Accessing path: " + path + " (" + (string.IsNullOrEmpty(e.Message) ? "IO Error" : e.Message) + ")");
+            }
+
+            return paths.ToArray();
         }
 
     }
