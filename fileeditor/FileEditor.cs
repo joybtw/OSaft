@@ -6,17 +6,48 @@ namespace OSaft.fileeditor
 {
     internal class FileEditor
     {
+        private static void PrintViewport(string[] lines, int viewportX, int viewportY,int cursorX,int cursorY, int MAX_HEIGHT, int MAX_WIDTH)
+        {
+            Console.SetCursorPosition(0, 1);
+            // Print only characeters in the viewport
+            viewportX = Math.Max(0, viewportX);
+            viewportY = Math.Max(0, Math.Min(viewportY, Math.Max(0, lines.Length - MAX_HEIGHT)));
+            for (int row = viewportY; row <= Math.Min(viewportY + MAX_HEIGHT, lines.Length - 1); row++)
+            {
+                string line = lines[row];
+                if (line.Length > viewportX)
+                {
+                    int length = Math.Min(MAX_WIDTH + 1, line.Length - viewportX);
+                    string substring = line.Substring(viewportX, length);
+                    Console.WriteLine(substring);
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+            }
+            Console.SetCursorPosition(cursorX - viewportX, cursorY - viewportY + 1);
+        }
         public static void EditFile(string path)
         {
+            // Constants
+            int MAX_WIDTH = Console.WindowWidth - 1;
+            int MAX_HEIGHT = Console.WindowHeight - 2;
+
+            // Import the File
             string file = FileSystem.ReadFile(path);
             if (file == null) {return;}
             string[] lines = file.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            int row = 0;
-            int column = 0;
+            
+            // Position
+            int cursorX = 0;
+            int cursorY = 0;
+            int viewportX = 0;
+            int viewportY = 0;
+
             Console.Clear();
             Console.WriteLine("Input: ");
-            Console.WriteLine(file);
-            Console.SetCursorPosition(row, column + 1);
+            PrintViewport(lines, viewportX, viewportY, cursorX, cursorY, MAX_HEIGHT, MAX_WIDTH);
 
             while (true)
             {
@@ -91,59 +122,69 @@ namespace OSaft.fileeditor
                     //Moving around
                     case ConsoleKey.LeftArrow when ctrl:
                         Console.WriteLine("One word backward");
+                        if (cursorX < 1)
+                        {
+                            cursorY--;
+                            cursorX = lines[cursorY].Length;
+                        }
+                        char c = lines[cursorY][cursorX];
+                        while (cursorX < lines[cursorY].Length && char.IsWhiteSpace(c))
+                        {
+                            cursorX--;
+                        }
                         break;
                     case ConsoleKey.RightArrow when ctrl:
                         Console.WriteLine("One word forward");
                         break;
                     case ConsoleKey.LeftArrow:
                         Console.WriteLine("One character backward");
-                        if(row < 1)
+                        if (cursorX < 1)
                         {
-                            if(column > 0)
+                            if (cursorY > 0)
                             {
-                                column--;
-                                row = lines[column].Length;
+                                cursorY--;
+                                cursorX = lines[cursorY].Length;
                             }
                         } else {
-                            row--;
+                            cursorX--;
                         }
                         break;
                     case ConsoleKey.RightArrow:
                         Console.WriteLine("One character forward");
-                        if(row < lines[column].Length)
+                        if (cursorX < lines[cursorY].Length)
                         {
-                            row++;
+                            cursorX++;
                         } else
                         {
-                            if(column < (lines.Length - 1))
+                            if (cursorY < (lines.Length - 1))
                             {
-                                column++;
-                                row = 0;
+                                cursorY++;
+                                cursorX = 0;
                             }
                         }
-                            break;
+                        break;
                     case ConsoleKey.A when ctrl:
                         Console.WriteLine("To start of line");
-                        row = 0;
+                        cursorX = 0;
                         break;
                     case ConsoleKey.E when ctrl:
                         Console.WriteLine("To end of line");
-                        row = lines[column].Length;
+                        cursorX = lines[cursorY].Length;
                         break;
                     case ConsoleKey.P when ctrl:
                         Console.WriteLine("One line up");
-                        if (column > 0) {
-                            column--;
+                        if (cursorY > 0) {
+                            cursorY--;
                         } else {
-                            column = 0;
+                            cursorY = 0;
                         }
                         break;
                     case ConsoleKey.N when ctrl:
                         Console.WriteLine("One line down");
-                        if(column < lines.Length -1 ) {
-                            column++;
-                            if (lines[column].Length < row) {
-                                row = lines[column].Length;
+                        if (cursorY < lines.Length - 1) {
+                            cursorY++;
+                            if (lines[cursorY].Length < cursorX) {
+                                cursorX = lines[cursorY].Length;
                             }
                         }
                         break;
@@ -152,13 +193,13 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.UpArrow:
                         Console.WriteLine("One line up");
-                        if (column > 0)
+                        if (cursorY > 0)
                         {
-                            column--;
+                            cursorY--;
                         }
                         else
                         {
-                            column = 0;
+                            cursorY = 0;
                         }
                         break;
                     case ConsoleKey.DownArrow when ctrl:
@@ -166,12 +207,12 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.DownArrow:
                         Console.WriteLine("One line down");
-                        if (column < lines.Length - 1)
+                        if (cursorY < lines.Length - 1)
                         {
-                            column++;
-                            if (lines[column].Length < row)
+                            cursorY++;
+                            if (lines[cursorY].Length < cursorX)
                             {
-                                row = lines[column].Length;
+                                cursorX = lines[cursorY].Length;
                             }
                         }
                         break;
@@ -192,42 +233,56 @@ namespace OSaft.fileeditor
                     //Various
                     case ConsoleKey.Backspace:
                         Console.WriteLine("Delete character");
-                        if (row > 0) {
-                            lines[column] = lines[column].Remove(row - 1, 1);
-                            row--;
+                        if (cursorX > 0) {
+                            lines[cursorY] = lines[cursorY].Remove(cursorX - 1, 1);
+                            cursorX--;
                         } else {
-                            if(column > 0) {
-                                lines[column-1] = lines[column-1] + lines[column];
+                            if (cursorY > 0) {
+                                lines[cursorY - 1] = lines[cursorY - 1] + lines[cursorY];
                                 List<string> temp = new List<string>(lines);
-                                temp.RemoveAt(column);
+                                temp.RemoveAt(cursorY);
                                 lines = temp.ToArray();
-                                
-                                column--;
-                                row = lines[column].Length;
+
+                                cursorY--;
+                                cursorX = lines[cursorY].Length;
                             }
                         }
                         break;
                     case ConsoleKey.Enter:
                         Console.WriteLine("Add a line break");
-                        string currentLine = lines[column];
-                        string before = currentLine.Substring(0, row);
-                        string after = currentLine.Substring(row);
-                        lines[column] = before;
+                        string currentLine = lines[cursorY];
+                        string before = currentLine.Substring(0, cursorX);
+                        string after = currentLine.Substring(cursorX);
+                        lines[cursorY] = before;
                         var newLines = new List<string>(lines);
-                        newLines.Insert(column + 1, after);
+                        newLines.Insert(cursorY + 1, after);
                         lines = newLines.ToArray();
-                        column++;
-                        row = 0;
+                        cursorY++;
+                        cursorX = 0;
                         break;
                     default:
-                        lines[column] = lines[column].Insert(row, key.KeyChar.ToString());
-                        row++;
+                        lines[cursorY] = lines[cursorY].Insert(cursorX, key.KeyChar.ToString());
+                        cursorX++;
                         Console.WriteLine(key.ToString());
                         break;
                 }
+
+                //Move viewport to the marker
+                if (cursorX < viewportX) {
+                viewportX = cursorX;
+                }else if (cursorX >= viewportX + MAX_WIDTH) { 
+                    viewportX = cursorX - MAX_WIDTH + 1;
+                }
+
+                if (cursorY < viewportY) {
+                    viewportY = cursorY;
+                }else if (cursorY >= viewportY + MAX_HEIGHT) { 
+                    viewportY = cursorY - MAX_HEIGHT + 1;
+                }
+
+                PrintViewport(lines, viewportX, viewportY, cursorX, cursorY, MAX_HEIGHT, MAX_WIDTH);
+
                 file = string.Join("\r\n", lines);
-                Console.WriteLine(file);
-                Console.SetCursorPosition(row, column + 1);
             }
         }
     }
