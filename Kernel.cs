@@ -45,6 +45,7 @@ namespace OSaftKernel
 
         protected override void Run()
         {
+            FileEditor.EditFile("root.txt");
             // Input Handling
             Console.Write("Input: ");
             String input = Console.ReadLine();

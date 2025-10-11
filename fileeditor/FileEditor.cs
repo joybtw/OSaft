@@ -6,44 +6,48 @@ namespace OSaft.fileeditor
 {
     internal class FileEditor
     {
-        private static void PrintViewport(string[] lines, int viewportX, int viewportY,int cursorX,int cursorY, int MAX_HEIGHT, int MAX_WIDTH)
+        // Constant
+        private static int[] console = { 0, 10/*Console.WindowWidth - 1*/, 1, 10/*Console.WindowHeight-2*/ }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
+        private static int consoleWidth = console[1] - console[0] + 1;
+        private static int consoleHeight = console[3] - console[2] + 1;
+
+        private static void CursorToConsole(int cursorX, int cursorY, int viewportX, int viewportY)
         {
-            Console.SetCursorPosition(0, 1);
-            //Clear the viewport
-            for (int i = 0; i < MAX_HEIGHT; i++) {
-                Console.WriteLine(new string(' ', MAX_WIDTH));
-            }
-            Console.SetCursorPosition(0, 1);
-            // Print only characeters in the viewport
-            viewportX = Math.Max(0, viewportX);
-            viewportY = Math.Max(0, Math.Min(viewportY, Math.Max(0, lines.Length - MAX_HEIGHT)));
-            for (int row = viewportY; row <= Math.Min(viewportY + MAX_HEIGHT, lines.Length - 1); row++)
-            {
-                string line = lines[row];
-                if (line.Length > viewportX)
-                {
-                    int length = Math.Min(MAX_WIDTH + 1, line.Length - viewportX);
-                    string substring = line.Substring(viewportX, length);
-                    Console.WriteLine(substring);
-                }
-                else
-                {
-                    Console.WriteLine();
-                }
-            }
-            Console.SetCursorPosition(cursorX - viewportX, cursorY - viewportY + 1);
+            Console.SetCursorPosition(cursorX - viewportX + console[0], cursorY - viewportY + console[2]);
         }
+        
+
+        private static void PrintViewport(string[] lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
+            Console.Clear();
+
+            // Move viewport to the marker
+            viewportX = Math.Min(Math.Max(cursorX - consoleWidth + 1, 0), cursorX);
+            viewportY = Math.Min(Math.Max(cursorY - consoleHeight + 1, 0), cursorY);
+
+            // Print only characters in the viewport
+            for (int Y = viewportY; Y <= lines.Length - 1 - viewportY; Y++) {
+                string line = lines[Y];
+                int start = Math.Min(viewportX, line.Length);
+                int length = Math.Min(consoleWidth, line.Length - start);
+
+                Console.SetCursorPosition(console[0], console[2]+Y);
+
+                if (length > 0) {
+                    Console.Write(line.Substring(start, length));
+                } else {
+                    Console.Write("");
+                }
+            }
+
+            CursorToConsole(cursorX, cursorY, viewportX, viewportY);
+        }
+
         public static void EditFile(string path)
         {
-            // Constants
-            int MAX_WIDTH = Console.WindowWidth - 1;
-            int MAX_HEIGHT = Console.WindowHeight - 2;
-
             // Import the File
             string file = FileSystem.ReadFile(path);
-            if (file == null) {return;}
             string[] lines = file.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            
+
             // Position
             int cursorX = 0;
             int cursorY = 0;
@@ -53,10 +57,7 @@ namespace OSaft.fileeditor
             string buffer;
 
             Console.Clear();
-            Console.WriteLine("Input: ");
-            PrintViewport(lines, viewportX, viewportY, cursorX, cursorY, MAX_HEIGHT, MAX_WIDTH);
-            Console.SetCursorPosition(0, 0);
-
+            PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
 
             while (true)
             {
@@ -69,7 +70,6 @@ namespace OSaft.fileeditor
                 {
                     //File Handling
                     case ConsoleKey.S when ctrl:
-                        Console.SetCursorPosition(0, 0);
                         Console.WriteLine("Input: Save current file");
                         file = string.Join("\r\n", lines);
                         FileSystem.WriteFile(path, file);
@@ -86,6 +86,7 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.D6 when alt:
                         Console.WriteLine("Input: Copy current line into cutbuffer");
+                        buffer = lines[cursorY];
                         break;
                     case ConsoleKey.U when ctrl:
                         Console.WriteLine("Input: Paste contents of cutbuffer");
@@ -132,46 +133,42 @@ namespace OSaft.fileeditor
                     //Moving around
                     case ConsoleKey.LeftArrow when ctrl:
                         Console.WriteLine("Input: One word backward");
-                        if (cursorX < 1)
-                        {
-                            cursorY--;
-                            cursorX = lines[cursorY].Length;
-                        }
-                        char c = lines[cursorY][cursorX];
-                        while (cursorX < lines[cursorY].Length && char.IsWhiteSpace(c))
+                        while(cursorX > 0 && lines[cursorY][cursorX - 1] != ' ')
                         {
                             cursorX--;
                         }
                         break;
                     case ConsoleKey.RightArrow when ctrl:
                         Console.WriteLine("Input: One word forward");
+                        while(cursorX < lines[cursorY].Length && lines[cursorY][cursorX+1] != ' ')
+                        {
+                            cursorX++;
+                        }
                         break;
                     case ConsoleKey.LeftArrow:
                         Console.WriteLine("Input: One character backward");
-                        if (cursorX < 1)
+                        if(cursorX > 0)
                         {
-                            if (cursorY > 0)
+                            cursorX--;
+                        } else
+                        {
+                            if(cursorY > 0)
                             {
                                 cursorY--;
                                 cursorX = lines[cursorY].Length;
                             }
-                        } else {
-                            cursorX--;
                         }
                         break;
                     case ConsoleKey.RightArrow:
                         Console.WriteLine("Input: One character forward");
-                        if (cursorX < lines[cursorY].Length)
-                        {
+                        if (cursorX < lines[cursorY].Length) {
                             cursorX++;
-                        } else
-                        {
-                            if (cursorY < (lines.Length - 1))
-                            {
-                                cursorY++;
-                                cursorX = 0;
-                            }
+                        } else if (cursorY < (lines.Length - 1)) {
+                            cursorY++;
+                            cursorX = 0;
                         }
+                        cursorY = Math.Clamp(cursorY, 0, lines.Length - 1);
+                        cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
                         break;
                     case ConsoleKey.A when ctrl:
                         Console.WriteLine("Input: To start of line");
@@ -183,60 +180,46 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.P when ctrl:
                         Console.WriteLine("Input: One line up");
-                        if (cursorY > 0) {
-                            cursorY--;
-                        } else {
-                            cursorY = 0;
-                        }
+                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Length - 1);
                         break;
                     case ConsoleKey.N when ctrl:
                         Console.WriteLine("Input: One line down");
-                        if (cursorY < lines.Length - 1) {
-                            cursorY++;
-                            if (lines[cursorY].Length < cursorX) {
-                                cursorX = lines[cursorY].Length;
-                            }
-                        }
+                        cursorY = Math.Clamp(cursorY + 1, 0, lines.Length - 1);
                         break;
                     case ConsoleKey.UpArrow when ctrl:
                         Console.WriteLine("Input: To previous block");
                         break;
                     case ConsoleKey.UpArrow:
                         Console.WriteLine("Input: One line up");
-                        if (cursorY > 0)
-                        {
-                            cursorY--;
-                        }
-                        else
-                        {
-                            cursorY = 0;
-                        }
+                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Length - 1);
                         break;
                     case ConsoleKey.DownArrow when ctrl:
                         Console.WriteLine("Input: To next block");
                         break;
                     case ConsoleKey.DownArrow:
                         Console.WriteLine("Input: One line down");
-                        if (cursorY < lines.Length - 1)
-                        {
-                            cursorY++;
-                            if (lines[cursorY].Length < cursorX)
-                            {
-                                cursorX = lines[cursorY].Length;
-                            }
-                        }
+                        cursorY = Math.Clamp(cursorY+1, 0, lines.Length - 1);
                         break;
                     case ConsoleKey.Home when alt:
                         Console.WriteLine("Input: To first row in viewport");
+                        cursorX = viewportX;
+                        cursorY = viewportY;
                         break;
                     case ConsoleKey.End when alt:
                         Console.WriteLine("Input: To last row in viewport");
+                        cursorX = viewportX + consoleWidth - 1;
+                        cursorY = viewportY + consoleHeight - 1;
                         break;
                     case ConsoleKey.Y when ctrl:
                         Console.WriteLine("Input: One page up");
+                        cursorY = Math.Max(cursorY - consoleHeight, 0);
+                        viewportY = Math.Max(viewportY - consoleHeight, 0);
+
                         break;
                     case ConsoleKey.V when ctrl:
                         Console.WriteLine("Input: One page down");
+                        cursorY = Math.Min(cursorY + consoleHeight, lines.Length);
+                        viewportY = Math.Min(viewportY + consoleHeight, lines.Length - consoleHeight);
                         break;
                     //Special Movement
                     //Information
@@ -277,20 +260,7 @@ namespace OSaft.fileeditor
                         break;
                 }
 
-                //Move viewport to the marker
-                if (cursorX < viewportX) {
-                viewportX = cursorX;
-                }else if (cursorX >= viewportX + MAX_WIDTH) { 
-                    viewportX = cursorX - MAX_WIDTH + 1;
-                }
-
-                if (cursorY < viewportY) {
-                    viewportY = cursorY;
-                }else if (cursorY >= viewportY + MAX_HEIGHT) { 
-                    viewportY = cursorY - MAX_HEIGHT + 1;
-                }
-
-                PrintViewport(lines, viewportX, viewportY, cursorX, cursorY, MAX_HEIGHT, MAX_WIDTH);
+                PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
             }
         }
     }
