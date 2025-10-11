@@ -7,7 +7,7 @@ namespace OSaft.fileeditor
     internal class FileEditor
     {
         // Constant
-        private static int[] console = { 0, 10/*Console.WindowWidth - 1*/, 1, 10/*Console.WindowHeight-2*/ }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
+        private static int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-2 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
         private static int consoleWidth = console[1] - console[0] + 1;
         private static int consoleHeight = console[3] - console[2] + 1;
 
@@ -16,11 +16,17 @@ namespace OSaft.fileeditor
             Console.SetCursorPosition(cursorX - viewportX + console[0], cursorY - viewportY + console[2]);
         }
         
+        private static void clearViewport()
+        {
+            for (int Y = console[2]; Y <= console[3]; Y++)
+            {
+                Console.SetCursorPosition(console[0], Y);
+                Console.Write(new string(' ', consoleWidth));
+            }
+        }   
 
         private static void PrintViewport(List<string> lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
-            Console.Clear();
-            cursorY = Math.Clamp(cursorY, 0, lines.Count - 1);
-            cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
+            clearViewport();
 
             // Move viewport to the marker
             viewportX = Math.Min(Math.Max(cursorX - consoleWidth + 1, 0), cursorX);
@@ -61,7 +67,7 @@ namespace OSaft.fileeditor
 
             string buffer = "";
 
-            Console.Clear();
+            clearViewport();
             PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
 
             while (true)
@@ -71,12 +77,20 @@ namespace OSaft.fileeditor
                 bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
                 bool alt = (key.Modifiers & ConsoleModifiers.Alt) != 0;
 
+                Console.SetCursorPosition(0, 0);
+
                 switch (key.Key)
                 {
                     //File Handling
                     case ConsoleKey.S when ctrl:
                         Console.WriteLine("Input: Save current file");
-                        //file = string.Join(Environment.NewLine, lines);
+                        file = "";
+                        for (int i = 0; i < lines.Count; i++) {
+                            file += lines[i];
+                            if (i < lines.Count - 1) {
+                                file += "\n";
+                            }
+                        }
                         FileSystem.WriteFile(path, file);
                         break;
                     case ConsoleKey.X when ctrl:
