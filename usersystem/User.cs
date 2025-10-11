@@ -7,7 +7,7 @@ namespace OSaft.usersystem
     {
         public string Name { get; private set; }
         public uint Uid { get; private set; }
-        public bool IsRoot { get; private set; }
+        public bool IsSuperuser { get; private set; }
         public string PasswordHash { get; private set; }
         public string Salt { get; private set; }
 
@@ -72,7 +72,7 @@ namespace OSaft.usersystem
             return ComputeFNV1a(password + salt);
         }
 
-        public User(string newName, string password, bool root, uint id)
+        public User(string newName, string password, bool sudo, uint id)
         {
             if (string.IsNullOrWhiteSpace(newName) || newName.Length > MaxNameLength)
                 throw new ArgumentException("Invalid username", nameof(newName));
@@ -80,7 +80,7 @@ namespace OSaft.usersystem
             this.Name = newName;
             this.Salt = GenerateSalt();
             this.PasswordHash = HashPassword(password, this.Salt);
-            this.IsRoot = root;
+            this.IsSuperuser = sudo;
             this.Uid = id;
         }
 

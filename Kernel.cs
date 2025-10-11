@@ -3,8 +3,6 @@ using OSaft.fileeditor;
 using OSaft.filesystem;
 using OSaft.usersystem;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
 
@@ -35,6 +33,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
+            Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
             Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
 
             // Usersystem
