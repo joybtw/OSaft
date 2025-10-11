@@ -1,7 +1,6 @@
 ﻿using OSaft.filesystem;
 using System;
 using System.Collections.Generic;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace OSaft.fileeditor
 {
@@ -20,13 +19,15 @@ namespace OSaft.fileeditor
 
         private static void PrintViewport(List<string> lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
             Console.Clear();
+            cursorY = Math.Clamp(cursorY, 0, lines.Count - 1);
+            cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
 
             // Move viewport to the marker
             viewportX = Math.Min(Math.Max(cursorX - consoleWidth + 1, 0), cursorX);
             viewportY = Math.Min(Math.Max(cursorY - consoleHeight + 1, 0), cursorY);
 
             // Print only characters in the viewport
-            for (int Y = viewportY; Y <= lines.Count - 1 - viewportY; Y++) {
+            for (int Y = viewportY; Y < Math.Min(lines.Count, viewportY + consoleHeight); Y++) {
                 string line = lines[Y];
                 int start = Math.Min(viewportX, line.Length);
                 int length = Math.Min(consoleWidth, line.Length - start);
@@ -48,6 +49,9 @@ namespace OSaft.fileeditor
             // Import the File
             string file = FileSystem.ReadFile(path);
             List<string> lines = new List<string>(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
+            if (lines.Count == 0) {
+                lines.Add("");
+            }
 
             // Position
             int cursorX = 0;
@@ -55,7 +59,7 @@ namespace OSaft.fileeditor
             int viewportX = 0;
             int viewportY = 0;
 
-            string buffer;
+            string buffer = "";
 
             Console.Clear();
             PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
@@ -72,11 +76,9 @@ namespace OSaft.fileeditor
                     //File Handling
                     case ConsoleKey.S when ctrl:
                         Console.WriteLine("Input: Save current file");
-                        Console.Clear();
-                        file = string.Join("\n", lines);
+                        //file = string.Join(Environment.NewLine, lines);
                         FileSystem.WriteFile(path, file);
-                        Console.Clear();
-                        return;
+                        break;
                     case ConsoleKey.X when ctrl:
                         Console.WriteLine("Input: Close buffer, exit from nano");
                         Console.Clear();
@@ -169,8 +171,6 @@ namespace OSaft.fileeditor
                             cursorY++;
                             cursorX = 0;
                         }
-                        cursorY = Math.Clamp(cursorY, 0, lines.Count - 1);
-                        cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
                         break;
                     case ConsoleKey.A when ctrl:
                         Console.WriteLine("Input: To start of line");
@@ -240,11 +240,12 @@ namespace OSaft.fileeditor
                                 cursorY--;
                                 cursorX = lines[cursorY].Length;
 
-                                lines.Insert(cursorY, lines[cursorY] + lines[cursorY + 1]);
+                                lines[cursorY] += lines[cursorY + 1];
                                 lines.RemoveAt(cursorY + 1);
-                                lines.RemoveAt(cursorY + 2);
                             }
                         }
+                        cursorY = Math.Clamp(cursorY, 0, lines.Count - 1);
+                        cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
                         break;
                     case ConsoleKey.Enter:
                         Console.WriteLine("Add a line break");
@@ -257,9 +258,11 @@ namespace OSaft.fileeditor
                         cursorX = 0;
                         break;
                     default:
-                        lines[cursorY] = lines[cursorY].Insert(cursorX, key.KeyChar.ToString());
-                        cursorX++;
-                        Console.WriteLine(key.ToString());
+                        if (!char.IsControl(key.KeyChar) && key.KeyChar != '\0') { 
+                            lines[cursorY] = lines[cursorY].Insert(cursorX, key.KeyChar.ToString());
+                            cursorX++;
+                            Console.WriteLine(key.ToString());
+                        }
                         break;
                 }
 
