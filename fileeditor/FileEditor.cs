@@ -1,6 +1,7 @@
 ﻿using OSaft.filesystem;
 using System;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace OSaft.fileeditor
 {
@@ -17,7 +18,7 @@ namespace OSaft.fileeditor
         }
         
 
-        private static void PrintViewport(string[] lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
+        private static void PrintViewport(List<string> lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
             Console.Clear();
 
             // Move viewport to the marker
@@ -25,7 +26,7 @@ namespace OSaft.fileeditor
             viewportY = Math.Min(Math.Max(cursorY - consoleHeight + 1, 0), cursorY);
 
             // Print only characters in the viewport
-            for (int Y = viewportY; Y <= lines.Length - 1 - viewportY; Y++) {
+            for (int Y = viewportY; Y <= lines.Count - 1 - viewportY; Y++) {
                 string line = lines[Y];
                 int start = Math.Min(viewportX, line.Length);
                 int length = Math.Min(consoleWidth, line.Length - start);
@@ -46,7 +47,7 @@ namespace OSaft.fileeditor
         {
             // Import the File
             string file = FileSystem.ReadFile(path);
-            string[] lines = file.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            List<string> lines = new List<string>(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
 
             // Position
             int cursorX = 0;
@@ -71,7 +72,8 @@ namespace OSaft.fileeditor
                     //File Handling
                     case ConsoleKey.S when ctrl:
                         Console.WriteLine("Input: Save current file");
-                        file = string.Join("\r\n", lines);
+                        Console.Clear();
+                        file = string.Join("\n", lines);
                         FileSystem.WriteFile(path, file);
                         Console.Clear();
                         return;
@@ -163,11 +165,11 @@ namespace OSaft.fileeditor
                         Console.WriteLine("Input: One character forward");
                         if (cursorX < lines[cursorY].Length) {
                             cursorX++;
-                        } else if (cursorY < (lines.Length - 1)) {
+                        } else if (cursorY < (lines.Count - 1)) {
                             cursorY++;
                             cursorX = 0;
                         }
-                        cursorY = Math.Clamp(cursorY, 0, lines.Length - 1);
+                        cursorY = Math.Clamp(cursorY, 0, lines.Count - 1);
                         cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
                         break;
                     case ConsoleKey.A when ctrl:
@@ -180,25 +182,29 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.P when ctrl:
                         Console.WriteLine("Input: One line up");
-                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Length - 1);
+                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Count - 1);
+                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
                         break;
                     case ConsoleKey.N when ctrl:
                         Console.WriteLine("Input: One line down");
-                        cursorY = Math.Clamp(cursorY + 1, 0, lines.Length - 1);
+                        cursorY = Math.Clamp(cursorY + 1, 0, lines.Count - 1);
+                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
                         break;
                     case ConsoleKey.UpArrow when ctrl:
                         Console.WriteLine("Input: To previous block");
                         break;
                     case ConsoleKey.UpArrow:
                         Console.WriteLine("Input: One line up");
-                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Length - 1);
+                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Count - 1);
+                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
                         break;
                     case ConsoleKey.DownArrow when ctrl:
                         Console.WriteLine("Input: To next block");
                         break;
                     case ConsoleKey.DownArrow:
                         Console.WriteLine("Input: One line down");
-                        cursorY = Math.Clamp(cursorY+1, 0, lines.Length - 1);
+                        cursorY = Math.Clamp(cursorY+1, 0, lines.Count - 1);
+                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
                         break;
                     case ConsoleKey.Home when alt:
                         Console.WriteLine("Input: To first row in viewport");
@@ -218,8 +224,8 @@ namespace OSaft.fileeditor
                         break;
                     case ConsoleKey.V when ctrl:
                         Console.WriteLine("Input: One page down");
-                        cursorY = Math.Min(cursorY + consoleHeight, lines.Length);
-                        viewportY = Math.Min(viewportY + consoleHeight, lines.Length - consoleHeight);
+                        cursorY = Math.Min(cursorY + consoleHeight, lines.Count);
+                        viewportY = Math.Min(viewportY + consoleHeight, lines.Count - consoleHeight);
                         break;
                     //Special Movement
                     //Information
@@ -231,13 +237,12 @@ namespace OSaft.fileeditor
                             cursorX--;
                         } else {
                             if (cursorY > 0) {
-                                lines[cursorY - 1] = lines[cursorY - 1] + lines[cursorY];
-                                List<string> temp = new List<string>(lines);
-                                temp.RemoveAt(cursorY);
-                                lines = temp.ToArray();
-
                                 cursorY--;
                                 cursorX = lines[cursorY].Length;
+
+                                lines.Insert(cursorY, lines[cursorY] + lines[cursorY + 1]);
+                                lines.RemoveAt(cursorY + 1);
+                                lines.RemoveAt(cursorY + 2);
                             }
                         }
                         break;
@@ -247,9 +252,7 @@ namespace OSaft.fileeditor
                         string before = currentLine.Substring(0, cursorX);
                         string after = currentLine.Substring(cursorX);
                         lines[cursorY] = before;
-                        var newLines = new List<string>(lines);
-                        newLines.Insert(cursorY + 1, after);
-                        lines = newLines.ToArray();
+                        lines.Insert(cursorY + 1, after);
                         cursorY++;
                         cursorX = 0;
                         break;
