@@ -1,4 +1,5 @@
 ﻿using Cosmos.System.ScanMaps;
+using OSaft.fileeditor;
 using OSaft.filesystem;
 using OSaft.usersystem;
 using System;
@@ -33,6 +34,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
             Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
+            Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
 
             // Usersystem
             UserHelper.Initialize();
