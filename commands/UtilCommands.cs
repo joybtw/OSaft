@@ -2,6 +2,7 @@
 using System.IO;
 using OSaft.filesystem;
 using OSaft.fileeditor;
+using OSaft.calculator;
 
 namespace OSaft.commands
 {
@@ -60,13 +61,22 @@ namespace OSaft.commands
             Console.WriteLine("File System Type: " + FileSystem.Instance.GetFileSystemType(@"0:\"));
         }
     }
+    public class CalculatorCommand : Command
+    {
+        public CalculatorCommand(string name) : base(name) { }
 
+        internal override void Execute(string[] args)
+        {
+            Calculator.StringToAlgebra(args);
+        }
+    }
     public class FileEditCommand : Command
     {
         public FileEditCommand(string name) : base(name) { }
 
         internal override void Execute(string[] args)
         {
+            if (args == null || args.Length == 0) {Console.WriteLine("Please specify a filename");return;}
             FileEditor.EditFile(args[0]);
         }
     }

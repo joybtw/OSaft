@@ -279,7 +279,6 @@ namespace OSaft.fileeditor
                         }
                         break;
                 }
-
                 PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
             }
         }
