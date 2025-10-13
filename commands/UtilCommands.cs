@@ -71,6 +71,17 @@ namespace OSaft.commands
         }
     }
 
+    public class ClearCommand : Command
+    {
+        public ClearCommand(string name) : base(name) { }
+
+        internal override void Execute(string[] args)
+        {
+            Console.Clear();
+            return;
+        }
+    }
+
     // @todo Parameterliste
     public class LSCommand : Command
     {

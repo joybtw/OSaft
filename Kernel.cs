@@ -35,6 +35,7 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
             Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
             Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ClearCommand("clear"));
 
             // Usersystem
             UserHelper.Initialize();
