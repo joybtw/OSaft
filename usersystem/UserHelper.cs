@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using OSaft_Apps;
 
 
 namespace OSaft.usersystem
@@ -39,7 +40,7 @@ namespace OSaft.usersystem
             FileSystem.CreateDirectory("users");
             FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
-            User_Database.SaveUser(root_u);
+          //  User_Database.SaveUser(root_u);
             Console.WriteLine("Sudo user created");
             Console.WriteLine("Welcome " + root_u.Name + "!");
             //Console.WriteLine(root_u.PasswordHash);
@@ -68,27 +69,35 @@ namespace OSaft.usersystem
     public class User_Database
     {
         private static readonly string user_db_path = @"system\users.db";
-        private  static readonly byte _key = 0x5A;
+        private static readonly byte _key = 0x5A;
 
         public static void DBInit()
         {
-            if (!File.Exists(user_db_path)) 
+            if (!File.Exists(user_db_path))
             {
                 FileSystem.CreateFile(user_db_path);
             }
             return;
         }
 
-        public static void SaveUser(User new_u) 
+        public static void SaveAllUsers(List<User> users)
         {
+            DBInit();
 
-            string content = $"{new_u.Name}|{new_u.PasswordHash}|{new_u.IsSuperuser}|{new_u.Uid}"; 
-            byte[] data = Encoding.ASCII.GetBytes(content);
+            StringBuilder sb = new();
+            foreach (var u in users)
+            {
+                sb.Append(u.Name).Append('|')
+                  .Append(u.PasswordHash).Append('|')
+                  .Append(u.IsSuperuser ? "1" : "0").Append('|')
+                  .Append(u.Uid).Append('\n');
+            }
+
+            byte[] data = Encoding.ASCII.GetBytes(sb.ToString());
 
             for (int i = 0; i < data.Length; i++)
-            {
                 data[i] ^= _key;
-            }
+
             byte checksum = 0;
             foreach (var b in data)
                 checksum ^= b;
@@ -97,14 +106,8 @@ namespace OSaft.usersystem
             data.CopyTo(finalData, 0);
             finalData[^1] = checksum;
 
-            DBInit();
-            /*
-            using (FileStream stream = new FileStream(user_db_path, FileMode.Append, FileAccess.Write))
-            {
-                stream.Write(data, 0, data.Length);
-            }
-            return;
-            */
+            var file = FileSystem.CreateFile(user_db_path);
+            file.Write(finalData, 0, finalData.Length);
         }
         public (string Username, string PasswordHash)? LoadUser()
         {
@@ -132,4 +135,4 @@ namespace OSaft.usersystem
             return (parts[0], parts[1]);
         }
     }
-} 
+}
