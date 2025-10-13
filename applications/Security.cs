@@ -3,7 +3,7 @@ using System.Text;
 
 namespace OSaft_Apps
 {
-    public class OSaft_Security
+    public class OSaftSecurity
     {
         public static string FNV1a(string input)
         {

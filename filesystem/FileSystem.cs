@@ -7,8 +7,7 @@ namespace OSaft.filesystem {
     public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
-        private static string currentDrive = "0:\\";
-        private static string currentPath = "";
+        private static string currentPath = "0:\\";
         private static string ValidatePath(string inputPath)
         {
             if (string.IsNullOrWhiteSpace(inputPath)) { return "0:\\"; }
@@ -18,7 +17,7 @@ namespace OSaft.filesystem {
             if (!inputPath.Contains(":\\"))
             {
                 inputPath = inputPath.TrimStart('\\');
-                inputPath = Path.Combine(currentDrive, inputPath);
+                inputPath = currentPath + inputPath;
             }
 
             string normalized = Path.GetFullPath(inputPath);
@@ -47,10 +46,10 @@ namespace OSaft.filesystem {
 
 
         public static DirectoryInfo CreateDirectory(string path) {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""));
             try
             {
-                return Directory.CreateDirectory(@"0:\" + path);
+                return Directory.CreateDirectory(path);
             }
             catch (Exception e)
             {
@@ -61,10 +60,10 @@ namespace OSaft.filesystem {
 
         public static void DeleteDirectory(string path)
         {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""));
             try
             {
-                Directory.Delete(@"0:\" + path);
+                Directory.Delete(path);
             }
             catch (Exception e)
             {
@@ -74,7 +73,7 @@ namespace OSaft.filesystem {
 
         public static void DeleteFile(string path)
         {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""));
             try
             {
                 File.Delete(path);
@@ -86,7 +85,7 @@ namespace OSaft.filesystem {
         }
 
         public static void WriteFile(string path, string content) {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""));
             try
             {
                File.WriteAllText(path, content);
@@ -98,15 +97,15 @@ namespace OSaft.filesystem {
 
         public static void WriteFile(string path, string[] content)
         {
-            path = ValidatePath(currentPath + path ?? "");
-            foreach(string s in content)
+            path = ValidatePath(currentPath + (path ?? ""));
+            foreach (string s in content)
             {
                 WriteFile(path, s);
             }
         }
 
         public static string ReadFile(string path) {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""));
             try
             {
                 return File.ReadAllText(path);
@@ -119,7 +118,7 @@ namespace OSaft.filesystem {
 
         public static string[] FindFile(string filename, string path)
         {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""));
             List<string> paths = new List<string>();
 
             try
