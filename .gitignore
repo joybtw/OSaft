@@ -54,5 +54,5 @@ TestResult.xml
 nunit-*.xml
 
 .vs/
-
+Workstation.lnk
 *.ps1
