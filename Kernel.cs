@@ -36,18 +36,25 @@ namespace OSaftKernel
             Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
             Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
             Commands.CommandHelper.RegisterCommand(new Commands.ClearCommand("clear"));
+            Commands.CommandHelper.RegisterCommand(new Commands.CDCommand("cd"));
 
             // Usersystem
             UserHelper.Initialize();
             //root_user creation working
             //login in progress
             //user safe missing
+            FileSystem.CurrentPath = "0:\\system";
+            //Console.WriteLine(FileSystem.ValidatePath("../", FileSystem.CurrentPath));
+            //Console.WriteLine(FileSystem.ValidatePath("0:\\test\\1234", FileSystem.CurrentPath));
+            //Console.WriteLine(FileSystem.ValidatePath("../TEST", FileSystem.CurrentPath));
+            //Console.WriteLine(FileSystem.ValidatePath("0:\\", FileSystem.CurrentPath));
+            //Console.WriteLine(FileSystem.ValidatePath("0:/", FileSystem.CurrentPath));
         }
 
         protected override void Run()
         {
             // Input Handling
-            Console.Write("Input: ");
+            Console.Write(FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);
         }
