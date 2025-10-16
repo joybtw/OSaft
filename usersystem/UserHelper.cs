@@ -9,6 +9,7 @@ namespace OSaft.usersystem
     public class UserHelper
     {
         internal readonly static Dictionary<string, User> users = new();
+        public static string CurrentUser = " ";
 
         public static void Initialize()
         {
@@ -96,10 +97,12 @@ namespace OSaft.usersystem
                 Console.WriteLine($"Login successful. Welcome {found.Name}!");
                 Console.WriteLine(found.IsSuperuser ? "You are logged in as a superuser." : "Standard user session started.");
                 Console.WriteLine("--------------------------------");
+                UserHelper.CurrentUser = found.Name;
             }
             else
             {
                 Console.WriteLine("Incorrect password. Access denied.");
+
                 Console.WriteLine("--------------------------------");
                 LoginUser(); // Retry login
             }

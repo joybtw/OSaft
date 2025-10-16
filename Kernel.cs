@@ -40,9 +40,7 @@ namespace OSaftKernel
 
             // Usersystem
             UserHelper.Initialize();
-            //root_user creation working
-            //login in progress
-            //user safe missing
+
             FileSystem.CurrentPath = "0:\\";
             //Console.WriteLine(FileSystem.ValidatePath("../", FileSystem.CurrentPath));
             //Console.WriteLine(FileSystem.ValidatePath("0:\\test\\1234", FileSystem.CurrentPath));
@@ -54,7 +52,7 @@ namespace OSaftKernel
         protected override void Run()
         {
             // Input Handling
-            Console.Write(FileSystem.CurrentPath + "> ");
+            Console.Write(UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);
         }
