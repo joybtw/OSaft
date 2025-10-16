@@ -38,13 +38,13 @@ namespace OSaft.usersystem
                 password = Console.ReadLine();
             } while (password==null);
 
-            User rootUser = new(name, password, null , true, 0);
+            User rootUser = new(name, password, null , true, 0, false);
            Console.WriteLine (rootUser.Salt);
 
-            if (!File.Exists("system"))
+            if (!Directory.Exists("system"))
                 FileSystem.CreateDirectory("system");
 
-            if (!File.Exists("users"))
+            if (!Directory.Exists("users"))
                 FileSystem.CreateDirectory("users");
 
             FileSystem.CreateDirectory($@"users\{name}");
@@ -164,7 +164,7 @@ namespace OSaft.usersystem
                     uint uid = uint.Parse(parts[4]);
 
                 Console.WriteLine(salt + "LoadUser");
-                    list.Add(new User(name, hash, salt, isSuperuser, uid));
+                    list.Add(new User(name, hash, salt, isSuperuser, uid, true));
                    
                 }
                 catch (Exception e)
