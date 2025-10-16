@@ -89,8 +89,8 @@ namespace OSaft.commands
         internal override void Execute(string[] args)
         {
             string path = (args == null) ? "" : args[0];
-            string[] directories = Directory.GetDirectories(@"0:\" + path);
-            string[] files = Directory.GetFiles(@"0:\" + path);
+            string[] directories = Directory.GetDirectories(FileSystem.CurrentPath + "\\" + path);
+            string[] files = Directory.GetFiles(FileSystem.CurrentPath + "\\" + path);
             Console.WriteLine("Directories: " + string.Join(", ", directories));
             Console.WriteLine("Files: " + string.Join(", ", files));
         }
@@ -185,7 +185,7 @@ namespace OSaft.commands
 
     public class FindCommand : Command
     {
-        public FindCommand(string name) : base(name) { }
+        public FindCommand(string name) : base(name) {}
 
         internal override void Execute(string[] args) {
             if (args.Length > 0) {
@@ -193,6 +193,23 @@ namespace OSaft.commands
             } else
             {
                 Console.WriteLine("Error: Syntax: find <filename> <path>");
+            }
+        }
+    }
+
+    public class CDCommand : Command
+    {
+        public CDCommand(string name) : base(name) {}
+        internal override void Execute(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                FileSystem.CurrentPath = args[0];
+                Console.WriteLine(args[0]);
+            }
+            else
+            {
+                Console.WriteLine("Error: Syntax: cd <path>");
             }
         }
     }

@@ -7,26 +7,113 @@ namespace OSaft.filesystem {
     public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
-        private static string currentPath = "0:\\";
-        private static string ValidatePath(string inputPath)
+        private static string currentPath = "0:\\system";
+        public static string CurrentPath
         {
-            if (string.IsNullOrWhiteSpace(inputPath)) { return "0:\\"; }
-            
-            inputPath = inputPath.Trim().Replace('/', '\\');
+            get => currentPath;
+            set => currentPath = ValidatePath(value, currentPath);
+        }
 
-            if (!inputPath.Contains(":\\"))
+        private static bool IsRoot(string path) {
+            if (path.Contains(":\\"))
             {
-                inputPath = inputPath.TrimStart('\\');
-                inputPath = currentPath + inputPath;
+                DirectoryInfo info = new(path);
+                if (info.Parent == null) { return true; }
+            }
+            return false;
+        }
+
+        private static string ValidatePath(string newPath, string currentPath)
+        {
+            if (string.IsNullOrWhiteSpace(currentPath))
+            {
+                Console.WriteLine("Current Path cannot be null or empty");
+                return "0:\\"; 
+            }
+            if (string.IsNullOrWhiteSpace(newPath))
+            {
+                Console.WriteLine("Path cannot be null or empty");
+                return currentPath;
             }
 
-            string normalized = Path.GetFullPath(inputPath);
+            currentPath = currentPath.Replace('/', '\\');
+            newPath = newPath.Replace('/', '\\');
 
-            return normalized;
+            if (newPath.Contains(":\\"))
+            {
+                if (IsRoot(newPath))
+                {
+                    return currentPath;
+                }
+                return NormalizeAbsolutePath(newPath);
+            }
+
+            List<string> parts = new(currentPath.Split('\\', StringSplitOptions.RemoveEmptyEntries));
+
+            string drivePrefix = "";
+            if (parts.Count > 0 && parts[0].Contains(':'))
+            {
+                drivePrefix = parts[0];
+                parts.RemoveAt(0);
+            }
+
+            foreach (string segment in newPath.Split('\\', StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (segment == ".")
+                    continue;
+                else if (segment == "..")
+                {
+                    if (parts.Count > 0)
+                        parts.RemoveAt(parts.Count - 1);
+                }
+                else
+                {
+                    parts.Add(segment);
+                }
+            }
+
+            string result = drivePrefix + "\\" + string.Join("\\", parts.ToArray());
+            if (result.EndsWith(":\\") == false && result.EndsWith("\\"))
+                result = result.TrimEnd('\\');
+
+            if (!Directory.Exists(result))
+            {
+                Console.WriteLine("Directory does not exist! (" + result + ")");
+                return currentPath;
+            }
+
+            return result;
+        }
+
+        private static string NormalizeAbsolutePath(string path)
+        {
+            List<string> parts = new(path.Split("\\", StringSplitOptions.RemoveEmptyEntries));
+
+            string drivePrefix = parts[0];
+            parts.RemoveAt(0);
+
+            List<string> finalParts = new();
+
+            foreach (string part in parts)
+            {
+                if (part == ".")
+                    continue;
+                else if (part == "..")
+                {
+                    if (finalParts.Count > 0)
+                        finalParts.RemoveAt(finalParts.Count - 1);
+                }
+                else
+                {
+                    finalParts.Add(part);
+                }
+            }
+
+            return drivePrefix + "\\" + string.Join("\\", finalParts.ToArray());
         }
 
         public static FileStream CreateFile(string path) {
-            path = ValidatePath(currentPath + path ?? "");
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                 if (!File.Exists(path) && path.Contains('.'))
@@ -46,7 +133,7 @@ namespace OSaft.filesystem {
 
 
         public static DirectoryInfo CreateDirectory(string path) {
-            path = ValidatePath(currentPath + (path ?? ""));
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                 return Directory.CreateDirectory(path);
@@ -60,32 +147,32 @@ namespace OSaft.filesystem {
 
         public static void DeleteDirectory(string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""));
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                 Directory.Delete(path);
             }
             catch (Exception e)
             {
-                Console.WriteLine("DeleteFileOrDirectory: Exception thrown: " + e.Message);
+                Console.WriteLine("DeleteDirectory: Exception thrown: " + e.Message);
             }
         }
 
         public static void DeleteFile(string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""));
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                 File.Delete(path);
             }
             catch (Exception e)
             {
-                Console.WriteLine("DeleteFileOrDirectory: Exception thrown: " + e.Message);
+                Console.WriteLine("DeleteFile: Exception thrown: " + e.Message);
             }
         }
 
         public static void WriteFile(string path, string content) {
-            path = ValidatePath(currentPath + (path ?? ""));
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                File.WriteAllText(path, content);
@@ -97,7 +184,7 @@ namespace OSaft.filesystem {
 
         public static void WriteFile(string path, string[] content)
         {
-            path = ValidatePath(currentPath + (path ?? ""));
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             foreach (string s in content)
             {
                 WriteFile(path, s);
@@ -105,7 +192,7 @@ namespace OSaft.filesystem {
         }
 
         public static string ReadFile(string path) {
-            path = ValidatePath(currentPath + (path ?? ""));
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                 return File.ReadAllText(path);
@@ -118,8 +205,8 @@ namespace OSaft.filesystem {
 
         public static string[] FindFile(string filename, string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""));
-            List<string> paths = new List<string>();
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            List<string> paths = new();
 
             try
             {
