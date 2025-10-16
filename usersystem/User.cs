@@ -45,7 +45,7 @@ namespace OSaft.usersystem
         }
 
         private static string GenerateSalt()
-        {
+        {   
             return BytesToHex(GenerateSaltBytes(SaltSize));
         }
 
@@ -79,7 +79,7 @@ namespace OSaft.usersystem
 
             this.Name = newName;
             this.Salt = GenerateSalt();
-            this.PasswordHash = HashPassword(password, this.Salt);
+            this.PasswordHash = ComputeFNV1a(password);
             this.IsSuperuser = sudo;
             this.Uid = id;
         }
