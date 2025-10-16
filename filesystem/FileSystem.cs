@@ -7,7 +7,7 @@ namespace OSaft.filesystem {
     public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
-        private static string currentPath = "0:\\system";
+        private static string currentPath = "0:\\";
         public static string CurrentPath
         {
             get => currentPath;
