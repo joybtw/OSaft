@@ -43,7 +43,7 @@ namespace OSaftKernel
             //root_user creation working
             //login in progress
             //user safe missing
-            FileSystem.CurrentPath = "0:\\system";
+            FileSystem.CurrentPath = "0:\\";
             //Console.WriteLine(FileSystem.ValidatePath("../", FileSystem.CurrentPath));
             //Console.WriteLine(FileSystem.ValidatePath("0:\\test\\1234", FileSystem.CurrentPath));
             //Console.WriteLine(FileSystem.ValidatePath("../TEST", FileSystem.CurrentPath));
