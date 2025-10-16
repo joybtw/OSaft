@@ -38,7 +38,8 @@ namespace OSaft.usersystem
                 password = Console.ReadLine();
             } while (password==null);
 
-            User rootUser = new(name, password, true, 0);
+            User rootUser = new(name, password, null , true, 0);
+           Console.WriteLine (rootUser.Salt);
 
             if (!File.Exists("system"))
                 FileSystem.CreateDirectory("system");
@@ -75,7 +76,7 @@ namespace OSaft.usersystem
             {
                 Console.WriteLine("Skip Login with 'dev'");
                 Console.Write("Enter user name: ");
-                name = Console.ReadLine();
+                name = Console.ReadLine();  
                 if (name == "dev") { return; }
             }
 
@@ -90,14 +91,17 @@ namespace OSaft.usersystem
                 LoginUser(); // Retry login 
             }
 
-            if (found.VerifyPassword(password))
+            if ((found.PasswordHash == User.HashPassword(password, found.Salt)))
             {
                 Console.WriteLine($"Login successful. Welcome {found.Name}!");
                 Console.WriteLine(found.IsSuperuser ? "You are logged in as a superuser." : "Standard user session started.");
+                Console.WriteLine("--------------------------------");
             }
             else
             {
                 Console.WriteLine("Incorrect password. Access denied.");
+                Console.WriteLine(found.PasswordHash+" "+User.HashPassword(password, found.Salt) +" " + found.Salt);
+                Console.WriteLine("--------------------------------");
                 LoginUser(); // Retry login
             }
         }
@@ -122,6 +126,7 @@ namespace OSaft.usersystem
             StringBuilder sb = new();
             foreach (var u in users)
             {
+                Console.WriteLine(u.Salt+ "SaveUser");
                 sb.Append(u.Name).Append('|')
                   .Append(u.PasswordHash).Append('|')
                   .Append(u.Salt).Append('|')
@@ -158,7 +163,8 @@ namespace OSaft.usersystem
                     bool isSuperuser = parts[3] == "1";
                     uint uid = uint.Parse(parts[4]);
 
-                    list.Add(new User(name, hash, isSuperuser, uid));
+                Console.WriteLine(salt + "LoadUser");
+                    list.Add(new User(name, hash, salt, isSuperuser, uid));
                    
                 }
                 catch (Exception e)

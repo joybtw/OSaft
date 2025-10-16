@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Xml;
 
 namespace OSaft.usersystem
 {
@@ -67,27 +68,22 @@ namespace OSaft.usersystem
             return hash.ToString("X8");
         }
 
-        private static string HashPassword(string password, string salt)
+        public static string HashPassword(string password, string salt)
         {
             return ComputeFNV1a(password + salt);
         }
 
-        public User(string newName, string password, bool sudo, uint id)
+        public User(string newName, string password, string salt, bool sudo, uint id)
         {
             if (string.IsNullOrWhiteSpace(newName) || newName.Length > MaxNameLength)
                 throw new ArgumentException("Invalid username", nameof(newName));
 
             this.Name = newName;
-            this.Salt = GenerateSalt();
-            this.PasswordHash = ComputeFNV1a(password);
+            if (salt == null) { this.Salt = GenerateSalt(); }
+            else { this.Salt = salt; }
+            this.PasswordHash = HashPassword(password, this.Salt);
             this.IsSuperuser = sudo;
             this.Uid = id;
-        }
-
-        public bool VerifyPassword(string password)
-        {
-            string attemptHash = HashPassword(password, this.Salt);
-            return attemptHash == this.PasswordHash;
         }
     }
 }
