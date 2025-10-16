@@ -13,7 +13,7 @@ namespace OSaft.usersystem
 
         public static void Initialize()
         {
-       
+
             if (File.Exists(@"0:\system\root_init.sys"))
             {
                 Console.WriteLine("System already initialized. Proceeding to login...");
@@ -36,11 +36,13 @@ namespace OSaft.usersystem
             do
             {
                 Console.Write("Enter password: ");
+                Console.ForegroundColor = ConsoleColor.Black;
                 password = Console.ReadLine();
-            } while (password==null);
+                Console.ResetColor();
+            } while (password == null);
 
-            User rootUser = new(name, password, null , true, 0, false);
-           
+            User rootUser = new(name, password, null, true, 0, false);
+
 
             if (!Directory.Exists("system"))
                 FileSystem.CreateDirectory("system");
@@ -71,40 +73,47 @@ namespace OSaft.usersystem
                 Console.WriteLine("No users found. Please reset filesystem (Skript on Discord)(to be changed).");
                 return;
             }
-             
+
             string name = "";
-            while (string.IsNullOrWhiteSpace(name))
+
+            for (; ; )
             {
-                Console.WriteLine("Skip Login with 'dev'");
-                Console.Write("Enter user name: ");
-                name = Console.ReadLine();  
-                if (name == "dev") { return; }
-            }
 
-            Console.Write("Enter password: ");
-            string password = Console.ReadLine();
+                while (string.IsNullOrWhiteSpace(name))
+                {
+                    Console.WriteLine("Skip Login with 'dev'");
+                    Console.Write("Enter user name: ");
+                    name = Console.ReadLine();
+                    if (name == "dev") { return; }
+                }
+                var found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
-            var found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (found == null)
+                {
+                    Console.WriteLine("User not found.");
+                    LoginUser();
+                    return;
+                }
+                Console.Write("Enter password: ");
+                Console.ForegroundColor = ConsoleColor.Black;
+                string password = Console.ReadLine();
+                Console.ResetColor();
 
-            if (found == null)
-            {
-                Console.WriteLine("User not found.");
-                LoginUser(); // Retry login 
-            }
+                if ((found.PasswordHash == User.HashPassword(password, found.Salt)))
+                {
+                    Console.WriteLine($"Login successful. Welcome {found.Name}!");
+                    Console.WriteLine(found.IsSuperuser ? "You are logged in as a superuser." : "Standard user session started.");
+                    Console.WriteLine("--------------------------------");
+                    UserHelper.CurrentUser = found.Name;
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect password. Access denied.");
+                    name = "";  
+                    Console.WriteLine("--------------------------------");
+                }
 
-            if ((found.PasswordHash == User.HashPassword(password, found.Salt)))
-            {
-                Console.WriteLine($"Login successful. Welcome {found.Name}!");
-                Console.WriteLine(found.IsSuperuser ? "You are logged in as a superuser." : "Standard user session started.");
-                Console.WriteLine("--------------------------------");
-                UserHelper.CurrentUser = found.Name;
-            }
-            else
-            {
-                Console.WriteLine("Incorrect password. Access denied.");
-
-                Console.WriteLine("--------------------------------");
-                LoginUser(); // Retry login
             }
         }
     }
@@ -131,7 +140,7 @@ namespace OSaft.usersystem
                 sb.Append(u.Name).Append('|')
                   .Append(u.PasswordHash).Append('|')
                   .Append(u.Salt).Append('|')
-                  .Append(u.IsSuperuser ? "1" : "0").Append('|')    
+                  .Append(u.IsSuperuser ? "1" : "0").Append('|')
                   .Append(u.Uid).Append('\n');
             }
 
@@ -165,7 +174,7 @@ namespace OSaft.usersystem
                     uint uid = uint.Parse(parts[4]);
 
                     list.Add(new User(name, hash, salt, isSuperuser, uid, true));
-                   
+
                 }
                 catch (Exception e)
                 {
