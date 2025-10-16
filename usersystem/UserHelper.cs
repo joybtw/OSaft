@@ -39,7 +39,7 @@ namespace OSaft.usersystem
             } while (password==null);
 
             User rootUser = new(name, password, null , true, 0, false);
-           Console.WriteLine (rootUser.Salt);
+           
 
             if (!Directory.Exists("system"))
                 FileSystem.CreateDirectory("system");
@@ -100,7 +100,6 @@ namespace OSaft.usersystem
             else
             {
                 Console.WriteLine("Incorrect password. Access denied.");
-                Console.WriteLine(found.PasswordHash+" "+User.HashPassword(password, found.Salt) +" " + found.Salt);
                 Console.WriteLine("--------------------------------");
                 LoginUser(); // Retry login
             }
@@ -126,7 +125,6 @@ namespace OSaft.usersystem
             StringBuilder sb = new();
             foreach (var u in users)
             {
-                Console.WriteLine(u.Salt+ "SaveUser");
                 sb.Append(u.Name).Append('|')
                   .Append(u.PasswordHash).Append('|')
                   .Append(u.Salt).Append('|')
@@ -163,7 +161,6 @@ namespace OSaft.usersystem
                     bool isSuperuser = parts[3] == "1";
                     uint uid = uint.Parse(parts[4]);
 
-                Console.WriteLine(salt + "LoadUser");
                     list.Add(new User(name, hash, salt, isSuperuser, uid, true));
                    
                 }
