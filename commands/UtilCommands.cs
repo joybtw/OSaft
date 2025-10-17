@@ -205,7 +205,6 @@ namespace OSaft.commands
             if (args.Length > 0)
             {
                 FileSystem.CurrentPath = args[0];
-                Console.WriteLine(args[0]);
             }
             else
             {

@@ -82,6 +82,8 @@ namespace OSaft.filesystem {
                 return currentPath;
             }
 
+            if (!result.EndsWith("\\")) { result += "\\"; }
+
             return result;
         }
 
@@ -161,6 +163,10 @@ namespace OSaft.filesystem {
         public static void DeleteFile(string path)
         {
             path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("DeleteFile: File \"" + path + "\" not found");
+            }
             try
             {
                 File.Delete(path);
@@ -205,7 +211,8 @@ namespace OSaft.filesystem {
 
         public static string[] FindFile(string filename, string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path ??= currentPath;
+            path = ValidatePath(path, currentPath);
             List<string> paths = new();
 
             try
@@ -214,7 +221,7 @@ namespace OSaft.filesystem {
                 {
                     if (filename == file)
                     {
-                        paths.Add(path + "\\" + file);
+                        paths.Add(ValidatePath(path + "\\" + file, currentPath));
                     }
                 }
 
