@@ -50,7 +50,7 @@ namespace OSaft.usersystem
         }
 
         // --- FNV-1a Hash (statt SHA256) ---
-        private static string ComputeFNV1a(string input)
+        internal static string ComputeFNV1a(string input)
         {
             const uint fnvPrime = 16777619;
             const uint offsetBasis = 2166136261;
@@ -67,11 +67,6 @@ namespace OSaft.usersystem
             return hash.ToString("X8");
         }
 
-        public static string HashPassword(string password, string salt)
-        {
-            return ComputeFNV1a(password + salt);
-        }
-
         public User(string newName, string password, string salt, bool sudo, uint id, bool hashed)
         {
             if (string.IsNullOrWhiteSpace(newName) || newName.Length > MaxNameLength)
@@ -80,7 +75,7 @@ namespace OSaft.usersystem
             this.Name = newName;
             if (salt == null) { this.Salt = GenerateSalt(); }
             else { this.Salt = salt; }
-            if (hashed == false) { this.PasswordHash = HashPassword(password, this.Salt); }
+            if (hashed == false) { this.PasswordHash = ComputeFNV1a(password + this.Salt); }
             else { this.PasswordHash = password; }
             this.IsSuperuser = sudo;
             this.Uid = id;

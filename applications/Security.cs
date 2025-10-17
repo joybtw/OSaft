@@ -19,13 +19,5 @@ namespace OSaft.applications
             }
             return hash.ToString("X8");
         }
-
-
-
-
     }
-
-
-
-
 }

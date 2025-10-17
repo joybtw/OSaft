@@ -13,7 +13,7 @@ namespace OSaft.usersystem
         public static string CurrentUser
         {
             get => currentUser;
-            set => currentUser = value;
+            internal set => currentUser = value;
         }
 
         public static void Initialize()
@@ -69,7 +69,7 @@ namespace OSaft.usersystem
 
         private static void LoginUser()
         {
-            var users = UserDatabase.LoadAllUsers();
+            List<User> users = UserDatabase.LoadAllUsers();
             if (users.Count == 0)
             {
                 Console.WriteLine("No users found. Please reset filesystem (Skript on Discord)(to be changed).");
@@ -87,7 +87,7 @@ namespace OSaft.usersystem
                     name = Console.ReadLine();
                     if (name == "dev") { return; }
                 }
-                var found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
                 if (found == null)
                 {
@@ -100,7 +100,7 @@ namespace OSaft.usersystem
                 string password = Console.ReadLine();
                 Console.ResetColor();
 
-                if ((found.PasswordHash == User.HashPassword(password, found.Salt)))
+                if ((found.PasswordHash == User.ComputeFNV1a(password + found.Salt)))
                 {
                     Console.WriteLine($"Login successful. Welcome {found.Name}!");
                     Console.WriteLine(found.IsSuperuser ? "You are logged in as a superuser." : "Standard user session started.");
@@ -114,7 +114,6 @@ namespace OSaft.usersystem
                     name = "";
                     Console.WriteLine("--------------------------------");
                 }
-
             }
         }
     }
@@ -135,23 +134,19 @@ namespace OSaft.usersystem
         {
             DBInit();
 
-            StringBuilder sb = new();
-            foreach (var u in users)
+            string sb = "";
+            foreach (User u in users)
             {
-                sb.Append(u.Name).Append('|')
-                  .Append(u.PasswordHash).Append('|')
-                  .Append(u.Salt).Append('|')
-                  .Append(u.IsSuperuser ? "1" : "0").Append('|')
-                  .Append(u.Uid).Append('\n');
+                sb += (u.Name + '|' + u.PasswordHash + '|' + u.Salt + '|' + (u.IsSuperuser ? '1' : '0') + '|' + u.Uid.ToString() + '\n');
             }
 
-            FileSystem.WriteFile(user_db_path, sb.ToString());
+            FileSystem.WriteFile(user_db_path, sb);
             Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
         }
 
         public static List<User> LoadAllUsers()
         {
-            var list = new List<User>();
+            List<User> list = new();
 
             string content = FileSystem.ReadFile(user_db_path);
             if (string.IsNullOrWhiteSpace(content))
@@ -160,10 +155,10 @@ namespace OSaft.usersystem
                 return list;
             }
 
-            var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
+            string[] lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string line in lines)
             {
-                var parts = line.Split('|');
+                string[] parts = line.Split('|');
                 if (parts.Length < 5) continue;
 
                 try
@@ -187,7 +182,5 @@ namespace OSaft.usersystem
             return list;
         }
     }
-
-
 }
 
