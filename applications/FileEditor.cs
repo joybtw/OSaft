@@ -2,21 +2,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace OSaft.fileeditor
+namespace OSaft.applications
 {
     internal class FileEditor
     {
         // Constant
-        private static int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-2 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
-        private static int consoleWidth = console[1] - console[0] + 1;
-        private static int consoleHeight = console[3] - console[2] + 1;
+        private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-2 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
+        private static readonly int consoleWidth = console[1] - console[0] + 1;
+        private static readonly int consoleHeight = console[3] - console[2] + 1;
 
         private static void CursorToConsole(int cursorX, int cursorY, int viewportX, int viewportY)
         {
             Console.SetCursorPosition(cursorX - viewportX + console[0], cursorY - viewportY + console[2]);
         }
         
-        private static void clearViewport()
+        private static void ClearViewport()
         {
             for (int Y = console[2]; Y <= console[3]; Y++)
             {
@@ -26,7 +26,7 @@ namespace OSaft.fileeditor
         }   
 
         private static void PrintViewport(List<string> lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
-            clearViewport();
+            ClearViewport();
 
             // Move viewport to the marker
             viewportX = Math.Min(Math.Max(cursorX - consoleWidth + 1, 0), cursorX);
@@ -54,7 +54,7 @@ namespace OSaft.fileeditor
         {
             // Import the File
             string file = FileSystem.ReadFile(path);
-            List<string> lines = new List<string>(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
+            List<string> lines = new(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
             if (lines.Count == 0) {
                 lines.Add("");
             }
@@ -65,16 +65,16 @@ namespace OSaft.fileeditor
             int viewportX = 0;
             int viewportY = 0;
 
-            string buffer = "";
+            // string buffer = "";
 
-            clearViewport();
+            ClearViewport();
             PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
 
             while (true)
             {
                 var key = Console.ReadKey(true);
                 bool ctrl = (key.Modifiers & ConsoleModifiers.Control) != 0;
-                bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
+                // bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
                 bool alt = (key.Modifiers & ConsoleModifiers.Alt) != 0;
 
                 Console.SetCursorPosition(0, 0);
@@ -100,11 +100,11 @@ namespace OSaft.fileeditor
                     //Editing
                     case ConsoleKey.K when ctrl:
                         Console.WriteLine("Input: Cut current line into cutbuffer");
-                        buffer = lines[cursorY];
+                        // buffer = lines[cursorY];
                         break;
                     case ConsoleKey.D6 when alt:
                         Console.WriteLine("Input: Copy current line into cutbuffer");
-                        buffer = lines[cursorY];
+                        // buffer = lines[cursorY];
                         break;
                     case ConsoleKey.U when ctrl:
                         Console.WriteLine("Input: Paste contents of cutbuffer");
@@ -181,7 +181,7 @@ namespace OSaft.fileeditor
                         Console.WriteLine("Input: One character forward");
                         if (cursorX < lines[cursorY].Length) {
                             cursorX++;
-                        } else if (cursorY < (lines.Count - 1)) {
+                        } else if (cursorY < lines.Count - 1) {
                             cursorY++;
                             cursorX = 0;
                         }
@@ -264,8 +264,8 @@ namespace OSaft.fileeditor
                     case ConsoleKey.Enter:
                         Console.WriteLine("Add a line break");
                         string currentLine = lines[cursorY];
-                        string before = currentLine.Substring(0, cursorX);
-                        string after = currentLine.Substring(cursorX);
+                        string before = currentLine[cursorX..];
+                        string after = currentLine[cursorX..];
                         lines[cursorY] = before;
                         lines.Insert(cursorY + 1, after);
                         cursorY++;

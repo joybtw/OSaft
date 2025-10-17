@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using OSaft.filesystem;
-using OSaft.fileeditor;
+using OSaft.applications;
 
 namespace OSaft.commands
 {
