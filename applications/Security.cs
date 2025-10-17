@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace OSaft_Apps
+namespace OSaft.applications
 {
     public class OSaftSecurity
     {

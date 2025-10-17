@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace OSaft.calculator
+namespace OSaft.applications
 {
     internal class Calculator
     {
@@ -10,7 +10,7 @@ namespace OSaft.calculator
             string equation = "";
             for(int i = 0; i < args.Length; i++)
             {
-                equation = equation + args[i];
+                equation += args[i];
             }
 
             if(equation == "")
@@ -18,7 +18,7 @@ namespace OSaft.calculator
                 return;
             }
 
-            DataTable table = new DataTable();
+            DataTable table = new();
             var result = table.Compute(equation, "");
             Console.WriteLine($"Result: {result}");
 

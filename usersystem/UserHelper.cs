@@ -6,10 +6,15 @@ using System.Text;
 
 namespace OSaft.usersystem
 {
-    public class UserHelper
+    public static class UserHelper
     {
         internal readonly static Dictionary<string, User> users = new();
-        public static string CurrentUser = " ";
+        private static string currentUser = "";
+        public static string CurrentUser
+        {
+            get => currentUser;
+            set => currentUser = value;
+        }
 
         public static void Initialize()
         {
@@ -18,7 +23,7 @@ namespace OSaft.usersystem
             {
                 Console.WriteLine("System already initialized. Proceeding to login...");
                 Console.WriteLine("--------------------------------");
-                Login.LoginUser();
+                LoginUser();
                 return;
             }
 
@@ -53,21 +58,18 @@ namespace OSaft.usersystem
             FileSystem.CreateDirectory($@"users\{name}");
             FileSystem.CreateFile(@"system\root_init.sys");
 
-            User_Database.SaveAllUsers(new List<User> { rootUser });
+            UserDatabase.SaveAllUsers(new List<User> { rootUser });
 
             Console.WriteLine("\nSudo user created successfully.");
             Console.WriteLine("--------------------------------");
 
             // Nach erfolgreicher Einrichtung direkt zum Login
-            Login.LoginUser();
+            LoginUser();
         }
-    }
 
-    public class Login
-    {
-        public static void LoginUser()
+        private static void LoginUser()
         {
-            var users = User_Database.LoadAllUsers();
+            var users = UserDatabase.LoadAllUsers();
             if (users.Count == 0)
             {
                 Console.WriteLine("No users found. Please reset filesystem (Skript on Discord)(to be changed).");
@@ -76,9 +78,8 @@ namespace OSaft.usersystem
 
             string name = "";
 
-            for (; ; )
+            for (;;)
             {
-
                 while (string.IsNullOrWhiteSpace(name))
                 {
                     Console.WriteLine("Skip Login with 'dev'");
@@ -104,13 +105,13 @@ namespace OSaft.usersystem
                     Console.WriteLine($"Login successful. Welcome {found.Name}!");
                     Console.WriteLine(found.IsSuperuser ? "You are logged in as a superuser." : "Standard user session started.");
                     Console.WriteLine("--------------------------------");
-                    UserHelper.CurrentUser = found.Name;
+                    currentUser = found.Name;
                     return;
                 }
                 else
                 {
                     Console.WriteLine("Incorrect password. Access denied.");
-                    name = "";  
+                    name = "";
                     Console.WriteLine("--------------------------------");
                 }
 
@@ -118,7 +119,7 @@ namespace OSaft.usersystem
         }
     }
 
-    public static class User_Database
+    public static class UserDatabase
     {
         private static readonly string user_db_path = @"\system\users.db";
 

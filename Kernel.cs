@@ -1,12 +1,12 @@
 ﻿using Cosmos.System.ScanMaps;
-using OSaft.fileeditor;
+using OSaft.applications;
 using OSaft.filesystem;
 using OSaft.usersystem;
 using System;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
 
-namespace OSaftKernel
+namespace OSaft
 {
     public class Kernel : Sys.Kernel
     {
@@ -41,12 +41,8 @@ namespace OSaftKernel
             // Usersystem
             UserHelper.Initialize();
 
+            // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
-            //Console.WriteLine(FileSystem.ValidatePath("../", FileSystem.CurrentPath));
-            //Console.WriteLine(FileSystem.ValidatePath("0:\\test\\1234", FileSystem.CurrentPath));
-            //Console.WriteLine(FileSystem.ValidatePath("../TEST", FileSystem.CurrentPath));
-            //Console.WriteLine(FileSystem.ValidatePath("0:\\", FileSystem.CurrentPath));
-            //Console.WriteLine(FileSystem.ValidatePath("0:/", FileSystem.CurrentPath));
         }
 
         protected override void Run()
