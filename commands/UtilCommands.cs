@@ -1,7 +1,11 @@
-﻿using System;
-using System.IO;
-using OSaft.filesystem;
+﻿using Cosmos.System.Graphics.Fonts;
 using OSaft.applications;
+using OSaft.filesystem;
+using OSaft.usersystem;
+using System;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace OSaft.commands
 {
@@ -150,7 +154,7 @@ namespace OSaft.commands
             {
                 flag = args[0];
                 path = args[1];
-            } 
+            }
 
 
             if (flag != null && path != null)
@@ -185,12 +189,15 @@ namespace OSaft.commands
 
     public class FindCommand : Command
     {
-        public FindCommand(string name) : base(name) {}
+        public FindCommand(string name) : base(name) { }
 
-        internal override void Execute(string[] args) {
-            if (args.Length > 0) {
+        internal override void Execute(string[] args)
+        {
+            if (args.Length > 0)
+            {
                 Console.WriteLine(string.Join("\n", FileSystem.FindFile(args[0], args.Length > 1 ? args[1] : null)));
-            } else
+            }
+            else
             {
                 Console.WriteLine("Error: Syntax: find <filename> <path>");
             }
@@ -199,17 +206,87 @@ namespace OSaft.commands
 
     public class CDCommand : Command
     {
-        public CDCommand(string name) : base(name) {}
+        public CDCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
-            if (args.Length > 0)
+            if (args == null)
             {
-                FileSystem.CurrentPath = args[0];
+                if (args.Length > 0)
+                {
+                    FileSystem.CurrentPath = args[0];
+                }
+                else
+                {
+                    Console.WriteLine("Error: Syntax: cd <path>");
+                }
             }
-            else
+        }
+    }
+    public class UserCommand : Command
+    {
+        public UserCommand(string name) : base(name) { }
+        internal override void Execute(string[] args)
+        {
+            if (UserDatabase.GetUserState(UserHelper.CurrentUser) != true)
             {
-                Console.WriteLine("Error: Syntax: cd <path>");
+                Console.WriteLine("Error: No permission!");
+                return;
             }
+            if (UserDatabase.VerifyUser(UserHelper.CurrentUser) == false) { return; }
+
+            if (args == null || args.Length < 0)
+            {
+                Console.WriteLine("Error: Syntax: user <add|remove|list> [username]");
+                return;
+            }
+
+
+            switch (args[0].ToLower())
+            {
+                case "add":
+                    if (args.Length != 2)
+                    {
+                        Console.WriteLine("Error: Syntax: user add <username>");
+                        return;
+                    }
+                    UserDatabase.AddUser(args[1]);
+                    break;
+
+                case "remove":
+                    if (args.Length != 2)
+                    {
+                        Console.WriteLine("Error: Syntax: user remove <username>");
+                        return;
+                    }
+                    if (args[1] == UserHelper.CurrentUser)
+                    {
+                        Console.WriteLine("Error: You can't delete yourself!");
+                        return;
+                    }
+                    UserDatabase.RemoveUser(args[1]);
+                    break;
+
+                case "list":
+                    UserDatabase.ListUsers();
+                    break;
+
+                default:
+                    Console.WriteLine("Error: Unknown command " + args[0]);
+                    break;
+            }
+        }
+    }
+    public class RelogCommand : Command
+    {
+        public RelogCommand(string name) : base(name) { }
+        internal override void Execute(string[] args)
+        {
+            if (args != null && args.Length > 0)
+            {
+                Console.WriteLine("Error: Syntax: relog");
+                return;
+            }
+            UserHelper.LoginUser();
         }
     }
 }

@@ -67,7 +67,7 @@ namespace OSaft.usersystem
             LoginUser();
         }
 
-        private static void LoginUser()
+        public static void LoginUser()
         {
             List<User> users = UserDatabase.LoadAllUsers();
             if (users.Count == 0)
@@ -78,7 +78,7 @@ namespace OSaft.usersystem
 
             string name = "";
 
-            for (;;)
+            for (; ; )
             {
                 while (string.IsNullOrWhiteSpace(name))
                 {
@@ -124,7 +124,7 @@ namespace OSaft.usersystem
 
         public static void DBInit()
         {
-            if (!File.Exists(user_db_path))
+            if (!(File.Exists(user_db_path)))
             {
                 FileSystem.CreateFile(user_db_path);
             }
@@ -139,8 +139,8 @@ namespace OSaft.usersystem
             {
                 sb += (u.Name + '|' + u.PasswordHash + '|' + u.Salt + '|' + (u.IsSuperuser ? '1' : '0') + '|' + u.Uid.ToString() + '\n');
             }
-
             FileSystem.WriteFile(user_db_path, sb);
+            
             Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
         }
 
@@ -178,8 +178,149 @@ namespace OSaft.usersystem
                 }
             }
 
-            Console.WriteLine("[UserDB] Loaded " + list.Count + " user(s)");
+            //Console.WriteLine("[UserDB] Loaded " + list.Count + " user(s)");
             return list;
+        }
+
+        public static bool GetUserState(string name)
+        {
+            List<User> users = LoadAllUsers();
+            User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (found != null)
+            {
+                return found.IsSuperuser;
+            }
+            else
+            {
+                throw new KeyNotFoundException("User not found: " + name);
+            }
+        }
+        public static uint GetUserID(string name)
+        {
+            List<User> users = LoadAllUsers();
+            User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (found != null)
+            {
+                return found.Uid;
+            }
+            else
+            {
+                throw new KeyNotFoundException("User not found: " + name);
+            }
+        }
+        public static void ListUsers()
+        {
+            List<User> users = LoadAllUsers();
+            if (users.Count == 0)
+            {
+                Console.WriteLine("No users found.");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("[UserDB] Loaded " + users.Count + " user(s)");
+                foreach (User u in users)
+                {
+                    Console.WriteLine($"Name: {u.Name}, UID: {u.Uid}");
+                }
+            }
+        }
+        public static void AddUser(string name)
+        {
+            List<User> users = LoadAllUsers();
+            if (users.Exists(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.WriteLine("User already exists: " + name);
+                return;
+            }
+            string password;
+            do
+            {
+                Console.Write("Enter password for "+ name +": ");
+                Console.ForegroundColor = ConsoleColor.Black;
+                password = Console.ReadLine();
+                Console.ResetColor();
+            } while (password == null);
+
+            bool sudo = false;
+            string tmp = null;
+            while (tmp == null)
+            {
+                Console.Write("Should the user have sudo privileges? (y/n): ");
+                tmp = Console.ReadLine();
+                if (tmp.ToLower() == "y")
+                {
+                    sudo = true;
+                }
+                else if (tmp.ToLower() == "n")
+                {
+                    sudo = false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'y' or 'n'.");
+                    tmp = null;
+                    Console.WriteLine();
+                }
+            }
+            int nextUid = users.Count;
+
+            while (users.Exists(u => u.Uid.Equals(nextUid)))
+            {
+                nextUid++;
+            }   
+
+            User newUser = new(name, password, null, sudo, (uint)nextUid, false);
+            users.Add(newUser);
+            FileSystem.CreateDirectory($@"users\{name}");
+            SaveAllUsers(users);
+            Console.WriteLine("User added successfully: " + name);
+            Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
+        }
+        public static void RemoveUser(string name)
+        {
+            List<User> users = LoadAllUsers();
+            User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (found == null)
+            {
+                Console.WriteLine("User not found: " + name);
+                return;
+            }
+
+            if (found.Uid == 0)
+            {
+                Console.WriteLine("You can't kill the gardener!");
+                return;
+            }
+            users.Remove(found);
+            SaveAllUsers(users);
+            FileSystem.DeleteDirectory($@"users\{name}");
+            Console.WriteLine("User removed successfully: " + name);
+        }
+        public static bool VerifyUser(string name)
+        {
+            List<User> users = LoadAllUsers();
+            User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            Console.WriteLine("Verifying user: " + name);
+
+                Console.Write("Enter password for user " + name + ": ");
+                Console.ForegroundColor = ConsoleColor.Black;
+                string password = Console.ReadLine();
+                Console.ResetColor();
+
+            if ((found.PasswordHash == User.ComputeFNV1a(password + found.Salt)))
+            {
+                Console.WriteLine("User verified successfully: " + name);
+                Console.WriteLine("--------------------------------");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Incorrect password. Access denied for user: " + name);
+                Console.WriteLine("--------------------------------");
+                return false;
+            }
         }
     }
 }
