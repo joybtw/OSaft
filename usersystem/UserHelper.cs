@@ -26,7 +26,7 @@ namespace OSaft.usersystem
                 LoginUser();
                 return;
             }
-
+            
             // Erster Systemstart -> Root-User erstellen
             Console.WriteLine("This is the first boot of OSaft. Please create a user.");
 
@@ -54,7 +54,7 @@ namespace OSaft.usersystem
 
             if (!Directory.Exists("users"))
                 FileSystem.CreateDirectory("users");
-
+            UserDatabase.DBInit();
             FileSystem.CreateDirectory($@"users\{name}");
             FileSystem.CreateFile(@"system\root_init.sys");
 
@@ -85,7 +85,7 @@ namespace OSaft.usersystem
                     Console.WriteLine("Skip Login with 'dev'");
                     Console.Write("Enter user name: ");
                     name = Console.ReadLine();
-                    if (name == "dev") { return; }
+                   // if (name == "dev") { return; }
                 }
                 User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
@@ -124,15 +124,16 @@ namespace OSaft.usersystem
 
         public static void DBInit()
         {
-            if (!(File.Exists(user_db_path)))
-            {
-                FileSystem.CreateFile(user_db_path);
-            }
+            if (File.Exists(user_db_path)) { return; }
+
+            FileSystem.CreateFile(user_db_path);
+                
+            
         }
 
         public static void SaveAllUsers(List<User> users)
         {
-            DBInit();
+          //  DBInit();
 
             string sb = "";
             foreach (User u in users)
@@ -263,19 +264,19 @@ namespace OSaft.usersystem
                     Console.WriteLine();
                 }
             }
-            int nextUid = users.Count;
-
-            while (users.Exists(u => u.Uid.Equals(nextUid)))
+            int nextUid = 0;
+            while (users.Exists(u => u.Uid == (uint)nextUid))
             {
                 nextUid++;
-            }   
+            }
+
 
             User newUser = new(name, password, null, sudo, (uint)nextUid, false);
             users.Add(newUser);
             FileSystem.CreateDirectory($@"users\{name}");
             SaveAllUsers(users);
             Console.WriteLine("User added successfully: " + name);
-            Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
+          
         }
         public static void RemoveUser(string name)
         {
