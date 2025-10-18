@@ -54,7 +54,6 @@ namespace OSaft.usersystem
 
             if (!Directory.Exists("users"))
                 FileSystem.CreateDirectory("users");
-            UserDatabase.DBInit();
             FileSystem.CreateDirectory($@"users\{name}");
             FileSystem.CreateFile(@"system\root_init.sys");
 
@@ -124,16 +123,16 @@ namespace OSaft.usersystem
 
         public static void DBInit()
         {
-            if (File.Exists(user_db_path)) { return; }
-
-            FileSystem.CreateFile(user_db_path);
-                
+            if (!File.Exists(@"0:\system\users.db"))
+            {
+                FileSystem.CreateFile(user_db_path);
+            }    
             
         }
 
         public static void SaveAllUsers(List<User> users)
         {
-          //  DBInit();
+           DBInit();
 
             string sb = "";
             foreach (User u in users)
