@@ -76,6 +76,11 @@ namespace OSaft.applications
 
             CursorToConsole(pos);
         }
+        private static void AddUndoStack()
+        {
+            redoStack.Clear();
+            undoStack.Add(new StackState { lines = new List<string>(lines), pos = pos });
+        }
 
         public static void EditFile(string path)
         {
@@ -137,7 +142,7 @@ namespace OSaft.applications
                                 lines.Add("");
                             }
                         }
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     case ConsoleKey.D6 when alt:
                         // Copy current line into cutbuffer
@@ -146,23 +151,27 @@ namespace OSaft.applications
                     case ConsoleKey.U when ctrl:
                         // Paste contents of cutbuffer
                         lines[pos.cursorY] = lines[pos.cursorY].Insert(pos.cursorX, buffer);
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     case ConsoleKey.U when alt:
                         // Undo last action
                         if(undoStack.Count > 0)
                         {
                             lines = undoStack[^1].lines;
-                            pos.cursorX = undoStack[^1].pos.cursorX;
-                            pos.cursorY = undoStack[^1].pos.cursorY;
-                            pos.viewportX = undoStack[^1].pos.viewportX;
-                            pos.viewportY = undoStack[^1].pos.viewportY;
+                            pos = undoStack[^1].pos;
                             redoStack.Add(undoStack[^1]);
                             undoStack.RemoveAt(undoStack.Count - 1);
                         }
                         break;
                     case ConsoleKey.E when alt:
                         // Redo last undone action
+                        if (redoStack.Count > 0)
+                        {
+                            lines = redoStack[^1].lines;
+                            pos = redoStack[^1].pos;
+                            undoStack.Add(redoStack[^1]);
+                            redoStack.RemoveAt(redoStack.Count - 1);
+                        }
                         break;
                     //Search and Replace
                     case ConsoleKey.B when ctrl:
@@ -188,7 +197,7 @@ namespace OSaft.applications
                             lines[pos.cursorY].Remove(pos.cursorX - 1, 1);
                             pos.cursorX--;
                         }
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     case ConsoleKey.D when ctrl:
                         // Delete character under cursor
@@ -197,7 +206,7 @@ namespace OSaft.applications
                             lines[pos.cursorY].Remove(pos.cursorX,1);
                             pos.cursorX--;
                         }
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     case ConsoleKey.Backspace when alt:
                         // Delete word to the left
@@ -221,7 +230,7 @@ namespace OSaft.applications
                                 lines.Add("");
                             }
                         }
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     //Operations
                     //Moving around
@@ -336,7 +345,7 @@ namespace OSaft.applications
                         }
                         pos.cursorY = Math.Clamp(pos.cursorY, 0, lines.Count - 1);
                         pos.cursorX = Math.Clamp(pos.cursorX, 0, lines[pos.cursorY].Length);
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     case ConsoleKey.Enter:
                         // Add a line break
@@ -347,7 +356,7 @@ namespace OSaft.applications
                         pos.cursorY++;
                         lines.Insert(pos.cursorY, after);
                         pos.cursorX = 0;
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                     default:
                         // Insert character
@@ -355,7 +364,7 @@ namespace OSaft.applications
                             lines[pos.cursorY] = lines[pos.cursorY].Insert(pos.cursorX, key.KeyChar.ToString());
                             pos.cursorX++;
                         }
-                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
+                        AddUndoStack();
                         break;
                 }
 
