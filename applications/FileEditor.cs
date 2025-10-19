@@ -236,14 +236,26 @@ namespace OSaft.applications
                     //Moving around
                     case ConsoleKey.LeftArrow when ctrl:
                         // One word backward
-                        while(pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] != ' ')
+                        while (pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] == ' ')
+                        {
+                            pos.cursorX--;
+                        }
+                        while (pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] != ' ')
                         {
                             pos.cursorX--;
                         }
                         break;
                     case ConsoleKey.RightArrow when ctrl:
                         // One word forward
-                        while(pos.cursorX < lines[pos.cursorY].Length && lines[pos.cursorY][pos.cursorX+1] != ' ')
+                        while (pos.cursorX < lines[pos.cursorY].Length && lines[pos.cursorY][pos.cursorX + 1] == ' ')
+                        {
+                            pos.cursorX++;
+                        }
+                        while (pos.cursorX < lines[pos.cursorY].Length && lines[pos.cursorY][pos.cursorX+1] != ' ')
+                        {
+                            pos.cursorX++;
+                        }
+                        if(pos.cursorX < lines[pos.cursorY].Length)
                         {
                             pos.cursorX++;
                         }
