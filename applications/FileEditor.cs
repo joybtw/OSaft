@@ -12,15 +12,27 @@ namespace OSaft.applications
             public int cursorY;
             public int viewportX;
             public int viewportY;
+            public void Set(int cX, int cY, int vX, int vY)
+            {
+                cursorX = cX;
+                cursorY = cY;
+                viewportX = vX;
+                viewportY = vY;
+            }
         }
         struct StackState 
         { 
             public List<string> lines;
             public Pos pos;
+            public void Set(List<string> l, Pos p)
+            {
+                lines = l;
+                pos = p;
+            }
         }
 
         // Constant
-        private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-3 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
+        private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-4 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
         private static readonly int consoleWidth = console[1] - console[0] + 1;
         private static readonly int consoleHeight = console[3] - console[2] + 1;
         
@@ -32,16 +44,18 @@ namespace OSaft.applications
 
         private static void CursorToConsole(Pos pos)
         {
-            Console.SetCursorPosition(pos.cursorX - pos.viewportX + console[0], pos.cursorY - pos.viewportX + console[2]);
+            Console.SetCursorPosition(pos.cursorX - pos.viewportX + console[0], pos.cursorY - pos.viewportY + console[2]);
         }
         
         private static void ClearViewport()
         {
+            // Console.CursorVisible = false;
             for (int Y = console[2]; Y <= console[3]; Y++)
             {
                 Console.SetCursorPosition(console[0], Y);
                 Console.Write(new string(' ', consoleWidth));
             }
+            // Console.CursorVisible = true;
         }   
 
         private static void PrintControls() 
@@ -56,8 +70,15 @@ namespace OSaft.applications
             ClearViewport();
 
             // Move viewport to the marker
-            pos.viewportX = Math.Min(Math.Max(pos.cursorX - consoleWidth + 1, 0), pos.cursorX);
-            pos.viewportY = Math.Min(Math.Max(pos.cursorY - consoleHeight + 1, 0), pos.cursorY);
+            if (pos.cursorY < pos.viewportY)
+                pos.viewportY = pos.cursorY;
+            else if (pos.cursorY >= pos.viewportY + consoleHeight)
+                pos.viewportY = pos.cursorY - consoleHeight + 1;
+
+            if (pos.cursorX < pos.viewportX)
+                pos.viewportX = pos.cursorX;
+            else if (pos.cursorX >= pos.viewportX + consoleWidth)
+                pos.viewportX = pos.cursorX - consoleWidth + 1;
 
             // Print only characters in the viewport
             for (int Y = pos.viewportY; Y < Math.Min(lines.Count, pos.viewportY + consoleHeight); Y++) {
@@ -65,7 +86,7 @@ namespace OSaft.applications
                 int start = Math.Min(pos.viewportX, line.Length);
                 int length = Math.Min(consoleWidth, line.Length - start);
 
-                Console.SetCursorPosition(console[0], console[2]+Y);
+                Console.SetCursorPosition(console[0], console[2]+ (Y - pos.viewportY));
 
                 if (length > 0) {
                     Console.Write(line.Substring(start, length));
@@ -91,6 +112,7 @@ namespace OSaft.applications
 
             undoStack.Add(new StackState { lines = new List<string>(lines), pos = pos});
             string buffer = "";
+            pos.Set(0, 0, 0, 0);
 
             Console.Clear();
             string title = $"-- Editing: {path} --";
@@ -127,6 +149,7 @@ namespace OSaft.applications
                         return;
                     //Editing
                     case ConsoleKey.K when ctrl:
+                        AddUndoStack();
                         // Cut current line into cutbuffer
                         buffer = lines[pos.cursorY];
                         lines.RemoveAt(pos.cursorY);
@@ -142,16 +165,15 @@ namespace OSaft.applications
                                 lines.Add("");
                             }
                         }
-                        AddUndoStack();
                         break;
                     case ConsoleKey.D6 when alt:
                         // Copy current line into cutbuffer
                         buffer = lines[pos.cursorY];
                         break;
                     case ConsoleKey.U when ctrl:
+                        AddUndoStack();
                         // Paste contents of cutbuffer
                         lines[pos.cursorY] = lines[pos.cursorY].Insert(pos.cursorX, buffer);
-                        AddUndoStack();
                         break;
                     case ConsoleKey.U when alt:
                         // Undo last action
@@ -191,30 +213,57 @@ namespace OSaft.applications
                         break;
                     //Deletion
                     case ConsoleKey.H when ctrl:
+                        AddUndoStack();
                         // Delete character before cursor
                         if (pos.cursorX > 0)
                         {
-                            lines[pos.cursorY].Remove(pos.cursorX - 1, 1);
+                            lines[pos.cursorY] = lines[pos.cursorY].Remove(pos.cursorX - 1, 1);
                             pos.cursorX--;
                         }
-                        AddUndoStack();
                         break;
                     case ConsoleKey.D when ctrl:
+                        AddUndoStack();
                         // Delete character under cursor
                         if (pos.cursorX > 0)
                         {
-                            lines[pos.cursorY].Remove(pos.cursorX,1);
+                            lines[pos.cursorY] = lines[pos.cursorY].Remove(pos.cursorX,1);
                             pos.cursorX--;
                         }
-                        AddUndoStack();
                         break;
-                    case ConsoleKey.Backspace when alt:
+                    case ConsoleKey.Backspace when ctrl:
+                        AddUndoStack();
                         // Delete word to the left
+                        int startWord = pos.cursorX;
+                        int endWord = pos.cursorX;
+                        while (pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] == ' ')
+                        {
+                            pos.cursorX--;
+                            startWord--;
+                        }
+                        while (pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] != ' ')
+                        {
+                            pos.cursorX--;
+                            startWord--;
+                        }
+                        lines[pos.cursorY] = lines[pos.cursorY].Remove(startWord, endWord - startWord);
                         break;
                     case ConsoleKey.Delete when ctrl:
+                        AddUndoStack();
                         // Delete word to the right
+                        startWord = pos.cursorX;
+                        endWord = pos.cursorX;
+                        while (endWord < lines[pos.cursorY].Length && lines[pos.cursorY][endWord + 1] == ' ')
+                        {
+                            endWord++;
+                        }
+                        while (endWord < lines[pos.cursorY].Length && lines[pos.cursorY][endWord + 1] != ' ')
+                        {
+                            endWord++;
+                        }
+                        lines[pos.cursorY] = lines[pos.cursorY].Remove(startWord, endWord - startWord);
                         break;
                     case ConsoleKey.Delete when alt:
+                        AddUndoStack();
                         // Delete current line
                         lines.RemoveAt(pos.cursorY);
                         if (pos.cursorY > 1)
@@ -230,7 +279,14 @@ namespace OSaft.applications
                                 lines.Add("");
                             }
                         }
+                        break;
+                    case ConsoleKey.Delete:
                         AddUndoStack();
+                        // Delete character under cursor
+                        if (pos.cursorX < lines[pos.cursorY].Length)
+                        {
+                            lines[pos.cursorY] = lines[pos.cursorY].Remove(pos.cursorX, 1);
+                        }
                         break;
                     //Operations
                     //Moving around
@@ -342,6 +398,7 @@ namespace OSaft.applications
                     // Information
                     // Various
                     case ConsoleKey.Backspace:
+                        AddUndoStack();
                         // Delete character
                         if (pos.cursorX > 0) {
                             lines[pos.cursorY] = lines[pos.cursorY].Remove(pos.cursorX - 1, 1);
@@ -357,9 +414,9 @@ namespace OSaft.applications
                         }
                         pos.cursorY = Math.Clamp(pos.cursorY, 0, lines.Count - 1);
                         pos.cursorX = Math.Clamp(pos.cursorX, 0, lines[pos.cursorY].Length);
-                        AddUndoStack();
                         break;
                     case ConsoleKey.Enter:
+                        AddUndoStack();
                         // Add a line break
                         string currentLine = lines[pos.cursorY];
                         string before = currentLine.Substring(0,pos.cursorX);
@@ -368,7 +425,6 @@ namespace OSaft.applications
                         pos.cursorY++;
                         lines.Insert(pos.cursorY, after);
                         pos.cursorX = 0;
-                        AddUndoStack();
                         break;
                     default:
                         // Insert character
@@ -376,10 +432,8 @@ namespace OSaft.applications
                             lines[pos.cursorY] = lines[pos.cursorY].Insert(pos.cursorX, key.KeyChar.ToString());
                             pos.cursorX++;
                         }
-                        AddUndoStack();
                         break;
                 }
-
                 PrintViewport();
             }
         }
