@@ -35,12 +35,14 @@ namespace OSaft.applications
         private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-4 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
         private static readonly int consoleWidth = console[1] - console[0] + 1;
         private static readonly int consoleHeight = console[3] - console[2] + 1;
-        
+        private static bool visibleHelp;
+
         // Variable
         private static Pos pos = new();
         private static List<string> lines;
         private static List<StackState> undoStack = new();
         private static List<StackState> redoStack = new();
+        private static List<Pos> markers = new();
 
         private static void CursorToConsole(Pos pos)
         {
@@ -56,14 +58,37 @@ namespace OSaft.applications
                 Console.Write(new string(' ', consoleWidth));
             }
             // Console.CursorVisible = true;
-        }   
-
-        private static void PrintControls() 
+        }
+        private static List<Pos> SearchWord(string word)
         {
-            Console.SetCursorPosition(0, Console.WindowHeight - 2);
-            Console.Write(" ^S: Save | ^K: Cut line | alt+U: Undo | ^A: Start of line");
-            Console.SetCursorPosition(0, Console.WindowHeight - 1);
-            Console.Write(" ^X: Exit | ^U: Paste    | alt+E: Redo | ^E: End of line");
+            List<Pos> results = new();
+            for (int i = 0; i < lines.Count; i++) 
+            {
+                int index = lines[i].IndexOf(word);
+                while (index != -1) 
+                {
+                    results.Add(new Pos { cursorX = index, cursorY = i, viewportX = 0, viewportY = 0 });
+                    index = lines[i].IndexOf(word, index + word.Length);
+                }
+            }
+            return results;
+        }
+        private static void ToggleHelp()
+        {
+            if (visibleHelp)
+            {
+                Console.SetCursorPosition(0, Console.WindowHeight - 2);
+                Console.Write(new string(' ', Console.WindowWidth-1));
+                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                Console.Write(new string(' ', Console.WindowWidth-1));
+                visibleHelp = false;
+            } else {
+                Console.SetCursorPosition(0, Console.WindowHeight - 2);
+                Console.Write(" ^S: Save | ^K: Cut line | alt+U: Undo | ^A: Start of line");
+                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                Console.Write(" ^X: Exit | ^U: Paste    | alt+E: Redo | ^E: End of line");
+                visibleHelp = true;
+            }
         }
 
         private static void PrintViewport() {
@@ -110,15 +135,20 @@ namespace OSaft.applications
             lines = new(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
             if (lines.Count == 0) {lines.Add("");}
 
+            // Initialize variables
+            undoStack.Clear();
+            redoStack.Clear();
+            markers.Clear();
             undoStack.Add(new StackState { lines = new List<string>(lines), pos = pos});
             string buffer = "";
             pos.Set(0, 0, 0, 0);
+            visibleHelp = false;
 
             Console.Clear();
             string title = $"-- Editing: {path} --";
             Console.SetCursorPosition(Math.Max(0, Console.WindowWidth/2 - (title.Length / 2)) , 0);
             Console.WriteLine(title);
-            PrintControls();
+            ToggleHelp();
             PrintViewport();
             CursorToConsole(pos);
 
@@ -397,6 +427,10 @@ namespace OSaft.applications
                     // Special Movement
                     // Information
                     // Various
+                    case ConsoleKey.X when alt:
+                        // Toggle help visibility
+                        ToggleHelp();
+                        break;
                     case ConsoleKey.Backspace:
                         AddUndoStack();
                         // Delete character
