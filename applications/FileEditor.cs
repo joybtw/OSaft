@@ -6,14 +6,33 @@ namespace OSaft.applications
 {
     internal class FileEditor
     {
+        struct Pos
+        {
+            public int cursorX;
+            public int cursorY;
+            public int viewportX;
+            public int viewportY;
+        }
+        struct StackState 
+        { 
+            public List<string> lines;
+            public Pos pos;
+        }
+
         // Constant
-        private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-2 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
+        private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-3 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
         private static readonly int consoleWidth = console[1] - console[0] + 1;
         private static readonly int consoleHeight = console[3] - console[2] + 1;
+        
+        // Variable
+        private static Pos pos = new();
+        private static List<string> lines;
+        private static List<StackState> undoStack = new();
+        private static List<StackState> redoStack = new();
 
-        private static void CursorToConsole(int cursorX, int cursorY, int viewportX, int viewportY)
+        private static void CursorToConsole(Pos pos)
         {
-            Console.SetCursorPosition(cursorX - viewportX + console[0], cursorY - viewportY + console[2]);
+            Console.SetCursorPosition(pos.cursorX - pos.viewportX + console[0], pos.cursorY - pos.viewportX + console[2]);
         }
         
         private static void ClearViewport()
@@ -25,17 +44,25 @@ namespace OSaft.applications
             }
         }   
 
-        private static void PrintViewport(List<string> lines, ref int viewportX, ref int viewportY, ref int cursorX, ref int cursorY) {
+        private static void PrintControls() 
+        {
+            Console.SetCursorPosition(0, Console.WindowHeight - 2);
+            Console.Write(" ^S: Save | ^K: Cut line | alt+U: Undo | ^A: Start of line");
+            Console.SetCursorPosition(0, Console.WindowHeight - 1);
+            Console.Write(" ^X: Exit | ^U: Paste    | alt+E: Redo | ^E: End of line");
+        }
+
+        private static void PrintViewport() {
             ClearViewport();
 
             // Move viewport to the marker
-            viewportX = Math.Min(Math.Max(cursorX - consoleWidth + 1, 0), cursorX);
-            viewportY = Math.Min(Math.Max(cursorY - consoleHeight + 1, 0), cursorY);
+            pos.viewportX = Math.Min(Math.Max(pos.cursorX - consoleWidth + 1, 0), pos.cursorX);
+            pos.viewportY = Math.Min(Math.Max(pos.cursorY - consoleHeight + 1, 0), pos.cursorY);
 
             // Print only characters in the viewport
-            for (int Y = viewportY; Y < Math.Min(lines.Count, viewportY + consoleHeight); Y++) {
+            for (int Y = pos.viewportY; Y < Math.Min(lines.Count, pos.viewportY + consoleHeight); Y++) {
                 string line = lines[Y];
-                int start = Math.Min(viewportX, line.Length);
+                int start = Math.Min(pos.viewportX, line.Length);
                 int length = Math.Min(consoleWidth, line.Length - start);
 
                 Console.SetCursorPosition(console[0], console[2]+Y);
@@ -47,28 +74,26 @@ namespace OSaft.applications
                 }
             }
 
-            CursorToConsole(cursorX, cursorY, viewportX, viewportY);
+            CursorToConsole(pos);
         }
 
         public static void EditFile(string path)
         {
             // Import the File
             string file = FileSystem.ReadFile(path);
-            List<string> lines = new(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
-            if (lines.Count == 0) {
-                lines.Add("");
-            }
+            lines = new(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
+            if (lines.Count == 0) {lines.Add("");}
 
-            // Position
-            int cursorX = 0;
-            int cursorY = 0;
-            int viewportX = 0;
-            int viewportY = 0;
+            undoStack.Add(new StackState { lines = new List<string>(lines), pos = pos});
+            string buffer = "";
 
-            // string buffer = "";
-
-            ClearViewport();
-            PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
+            Console.Clear();
+            string title = $"-- Editing: {path} --";
+            Console.SetCursorPosition(Math.Max(0, Console.WindowWidth/2 - (title.Length / 2)) , 0);
+            Console.WriteLine(title);
+            PrintControls();
+            PrintViewport();
+            CursorToConsole(pos);
 
             while (true)
             {
@@ -77,13 +102,11 @@ namespace OSaft.applications
                 // bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
                 bool alt = (key.Modifiers & ConsoleModifiers.Alt) != 0;
 
-                Console.SetCursorPosition(0, 0);
-
                 switch (key.Key)
                 {
                     //File Handling
                     case ConsoleKey.S when ctrl:
-                        Console.WriteLine("Input: Save current file");
+                        //Input: Save current file
                         file = "";
                         for (int i = 0; i < lines.Count; i++) {
                             file += lines[i];
@@ -94,193 +117,249 @@ namespace OSaft.applications
                         FileSystem.WriteFile(path, file);
                         break;
                     case ConsoleKey.X when ctrl:
-                        Console.WriteLine("Input: Close buffer, exit from nano");
+                        // Close buffer, exit from nano
                         Console.Clear();
                         return;
                     //Editing
                     case ConsoleKey.K when ctrl:
-                        Console.WriteLine("Input: Cut current line into cutbuffer");
-                        // buffer = lines[cursorY];
+                        // Cut current line into cutbuffer
+                        buffer = lines[pos.cursorY];
+                        lines.RemoveAt(pos.cursorY);
+                        if(pos.cursorY > 1)
+                        {
+                            pos.cursorY--;
+                        } else
+                        {
+                            pos.cursorY = 0;
+                            pos.cursorX = 0;
+                            if(lines.Count <= 1)
+                            {
+                                lines.Add("");
+                            }
+                        }
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     case ConsoleKey.D6 when alt:
-                        Console.WriteLine("Input: Copy current line into cutbuffer");
-                        // buffer = lines[cursorY];
+                        // Copy current line into cutbuffer
+                        buffer = lines[pos.cursorY];
                         break;
                     case ConsoleKey.U when ctrl:
-                        Console.WriteLine("Input: Paste contents of cutbuffer");
+                        // Paste contents of cutbuffer
+                        lines[pos.cursorY] = lines[pos.cursorY].Insert(pos.cursorX, buffer);
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     case ConsoleKey.U when alt:
-                        Console.WriteLine("Input: Undo last action");
+                        // Undo last action
+                        if(undoStack.Count > 0)
+                        {
+                            lines = undoStack[^1].lines;
+                            pos.cursorX = undoStack[^1].pos.cursorX;
+                            pos.cursorY = undoStack[^1].pos.cursorY;
+                            pos.viewportX = undoStack[^1].pos.viewportX;
+                            pos.viewportY = undoStack[^1].pos.viewportY;
+                            redoStack.Add(undoStack[^1]);
+                            undoStack.RemoveAt(undoStack.Count - 1);
+                        }
                         break;
                     case ConsoleKey.E when alt:
-                        Console.WriteLine("Input: Redo last undone action");
+                        // Redo last undone action
                         break;
                     //Search and Replace
                     case ConsoleKey.B when ctrl:
-                        Console.WriteLine("Input: Start backward search");
+                        // Start backward search
                         break;
                     case ConsoleKey.F when ctrl:
-                        Console.WriteLine("Input: Start forward search");
+                        // Start forward search");
                         break;
                     case ConsoleKey.B when alt:
-                        Console.WriteLine("Input: Find next occurrence backward");
+                        // Find next occurrence backward
                         break;
                     case ConsoleKey.F when alt:
-                        Console.WriteLine("Input: Find next occurrence forward");
+                        // Find next occurrence forward
                         break;
                     case ConsoleKey.R when alt:
-                        Console.WriteLine("Input: Start a replacing session");
+                        // Start a replacing session
                         break;
                     //Deletion
                     case ConsoleKey.H when ctrl:
-                        Console.WriteLine("Input: Delete character before cursor");
+                        // Delete character before cursor
+                        if (pos.cursorX > 0)
+                        {
+                            lines[pos.cursorY].Remove(pos.cursorX - 1, 1);
+                            pos.cursorX--;
+                        }
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     case ConsoleKey.D when ctrl:
-                        Console.WriteLine("Input: Delete character under cursor");
+                        // Delete character under cursor
+                        if (pos.cursorX > 0)
+                        {
+                            lines[pos.cursorY].Remove(pos.cursorX,1);
+                            pos.cursorX--;
+                        }
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     case ConsoleKey.Backspace when alt:
-                        Console.WriteLine("Input: Delete word to the left");
+                        // Delete word to the left
                         break;
                     case ConsoleKey.Delete when ctrl:
-                        Console.WriteLine("Input: Delete word to the right");
+                        // Delete word to the right
                         break;
                     case ConsoleKey.Delete when alt:
-                        Console.WriteLine("Input: Delete current line");
+                        // Delete current line
+                        lines.RemoveAt(pos.cursorY);
+                        if (pos.cursorY > 1)
+                        {
+                            pos.cursorY--;
+                        }
+                        else
+                        {
+                            pos.cursorY = 0;
+                            pos.cursorX = 0;
+                            if (lines.Count <= 1)
+                            {
+                                lines.Add("");
+                            }
+                        }
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     //Operations
                     //Moving around
                     case ConsoleKey.LeftArrow when ctrl:
-                        Console.WriteLine("Input: One word backward");
-                        while(cursorX > 0 && lines[cursorY][cursorX - 1] != ' ')
+                        // One word backward
+                        while(pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] != ' ')
                         {
-                            cursorX--;
+                            pos.cursorX--;
                         }
                         break;
                     case ConsoleKey.RightArrow when ctrl:
-                        Console.WriteLine("Input: One word forward");
-                        while(cursorX < lines[cursorY].Length && lines[cursorY][cursorX+1] != ' ')
+                        // One word forward
+                        while(pos.cursorX < lines[pos.cursorY].Length && lines[pos.cursorY][pos.cursorX+1] != ' ')
                         {
-                            cursorX++;
+                            pos.cursorX++;
                         }
                         break;
                     case ConsoleKey.LeftArrow:
-                        Console.WriteLine("Input: One character backward");
-                        if(cursorX > 0)
+                        // One character backward
+                        if(pos.cursorX > 0)
                         {
-                            cursorX--;
+                            pos.cursorX--;
                         } else
                         {
-                            if(cursorY > 0)
+                            if(pos.cursorY > 0)
                             {
-                                cursorY--;
-                                cursorX = lines[cursorY].Length;
+                                pos.cursorY--;
+                                pos.cursorX = lines[pos.cursorY].Length;
                             }
                         }
                         break;
                     case ConsoleKey.RightArrow:
-                        Console.WriteLine("Input: One character forward");
-                        if (cursorX < lines[cursorY].Length) {
-                            cursorX++;
-                        } else if (cursorY < lines.Count - 1) {
-                            cursorY++;
-                            cursorX = 0;
+                        // One character forward
+                        if (pos.cursorX < lines[pos.cursorY].Length) {
+                            pos.cursorX++;
+                        } else if (pos.cursorY < lines.Count - 1) {
+                            pos.cursorY++;
+                            pos.cursorX = 0;
                         }
                         break;
                     case ConsoleKey.A when ctrl:
-                        Console.WriteLine("Input: To start of line");
-                        cursorX = 0;
+                        // To start of line
+                        pos.cursorX = 0;
                         break;
                     case ConsoleKey.E when ctrl:
-                        Console.WriteLine("Input: To end of line");
-                        cursorX = lines[cursorY].Length;
+                        // To end of line
+                        pos.cursorX = lines[pos.cursorY].Length;
                         break;
                     case ConsoleKey.P when ctrl:
-                        Console.WriteLine("Input: One line up");
-                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Count - 1);
-                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
+                        // One line up
+                        pos.cursorY = Math.Clamp(pos.cursorY - 1, 0, lines.Count - 1);
+                        pos.cursorX = Math.Min(pos.cursorX, lines[pos.cursorY].Length);
                         break;
                     case ConsoleKey.N when ctrl:
-                        Console.WriteLine("Input: One line down");
-                        cursorY = Math.Clamp(cursorY + 1, 0, lines.Count - 1);
-                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
+                        // One line down
+                        pos.cursorY = Math.Clamp(pos.cursorY + 1, 0, lines.Count - 1);
+                        pos.cursorX = Math.Min(pos.cursorX, lines[pos.cursorY].Length);
                         break;
                     case ConsoleKey.UpArrow when ctrl:
-                        Console.WriteLine("Input: To previous block");
+                        // To previous block
                         break;
                     case ConsoleKey.UpArrow:
-                        Console.WriteLine("Input: One line up");
-                        cursorY = Math.Clamp(cursorY - 1, 0, lines.Count - 1);
-                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
+                        // One line up
+                        pos.cursorY = Math.Clamp(pos.cursorY - 1, 0, lines.Count - 1);
+                        pos.cursorX = Math.Min(pos.cursorX, lines[pos.cursorY].Length);
                         break;
                     case ConsoleKey.DownArrow when ctrl:
-                        Console.WriteLine("Input: To next block");
+                        // To next block
                         break;
                     case ConsoleKey.DownArrow:
-                        Console.WriteLine("Input: One line down");
-                        cursorY = Math.Clamp(cursorY+1, 0, lines.Count - 1);
-                        cursorX = Math.Min(cursorX, lines[cursorY].Length);
+                        // One line down
+                        pos.cursorY = Math.Clamp(pos.cursorY+1, 0, lines.Count - 1);
+                        pos.cursorX = Math.Min(pos.cursorX, lines[pos.cursorY].Length);
                         break;
                     case ConsoleKey.Home when alt:
-                        Console.WriteLine("Input: To first row in viewport");
-                        cursorX = viewportX;
-                        cursorY = viewportY;
+                        // To first row in viewport
+                        pos.cursorX = pos.viewportX;
+                        pos.cursorY = pos.viewportY;
                         break;
                     case ConsoleKey.End when alt:
-                        Console.WriteLine("Input: To last row in viewport");
-                        cursorX = viewportX + consoleWidth - 1;
-                        cursorY = viewportY + consoleHeight - 1;
+                        // To last row in viewport
+                        pos.cursorX = pos.viewportX + consoleWidth - 1;
+                        pos.cursorY = pos.viewportY + consoleHeight - 1;
                         break;
                     case ConsoleKey.Y when ctrl:
-                        Console.WriteLine("Input: One page up");
-                        cursorY = Math.Max(cursorY - consoleHeight, 0);
-                        viewportY = Math.Max(viewportY - consoleHeight, 0);
+                        // One page up
+                        pos.cursorY = Math.Max(pos.cursorY - consoleHeight, 0);
+                        pos.viewportY = Math.Max(pos.viewportY - consoleHeight, 0);
 
                         break;
                     case ConsoleKey.V when ctrl:
-                        Console.WriteLine("Input: One page down");
-                        cursorY = Math.Min(cursorY + consoleHeight, lines.Count);
-                        viewportY = Math.Min(viewportY + consoleHeight, lines.Count - consoleHeight);
+                        // One page down
+                        pos.cursorY = Math.Min(pos.cursorY + consoleHeight, lines.Count);
+                        pos.viewportY = Math.Min(pos.viewportY + consoleHeight, lines.Count - consoleHeight);
                         break;
-                    //Special Movement
-                    //Information
-                    //Various
+                    // Special Movement
+                    // Information
+                    // Various
                     case ConsoleKey.Backspace:
-                        Console.WriteLine("Delete character");
-                        if (cursorX > 0) {
-                            lines[cursorY] = lines[cursorY].Remove(cursorX - 1, 1);
-                            cursorX--;
+                        // Delete character
+                        if (pos.cursorX > 0) {
+                            lines[pos.cursorY] = lines[pos.cursorY].Remove(pos.cursorX - 1, 1);
+                            pos.cursorX--;
                         } else {
-                            if (cursorY > 0) {
-                                cursorY--;
-                                cursorX = lines[cursorY].Length;
+                            if (pos.cursorY > 0) {
+                                pos.cursorY--;
+                                pos.cursorX = lines[pos.cursorY].Length;
 
-                                lines[cursorY] += lines[cursorY + 1];
-                                lines.RemoveAt(cursorY + 1);
+                                lines[pos.cursorY] += lines[pos.cursorY + 1];
+                                lines.RemoveAt(pos.cursorY + 1);
                             }
                         }
-                        cursorY = Math.Clamp(cursorY, 0, lines.Count - 1);
-                        cursorX = Math.Clamp(cursorX, 0, lines[cursorY].Length);
+                        pos.cursorY = Math.Clamp(pos.cursorY, 0, lines.Count - 1);
+                        pos.cursorX = Math.Clamp(pos.cursorX, 0, lines[pos.cursorY].Length);
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     case ConsoleKey.Enter:
-                        Console.WriteLine("Add a line break");
-                        string currentLine = lines[cursorY];
-                        string before = currentLine[cursorX..];
-                        string after = currentLine[cursorX..];
-                        lines[cursorY] = before;
-                        lines.Insert(cursorY + 1, after);
-                        cursorY++;
-                        cursorX = 0;
+                        // Add a line break
+                        string currentLine = lines[pos.cursorY];
+                        string before = currentLine.Substring(0,pos.cursorX);
+                        string after = currentLine.Substring(pos.cursorX);
+                        lines[pos.cursorY] = before;
+                        pos.cursorY++;
+                        lines.Insert(pos.cursorY, after);
+                        pos.cursorX = 0;
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                     default:
-                        if (!char.IsControl(key.KeyChar) && key.KeyChar != '\0') { 
-                            lines[cursorY] = lines[cursorY].Insert(cursorX, key.KeyChar.ToString());
-                            cursorX++;
-                            Console.WriteLine(key.ToString());
+                        // Insert character
+                        if (!char.IsControl(key.KeyChar) && key.KeyChar != '\0') {
+                            lines[pos.cursorY] = lines[pos.cursorY].Insert(pos.cursorX, key.KeyChar.ToString());
+                            pos.cursorX++;
                         }
+                        undoStack.Add(new StackState { lines = new List<string>(lines),  pos = pos});
                         break;
                 }
 
-                PrintViewport(lines, ref viewportX, ref viewportY, ref cursorX, ref cursorY);
+                PrintViewport();
             }
         }
     }
