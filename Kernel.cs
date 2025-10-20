@@ -26,6 +26,7 @@ namespace OSaft
             // Commands Registry 
             Commands.CommandHelper.RegisterCommand(new Commands.CDCommand("cd"));
             Commands.CommandHelper.RegisterCommand(new Commands.ClearCommand("clear"));
+            Commands.CommandHelper.RegisterCommand(new Commands.TimeCommand("clock"));
             Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
             Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
             Commands.CommandHelper.RegisterCommand(new Commands.FSInfoCommand("fsinfo"));

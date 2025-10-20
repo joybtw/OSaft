@@ -289,4 +289,18 @@ namespace OSaft.commands
             UserHelper.LoginUser();
         }
     }
+    public class TimeCommand : Command
+    {
+        public TimeCommand(string name) : base(name) { }
+        internal override void Execute(string[] args)
+        {
+            if (args != null && args.Length > 0)
+            {
+                Console.WriteLine("Error: Syntax: clock");
+                return;
+            }
+            Clock.ShowTime();
+        }
+    }
+
 }
