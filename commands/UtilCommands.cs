@@ -4,8 +4,7 @@ using OSaft.filesystem;
 using OSaft.usersystem;
 using System;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Security.Cryptography.X509Certificates;
+using static Cosmos.HAL.BlockDevice.ATA_PIO;
 
 namespace OSaft.commands
 {
@@ -136,54 +135,44 @@ namespace OSaft.commands
     public class RMCommand : Command
     {
         public RMCommand(string name) : base(name) { }
-        internal override void Execute(string[] args)
+        //internal override void Execute(string[] args)
+        //{
+        //    //FileSystem.DeleteFile(path);
+        //    //FileSystem.DeleteDirectory(path);
+
+            
+        //}
+        protected override void DefineParameters()
         {
-            string flag = null;
-            string path = null;
+            ParameterList.Add(new CommandParameter("-h", "Displays help", false, false, val => {
+                Console.WriteLine(Name + ": deletes a file or directory");
+                Console.WriteLine("Syntax: " + GetSyntax());
+            }));
 
-            if (args == null || args.Length == 0)
-            {
-                Console.WriteLine("rm: Syntax: rm < -f|-d > {PATH}");
-                return;
-            }
-            else if (args.Length == 1)
-            {
-                flag = args[0];
-            }
-            else if (args.Length == 2)
-            {
-                flag = args[0];
-                path = args[1];
-            }
+            ParameterList.Add(new CommandParameter("--help", "Displays help", false, false, val => {
+                Console.WriteLine(Name + ": deletes a file or directory");
+                Console.WriteLine("Syntax: " + GetSyntax());
+            }));
 
+            ParameterList.Add(new CommandParameter("-f", "Delete a file", false, true, val => {
+                if (string.IsNullOrEmpty(val))
+                    {
+                        Console.WriteLine(Name + ": Error: no file provided.");
+                        return;
+                    }
+                FileSystem.DeleteFile(val);
+                Console.WriteLine("File " + val + " was deleted.");
+            }));
 
-            if (flag != null && path != null)
-            {
-                if (flag == "-d")
+            ParameterList.Add(new CommandParameter("-d", "Delete a directory", false, true, val => {
+                if (string.IsNullOrEmpty(val))
                 {
-                    FileSystem.DeleteDirectory(path);
-                    //siehe #22: directory, path and file validation notwendig für path in args[1]test
+                    Console.WriteLine(Name + ": Error: no directory provided.");
+                    return;
                 }
-
-                else if (flag == "-f")
-                {
-                    FileSystem.DeleteFile(path);
-                    //siehe #22: directory, path and file validation notwendig für path in args[1]
-                }
-            }
-
-            else if (flag == "--help" || flag == "-h")
-            {
-                Console.WriteLine("HELP-CENTER");
-                Console.WriteLine("----------------");
-                Console.WriteLine("rm: Remove a file or directory.");
-                Console.WriteLine("Syntax: rm < -f|-d > {PATH}");
-            }
-
-            else
-            {
-                Console.WriteLine("rm: Syntax: rm < -f|-d > {PATH}");
-            }
+                FileSystem.DeleteDirectory(val);
+                Console.WriteLine("Directory " + val + " was deleted.");
+            }));
         }
     }
 
@@ -191,10 +180,8 @@ namespace OSaft.commands
     {
         public FindCommand(string name) : base(name) { }
 
-        internal override void Execute(string[] args)
-        {
-            if (args.Length > 0)
-            {
+        internal override void Execute(string[] args) {
+            if (args.Length > 0) {
                 Console.WriteLine(string.Join("\n", FileSystem.FindFile(args[0], args.Length > 1 ? args[1] : null)));
             }
             else
