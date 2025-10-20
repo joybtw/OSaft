@@ -7,7 +7,10 @@ namespace OSaft.applications
     {
         public static void ShowTime()
         {
-            var now = RTC.Hour + ":" + RTC.Minute + ":" + RTC.Second;
+            int h = RTC.Hour;
+            int m = RTC.Minute;
+            int s = RTC.Second;
+            var now = $"{h:D2}:{m:D2}:{s:D2}";
             Console.WriteLine($"Current Time: {now}");
             //Cosmos zieht die Uhrzeit durch RTC vom Hostsystem, Sommer/-Winterzeit muss dabei nicht beachtet werden.
             // wenn nicht virtualisert wird, dann wird die Hardwareuhr genutzt. HW Uhr 1:00Uhr UTC,
@@ -15,7 +18,9 @@ namespace OSaft.applications
         }
         public static void ShortTime()
         {
-            var now = RTC.Hour + ":" + RTC.Minute + "  ";
+            int h = RTC.Hour;
+            int m = RTC.Minute;
+            var now = $"{h:D2}:{m:D2}  ";
             Console.Write(now);
         }
         public static bool ActiveClock = true;
