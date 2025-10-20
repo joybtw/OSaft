@@ -37,6 +37,7 @@ namespace OSaft
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
+            Commands.CommandHelper.RegisterCommand(new Commands.LiveTimeCommand("toggle-clock"));
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.UserCommand("user"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
@@ -47,11 +48,15 @@ namespace OSaft
 
             // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
+
+            //LiveClock
+            Clock.ActiveClock = true;
         }
 
         protected override void Run()
         {
             // Input Handling
+            if (Clock.ActiveClock == true) { Clock.ShortTime(); } 
             Console.Write(UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);

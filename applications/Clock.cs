@@ -1,6 +1,5 @@
-using System;
-using System.IO;
 using Cosmos.HAL;
+using System;
 
 namespace OSaft.applications
 {
@@ -14,5 +13,14 @@ namespace OSaft.applications
             // wenn nicht virtualisert wird, dann wird die Hardwareuhr genutzt. HW Uhr 1:00Uhr UTC,
             // Hostsystem 2:00Uhr MEZ 3:00 MESZ, Cosmos Strg+c, strg+v
         }
+        public static void ShortTime()
+        {
+            var now = RTC.Hour + ":" + RTC.Minute + "  ";
+            Console.Write(now);
+        }
+        public static bool ActiveClock = true;
     }
 }
+
+
+

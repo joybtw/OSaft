@@ -209,9 +209,8 @@ namespace OSaft.commands
         public CDCommand(string name) : base(name) { }
         internal override void Execute(string[] args)
         {
-            if (args == null)
-            {
-                if (args.Length > 0)
+            
+                if (args.Length ==1 && args != null)
                 {
                     FileSystem.CurrentPath = args[0];
                 }
@@ -219,7 +218,6 @@ namespace OSaft.commands
                 {
                     Console.WriteLine("Error: Syntax: cd <path>");
                 }
-            }
         }
     }
     public class UserCommand : Command
@@ -301,6 +299,21 @@ namespace OSaft.commands
             }
             Clock.ShowTime();
         }
-    }
+     }
+    public class LiveTimeCommand : Command
+    {
+        public LiveTimeCommand(string name) : base(name) { }
+        internal override void Execute(string[] args)
+        {
+            if (args != null && args.Length > 0)
+            {
+                Console.WriteLine("Error: Syntax: toggle-clock");
+                return;
+            }
+            if (Clock.ActiveClock == true) {Clock.ActiveClock = false; }
+            else { Clock.ActiveClock = true; }
 
+
+        }
+    }
 }
