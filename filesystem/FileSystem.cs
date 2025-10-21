@@ -23,7 +23,7 @@ namespace OSaft.filesystem {
             return false;
         }
 
-        private static string ValidatePath(string newPath, string currentPath)
+        internal static string ValidatePath(string newPath, string currentPath)
         {
             if (string.IsNullOrWhiteSpace(currentPath))
             {

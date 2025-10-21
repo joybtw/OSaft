@@ -34,7 +34,7 @@ namespace OSaft
             // Commands Registry 
             Commands.CommandHelper.RegisterCommand(new Commands.CDCommand("cd"));
             Commands.CommandHelper.RegisterCommand(new Commands.ClearCommand("clear"));
-            Commands.CommandHelper.RegisterCommand(new Commands.TimeCommand("clock"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ClockCommand("clock"));
             Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
             Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
             Commands.CommandHelper.RegisterCommand(new Commands.FSInfoCommand("fsinfo"));
@@ -45,7 +45,7 @@ namespace OSaft
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
-            Commands.CommandHelper.RegisterCommand(new Commands.LiveTimeCommand("toggle-clock"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ToggleClockCommand("toggleclock"));
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.UserCommand("user"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
