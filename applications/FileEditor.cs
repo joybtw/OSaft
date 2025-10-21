@@ -132,6 +132,7 @@ namespace OSaft.applications
         {
             // Import the File
             string file = FileSystem.ReadFile(path);
+            if (file == null) { return; }
             lines = new(file.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
             if (lines.Count == 0) {lines.Add("");}
 
