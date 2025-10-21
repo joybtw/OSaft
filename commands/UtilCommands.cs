@@ -17,7 +17,7 @@ namespace OSaft.commands
             Console.WriteLine("Alle Befehle: ");
             foreach (Command command in CommandHelper.commands.Values)
             {
-                Console.WriteLine(command.Name + " - {description}");
+                //Console.WriteLine(command.Name + " - " + Description);
             }
         }
     }
