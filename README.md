@@ -1,4 +1,4 @@
-<h1>OSaft - OperatingSystem: All For Techies</h1>
+<h1>OSaft - OperatingSystem: All for Techies</h1>
 Dieses Betriebssystem entsteht im Rahmen der Lehrveranstaltung "Betriebssysteme" im Studium "Praktische Informatik" an der Dualen Hochschule Gera-Eisenach (DHGE). <br>
 Umgesetzt wird dieses mit dem COSMOS-Framework für C#.
 <br><br>

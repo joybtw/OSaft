@@ -3,8 +3,12 @@ using OSaft.applications;
 using OSaft.filesystem;
 using OSaft.usersystem;
 using System;
+using System.Threading;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
+using Cosmos.System.Graphics;
+using Cosmos.System.Graphics.Fonts;
+using System.Drawing;
 
 namespace OSaft
 {
@@ -14,11 +18,15 @@ namespace OSaft
         {
             SetKeyboardScanMap(new DE_Standard());
 
+            StartupScreen SScreen = new StartupScreen();
+
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+
             // Welcome Messages
             Console.Clear();    
-            Console.WriteLine("OSaft - OperatingSystem - All For Techies");
+            Console.WriteLine("OSaft - OperatingSystem - All for Techies");
             Console.WriteLine("--------------------------------");
-            Console.WriteLine("OSaft booted correctly");
 
             // Filesystem
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
@@ -48,18 +56,16 @@ namespace OSaft
 
             // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
-
-            //LiveClock
-            Clock.ActiveClock = true;
         }
 
         protected override void Run()
         {
             // Input Handling
-            if (Clock.ActiveClock == true) { Clock.ShortTime(); } 
-            Console.Write(UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
+            Console.Write(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);
+
+            
         }
     }
 }

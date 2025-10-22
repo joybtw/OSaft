@@ -56,6 +56,7 @@ namespace OSaft.usersystem
             FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
+
             Console.WriteLine("\nSudo user created successfully.");
             Console.WriteLine("--------------------------------");
 
@@ -276,6 +277,11 @@ namespace OSaft.usersystem
         }
         public static void RemoveUser(string name)
         {
+            if (name == UserHelper.CurrentUser)
+            {
+                Console.WriteLine("You can't delete yourself!"); 
+                return; 
+            }
             List<User> users = LoadAllUsers();
             User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (found == null)
@@ -292,8 +298,6 @@ namespace OSaft.usersystem
             users.Remove(found);
             SaveAllUsers(users);
             FileSystem.DeleteDirectory($@"users\{name}");
-
-            
             Console.WriteLine("User removed successfully: " + name);
         }
         public static bool VerifyUser(string name)
