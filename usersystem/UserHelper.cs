@@ -53,9 +53,8 @@ namespace OSaft.usersystem
 
             if (!Directory.Exists("users"))
                 FileSystem.CreateDirectory("users");
-            FileSystem.CreateDirectory($@"users\{name}");
+            FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
-
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
 
             Console.WriteLine("\nSudo user created successfully.");
@@ -80,7 +79,7 @@ namespace OSaft.usersystem
             {
                 while (string.IsNullOrWhiteSpace(name))
                 {
-                    Console.WriteLine("Skip Login with 'dev'");
+                    //Console.WriteLine("Skip Login with 'dev'");
                     Console.Write("Enter user name: ");
                     name = Console.ReadLine();
                    // if (name == "dev") { return; }
@@ -278,6 +277,11 @@ namespace OSaft.usersystem
         }
         public static void RemoveUser(string name)
         {
+            if (name == UserHelper.CurrentUser)
+            {
+                Console.WriteLine("You can't delete yourself!"); 
+                return; 
+            }
             List<User> users = LoadAllUsers();
             User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (found == null)
