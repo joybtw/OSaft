@@ -211,6 +211,7 @@ namespace OSaft.filesystem {
 
         public static string[] FindFile(string filename, string path)
         {
+            if (string.IsNullOrEmpty(filename)) { return Array.Empty<string>(); }
             path ??= currentPath;
             path = ValidatePath(path, currentPath);
             List<string> paths = new();

@@ -20,7 +20,6 @@ namespace OSaft.commands
             {
                 Console.WriteLine(command.Name + " - " + command.Description);
             }
-            ExecuteParams(args);
         }
     }
 
@@ -30,10 +29,13 @@ namespace OSaft.commands
 
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("Shutdown in 5s. Goodbye!");
-            System.Threading.Thread.Sleep(5000);
-            Cosmos.System.Power.Shutdown();
             ExecuteParams(args);
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Shutdown in 5s. Goodbye!");
+                System.Threading.Thread.Sleep(5000);
+                Cosmos.System.Power.Shutdown();
+            }
         }
     }
     public class VersionCommand : Command
@@ -42,8 +44,8 @@ namespace OSaft.commands
 
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("OSaft v0.1 - early alpha");
             ExecuteParams(args);
+            if (args.Length == 0) { Console.WriteLine("OSaft v0.1 - early alpha"); }
         }
     }
 
@@ -53,9 +55,12 @@ namespace OSaft.commands
 
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("Goodbye. See you soon!");
-            Cosmos.System.Power.Reboot();
             ExecuteParams(args);
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Goodbye. See you soon!");
+                Cosmos.System.Power.Reboot();
+            }
         }
     }
 
@@ -64,9 +69,12 @@ namespace OSaft.commands
         public FSInfoCommand(string name) : base(name, "Gets important infos for the filesystem.") { }
         internal override void Execute(string[] args)
         {
-            Console.WriteLine("Available Space: " + FileSystem.Instance.GetAvailableFreeSpace(@"0:\"));
-            Console.WriteLine("File System Type: " + FileSystem.Instance.GetFileSystemType(@"0:\"));
             ExecuteParams(args);
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Available Space: " + FileSystem.Instance.GetAvailableFreeSpace(@"0:\"));
+                Console.WriteLine("File System Type: " + FileSystem.Instance.GetFileSystemType(@"0:\"));
+            }
         }
     }
 
@@ -86,13 +94,11 @@ namespace OSaft.commands
 
         internal override void Execute(string[] args)
         {
+            ExecuteParams(args);
             if (args.Length == 0)
             {
                 Console.Clear();
                 return;
-            } else
-            {
-                ExecuteParams(args);
             }
         }
     }
@@ -114,10 +120,8 @@ namespace OSaft.commands
         }
         internal override void Execute(string[] args)
         {
-            if (args.Length > 0)
-            {
-                ExecuteParams(args);
-            } else
+            ExecuteParams(args);
+            if (args.Length == 0)
             {
                 LsExecute("");
             }
@@ -194,19 +198,11 @@ namespace OSaft.commands
     {
         public UserCommand(string name) : base(name, "Creates, removes or lists a user.") {
             this.ParameterList.Add(new CommandParameter("-a", "Creates a user", false, true, user => UserDatabase.AddUser(user)));
-            this.ParameterList.Add(new CommandParameter("-r", "Removes a user", false, true, user => RemoveUser(user)));
-            this.ParameterList.Add(new CommandParameter("-l", "Lists all users", false, true, val => UserDatabase.ListUsers()));
+            this.ParameterList.Add(new CommandParameter("-r", "Removes a user", false, true, user => UserDatabase.RemoveUser(user)));
+            this.ParameterList.Add(new CommandParameter("-l", "Lists all users", false, false, _ => UserDatabase.ListUsers()));
             this.ParameterList.Add(new CommandParameter("--add", "Creates a user", false, true, user => UserDatabase.AddUser(user)));
-            this.ParameterList.Add(new CommandParameter("--remove", "Removes a user", false, true, user => RemoveUser(user)));
-            this.ParameterList.Add(new CommandParameter("--list", "Lists all users", false, true, val => UserDatabase.ListUsers()));
-        }
-
-        private static void RemoveUser(string user) {
-            if (user != UserHelper.CurrentUser)
-            {
-                UserDatabase.RemoveUser(user);
-            }
-            Console.WriteLine("Error: You can't delete yourself!");
+            this.ParameterList.Add(new CommandParameter("--remove", "Removes a user", false, true, user => UserDatabase.RemoveUser(user)));
+            this.ParameterList.Add(new CommandParameter("--list", "Lists all users", false, false, _ => UserDatabase.ListUsers()));
         }
         internal override void Execute(string[] args)
         {
@@ -229,7 +225,7 @@ namespace OSaft.commands
     {
         public RelogCommand(string name) : base(name, "Locks the access.") {}
         internal override void Execute(string[] args) {
-            UserHelper.LoginUser();
+            if (args.Length == 0) { UserHelper.LoginUser(); }
             ExecuteParams(args);
         }
     }
@@ -238,7 +234,7 @@ namespace OSaft.commands
         public ClockCommand(string name) : base(name, "Shows the current time.") { }
         internal override void Execute(string[] args)
         {
-            Clock.ShowTime();
+            if (args.Length == 0) { Clock.ShowTime(); }
             ExecuteParams(args);
         }
      }
@@ -247,7 +243,7 @@ namespace OSaft.commands
         public ToggleClockCommand(string name) : base(name, "Toggles the clock.") { }
         internal override void Execute(string[] args)
         {
-            Clock.ToggleClock();
+            if (args.Length == 0) { Clock.ToggleClock(); }
             ExecuteParams(args);
         }
     }

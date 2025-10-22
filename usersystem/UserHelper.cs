@@ -278,6 +278,7 @@ namespace OSaft.usersystem
         }
         public static void RemoveUser(string name)
         {
+            if (name == UserHelper.CurrentUser) { return; }
             List<User> users = LoadAllUsers();
             User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (found == null)

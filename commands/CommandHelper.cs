@@ -63,10 +63,17 @@ namespace OSaft.commands
                 if (param != null)
                 {
                     string value = null;
-                    if (param.ExpectsParameters && i + 1 < args.Length)
+                    if (param.ExpectsParameters)
                     {
-                        value = args[i + 1];
-                        i++; // überspringe den Wert beim nächsten Durchlauf
+                        if (i + 1 < args.Length)
+                        {
+                            value = args[i + 1];
+                            i++;
+                        } else
+                        {
+                            Console.WriteLine("Please provide a value after parameter \"" + param.Name + "\"");
+                            return;
+                        }
                     } else
                     {
                         value = args[i];
