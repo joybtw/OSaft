@@ -32,7 +32,7 @@ namespace OSaft.applications
         }
 
         // Constant
-        private static readonly int[] console = { 0, Console.WindowWidth - 1, 1, Console.WindowHeight-4 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
+        private static readonly int[] console = { 0, Console.WindowWidth - 1, 3, Console.WindowHeight-4 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
         private static readonly int consoleWidth = console[1] - console[0] + 1;
         private static readonly int consoleHeight = console[3] - console[2] + 1;
         private static bool visibleHelp;
@@ -43,6 +43,7 @@ namespace OSaft.applications
         private static List<StackState> undoStack = new();
         private static List<StackState> redoStack = new();
         private static List<Pos> markers = new();
+        private static string markBuffer = "";
 
         private static void CursorToConsole(Pos pos)
         {
@@ -59,15 +60,81 @@ namespace OSaft.applications
             }
             // Console.CursorVisible = true;
         }
+
+        private static void SearchInput()
+        {
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine(new string(' ', Console.WindowWidth - 1));
+            Console.SetCursorPosition(0, 1);
+            Console.Write("Searching for: ");
+            bool contuine = true;
+            markBuffer = "";
+
+            while (contuine) { 
+                var key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.Backspace:
+                        // Remove last character
+                        if (markBuffer.Length > 0)
+                        {
+                            markBuffer = markBuffer.Substring(0, markBuffer.Length - 1);
+                        }
+                        PrintViewport();
+                        break;
+                    case ConsoleKey.Enter:
+                        // Confirm search
+                        if(markBuffer == "")
+                        {
+                            Console.SetCursorPosition(0, 1);
+                            Console.WriteLine(new string(' ', Console.WindowWidth - 1));
+                        } else
+                        {
+                            markers = SearchWord(markBuffer);
+                        }
+                        contuine = false;
+                        break;
+                    case ConsoleKey.Escape:
+                        markBuffer = "";
+                        Console.SetCursorPosition(0, 1);
+                        Console.WriteLine(new string(' ', Console.WindowWidth - 1));
+                        contuine = false;
+                        break;
+                    default:
+                        // Input character
+                        if (!char.IsControl(key.KeyChar) && key.KeyChar != '\0')
+                        {
+                            markBuffer += key.KeyChar;
+                            markers = SearchWord(markBuffer);
+                        }
+                        PrintViewport();
+                        break;
+                }
+            }
+        }
         private static List<Pos> SearchWord(string word)
         {
+            if(word == "")
+            {
+                return null;
+            }
+
             List<Pos> results = new();
-            for (int i = 0; i < lines.Count; i++) 
+            for (int i = 0; i < lines.Count; i++)
             {
                 int index = lines[i].IndexOf(word);
-                while (index != -1) 
+                while (index != -1)
                 {
-                    results.Add(new Pos { cursorX = index, cursorY = i, viewportX = 0, viewportY = 0 });
+                    if (index >= 0 && index < lines[i].Length)
+                    {
+                        results.Add(new Pos
+                        {
+                            cursorX = index,
+                            cursorY = i,
+                            viewportX = 0,
+                            viewportY = 0
+                        });
+                    }
                     index = lines[i].IndexOf(word, index + word.Length);
                 }
             }
@@ -84,15 +151,21 @@ namespace OSaft.applications
                 visibleHelp = false;
             } else {
                 Console.SetCursorPosition(0, Console.WindowHeight - 2);
-                Console.Write(" ^S: Save | ^K: Cut line | alt+U: Undo | ^A: Start of line");
+                Console.Write(" ^S: Save | ^K: Cut line | alt+U: Undo | ^A: Start of line | ^W: Search Input");
                 Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                Console.Write(" ^X: Exit | ^U: Paste    | alt+E: Redo | ^E: End of line");
+                Console.Write(" ^X: Exit | ^U: Paste    | alt+E: Redo | ^E: End of line   | alt+F: next find");
                 visibleHelp = true;
             }
         }
 
         private static void PrintViewport() {
             ClearViewport();
+
+            if (markBuffer != "")
+            {
+                Console.SetCursorPosition(0, 1);
+                Console.WriteLine($"Searching for: {markBuffer}");
+            }
 
             // Move viewport to the marker
             if (pos.cursorY < pos.viewportY)
@@ -118,8 +191,43 @@ namespace OSaft.applications
                 } else {
                     Console.Write("");
                 }
-            }
 
+                // Mark words of the search results
+                if (markers.Count > 0 && !string.IsNullOrEmpty(markBuffer))
+                {
+                    foreach (Pos mpos in markers)
+                    {
+                        if (mpos.cursorY == Y)
+                        {
+                            int wordStart = mpos.cursorX;
+                            int wordEnd = wordStart + markBuffer.Length;
+
+                            // Area of Viewports
+                            int viewportStart = start;
+                            int viewportEnd = start + length;
+
+                            // Test if word is in the viewport
+                            if (wordEnd > viewportStart && wordStart < viewportEnd)
+                            {
+                                // calculate the part of the word in viewport
+                                int visibleStart = Math.Max(wordStart, viewportStart);
+                                int visibleEnd = Math.Min(wordEnd, viewportEnd);
+                                int visibleLength = visibleEnd - visibleStart;
+
+                                // set cursor to word
+                                int consoleX = visibleStart - viewportStart + console[0];
+                                int consoleY = console[2] + (Y - pos.viewportY);
+
+                                // mark the word
+                                Console.SetCursorPosition(consoleX, consoleY);
+                                Console.BackgroundColor = ConsoleColor.Yellow;
+                                Console.Write(line.Substring(visibleStart, visibleLength));
+                                Console.ResetColor();
+                            }
+                        }
+                    }
+                }
+            }
             CursorToConsole(pos);
         }
         private static void AddUndoStack()
@@ -145,6 +253,7 @@ namespace OSaft.applications
             pos.Set(0, 0, 0, 0);
             visibleHelp = false;
 
+            Console.ResetColor();
             Console.Clear();
             string title = $"-- Editing: {path} --";
             Console.SetCursorPosition(Math.Max(0, Console.WindowWidth/2 - (title.Length / 2)) , 0);
@@ -176,6 +285,7 @@ namespace OSaft.applications
                         break;
                     case ConsoleKey.X when ctrl:
                         // Close buffer, exit from nano
+                        markBuffer = "";
                         Console.Clear();
                         return;
                     //Editing
@@ -227,6 +337,10 @@ namespace OSaft.applications
                         }
                         break;
                     //Search and Replace
+                    case ConsoleKey.W when ctrl:
+                        // Start search input
+                        SearchInput();
+                        break;
                     case ConsoleKey.B when ctrl:
                         // Start backward search
                         break;
@@ -468,6 +582,10 @@ namespace OSaft.applications
                             pos.cursorX++;
                         }
                         break;
+                }
+                if(markBuffer != "")
+                {
+                    markers = SearchWord(markBuffer);
                 }
                 PrintViewport();
             }

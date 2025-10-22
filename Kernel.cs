@@ -6,9 +6,6 @@ using System;
 using System.Threading;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
-using Cosmos.System.Graphics;
-using Cosmos.System.Graphics.Fonts;
-using System.Drawing;
 
 namespace OSaft
 {
