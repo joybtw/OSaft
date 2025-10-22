@@ -53,12 +53,9 @@ namespace OSaft.usersystem
 
             if (!Directory.Exists("users"))
                 FileSystem.CreateDirectory("users");
-            FileSystem.CreateDirectory($@"users\{name}");
+            FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
-
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
-            AccessControlManager.GrantPermission(0, "system", FilePermission.Read | FilePermission.Write);
-            AccessControlManager.GrantPermission(0, $@"users\{name}", FilePermission.Read | FilePermission.Write);
             Console.WriteLine("\nSudo user created successfully.");
             Console.WriteLine("--------------------------------");
 
@@ -81,7 +78,7 @@ namespace OSaft.usersystem
             {
                 while (string.IsNullOrWhiteSpace(name))
                 {
-                    Console.WriteLine("Skip Login with 'dev'");
+                    //Console.WriteLine("Skip Login with 'dev'");
                     Console.Write("Enter user name: ");
                     name = Console.ReadLine();
                    // if (name == "dev") { return; }
@@ -274,11 +271,6 @@ namespace OSaft.usersystem
             users.Add(newUser);
             FileSystem.CreateDirectory($@"users\{name}");
             SaveAllUsers(users);
-            AccessControlManager.GrantPermission((uint)nextUid, $@"users\{name}", FilePermission.Read | FilePermission.Write);
-            if (sudo)
-            {
-                AccessControlManager.GrantPermission((uint)nextUid, "system", FilePermission.Read);
-            }
             Console.WriteLine("User added successfully: " + name);
           
         }
@@ -299,7 +291,6 @@ namespace OSaft.usersystem
             }
             users.Remove(found);
             SaveAllUsers(users);
-            AccessControlManager.RevokePermission(found.Uid,"");
             FileSystem.DeleteDirectory($@"users\{name}");
 
             
