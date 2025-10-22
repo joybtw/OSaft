@@ -56,16 +56,12 @@ namespace OSaft
 
             // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
-
-            //LiveClock
-            Clock.ActiveClock = true;
         }
 
         protected override void Run()
         {
             // Input Handling
-            if (Clock.ActiveClock == true) { Clock.ShortTime(); } 
-            Console.Write(UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
+            Console.Write(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);
 

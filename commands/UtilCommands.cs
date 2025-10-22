@@ -247,7 +247,7 @@ namespace OSaft.commands
         public ToggleClockCommand(string name) : base(name, "Toggles the clock.") { }
         internal override void Execute(string[] args)
         {
-            Clock.ActiveClock = !Clock.ActiveClock;
+            Clock.ToggleClock();
             ExecuteParams(args);
         }
     }

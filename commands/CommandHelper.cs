@@ -36,7 +36,7 @@ namespace OSaft.commands
             {
                 if (parameter.IsRequired) { reqCnt++; }
             }
-            return args.Length == reqCnt;
+            return args.Length >= reqCnt;
         }
 
         public string GetSyntax()
