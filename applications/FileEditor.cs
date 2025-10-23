@@ -12,7 +12,7 @@ namespace OSaft.applications
             public int cursorY;
             public int viewportX;
             public int viewportY;
-            public void Set(int cX, int cY, int vX, int vY)
+            public Pos(int cX, int cY, int vX, int vY)
             {
                 cursorX = cX;
                 cursorY = cY;
@@ -24,7 +24,7 @@ namespace OSaft.applications
         { 
             public List<string> lines;
             public Pos pos;
-            public void Set(List<string> l, Pos p)
+            public StackState(List<string> l, Pos p)
             {
                 lines = l;
                 pos = p;
@@ -44,6 +44,7 @@ namespace OSaft.applications
         private static List<StackState> redoStack = new();
         private static List<Pos> markers = new();
         private static string markBuffer = "";
+        private static Pos searchPos = new(0,1,0,0);
 
         private static void CursorToConsole(Pos pos)
         {
@@ -63,9 +64,9 @@ namespace OSaft.applications
 
         private static void SearchInput()
         {
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine(new string(' ', Console.WindowWidth - 1));
-            Console.SetCursorPosition(0, 1);
+            Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+            Console.Write(new string(' ', Console.WindowWidth - 1));
+            Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
             Console.Write("Searching for: ");
             bool contuine = true;
             markBuffer = "";
@@ -80,14 +81,17 @@ namespace OSaft.applications
                         {
                             markBuffer = markBuffer.Substring(0, markBuffer.Length - 1);
                         }
-                        PrintViewport();
+                        Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+                        Console.Write(new string(' ', Console.WindowWidth - 1));
+                        Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+                        Console.Write($"Searching for: {markBuffer}");
                         break;
                     case ConsoleKey.Enter:
                         // Confirm search
                         if(markBuffer == "")
                         {
-                            Console.SetCursorPosition(0, 1);
-                            Console.WriteLine(new string(' ', Console.WindowWidth - 1));
+                            Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+                            Console.Write(new string(' ', Console.WindowWidth - 1));
                         } else
                         {
                             markers = SearchWord(markBuffer);
@@ -96,8 +100,8 @@ namespace OSaft.applications
                         break;
                     case ConsoleKey.Escape:
                         markBuffer = "";
-                        Console.SetCursorPosition(0, 1);
-                        Console.WriteLine(new string(' ', Console.WindowWidth - 1));
+                        Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+                        Console.Write(new string(' ', Console.WindowWidth - 1));
                         contuine = false;
                         break;
                     default:
@@ -106,10 +110,14 @@ namespace OSaft.applications
                         {
                             markBuffer += key.KeyChar;
                             markers = SearchWord(markBuffer);
+                            Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+                            Console.Write(new string(' ', Console.WindowWidth - 1));
+                            Console.SetCursorPosition(searchPos.cursorX, searchPos.cursorY);
+                            Console.Write($"Searching for: {markBuffer}");
                         }
-                        PrintViewport();
                         break;
                 }
+                PrintViewport();
             }
         }
         private static List<Pos> SearchWord(string word)
@@ -160,12 +168,6 @@ namespace OSaft.applications
 
         private static void PrintViewport() {
             ClearViewport();
-
-            if (markBuffer != "")
-            {
-                Console.SetCursorPosition(0, 1);
-                Console.WriteLine($"Searching for: {markBuffer}");
-            }
 
             // Move viewport to the marker
             if (pos.cursorY < pos.viewportY)
@@ -250,7 +252,7 @@ namespace OSaft.applications
             markers.Clear();
             undoStack.Add(new StackState { lines = new List<string>(lines), pos = pos});
             string buffer = "";
-            pos.Set(0, 0, 0, 0);
+            pos = new Pos(0, 0, 0, 0);
             visibleHelp = false;
 
             Console.ResetColor();
