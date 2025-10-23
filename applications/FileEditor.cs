@@ -350,10 +350,63 @@ namespace OSaft.applications
                         // Start forward search");
                         break;
                     case ConsoleKey.B when alt:
-                        // Find next occurrence backward
+                        // Find next previous backward
+                        if (markers.Count > 0)
+                        {
+                            // Find index of the marker before the current position
+                            int previousIndex = -1;
+
+                            for (int i = 0; i < markers.Count; i++)
+                            {
+                                var m = markers[i];
+                                // if marker is before the current position
+                                if (m.cursorY < pos.cursorY || (m.cursorY == pos.cursorY && m.cursorX < pos.cursorX))
+                                {
+                                    previousIndex = i;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+
+                            // If none found, wrap to last
+                            if (previousIndex == -1)
+                            {
+                                previousIndex = markers.Count - 1;
+                            }
+
+                            // Move cursor to that marker
+                            pos.cursorX = markers[previousIndex].cursorX;
+                            pos.cursorY = markers[previousIndex].cursorY;
+                        }
                         break;
                     case ConsoleKey.F when alt:
                         // Find next occurrence forward
+                        if (markers.Count > 0)
+                        {
+                            // Find the first marker that appears *after* the current position
+                            int nextIndex = -1;
+                            for (int i = 0; i < markers.Count; i++)
+                            {
+                                var m = markers[i];
+                                if (m.cursorY > pos.cursorY || (m.cursorY == pos.cursorY && m.cursorX > pos.cursorX))
+                                {
+                                    nextIndex = i;
+                                    break;
+                                }
+                            }
+
+                            // If none found, wrap around to the first match
+                            if (nextIndex == -1)
+                            {
+                                nextIndex = 0;
+                            }
+
+                            // Move cursor to that marker
+                            pos.cursorX = markers[nextIndex].cursorX;
+                            pos.cursorY = markers[nextIndex].cursorY;
+                        }
                         break;
                     case ConsoleKey.R when alt:
                         // Start a replacing session
