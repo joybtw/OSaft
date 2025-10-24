@@ -12,7 +12,7 @@ namespace OSaft.applications
             public int cursorY;
             public int viewportX;
             public int viewportY;
-            public void Set(int cX, int cY, int vX, int vY)
+            public Pos(int cX, int cY, int vX, int vY)
             {
                 cursorX = cX;
                 cursorY = cY;
@@ -24,7 +24,7 @@ namespace OSaft.applications
         { 
             public List<string> lines;
             public Pos pos;
-            public void Set(List<string> l, Pos p)
+            public StackState(List<string> l, Pos p)
             {
                 lines = l;
                 pos = p;
@@ -36,6 +36,7 @@ namespace OSaft.applications
         private static readonly int consoleWidth = console[1] - console[0] + 1;
         private static readonly int consoleHeight = console[3] - console[2] + 1;
         private static bool visibleHelp;
+        private static Pos searchInputPos = new(0, 1, 0, 0);
 
         // Variable
         private static Pos pos = new();
@@ -44,6 +45,8 @@ namespace OSaft.applications
         private static List<StackState> redoStack = new();
         private static List<Pos> markers = new();
         private static string markBuffer = "";
+        private static int searchType = 0; // 0: normal, 1: backward, 2: forward
+        private static Pos searchPos = new();
 
         private static void CursorToConsole(Pos pos)
         {
@@ -63,55 +66,64 @@ namespace OSaft.applications
 
         private static void SearchInput()
         {
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine(new string(' ', Console.WindowWidth - 1));
-            Console.SetCursorPosition(0, 1);
+            Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+            Console.Write(new string(' ', Console.WindowWidth - 1));
+            Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
             Console.Write("Searching for: ");
-            bool contuine = true;
-            markBuffer = "";
 
-            while (contuine) { 
+            markBuffer = SearchBar("Searching for: ", "");
+
+            if (markBuffer == "")
+            {
+                Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                Console.Write(new string(' ', Console.WindowWidth - 1));
+            } else {
+                markers = SearchWord(markBuffer);
+            }
+
+            PrintViewport();
+        }
+
+        private static string SearchBar(string pretext, string input)
+        {
+            bool contuine = true;
+            while (contuine)
+            {
                 var key = Console.ReadKey(true);
                 switch (key.Key)
                 {
-                    case ConsoleKey.Backspace:
-                        // Remove last character
-                        if (markBuffer.Length > 0)
-                        {
-                            markBuffer = markBuffer.Substring(0, markBuffer.Length - 1);
-                        }
-                        PrintViewport();
-                        break;
                     case ConsoleKey.Enter:
                         // Confirm search
-                        if(markBuffer == "")
-                        {
-                            Console.SetCursorPosition(0, 1);
-                            Console.WriteLine(new string(' ', Console.WindowWidth - 1));
-                        } else
-                        {
-                            markers = SearchWord(markBuffer);
-                        }
                         contuine = false;
                         break;
                     case ConsoleKey.Escape:
-                        markBuffer = "";
-                        Console.SetCursorPosition(0, 1);
-                        Console.WriteLine(new string(' ', Console.WindowWidth - 1));
+                        // Cancel input
+                        input = "";
                         contuine = false;
+                        break;
+                    case ConsoleKey.Backspace:
+                        // Remove last character
+                        if (input.Length > 0)
+                        {
+                            input = input.Substring(0, input.Length - 1);
+                        }
                         break;
                     default:
                         // Input character
                         if (!char.IsControl(key.KeyChar) && key.KeyChar != '\0')
                         {
-                            markBuffer += key.KeyChar;
-                            markers = SearchWord(markBuffer);
+                            input += key.KeyChar;
                         }
-                        PrintViewport();
                         break;
                 }
+                Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                Console.Write(new string(' ', Console.WindowWidth - 1));
+                Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                Console.Write(pretext);
+                Console.Write(input);
             }
-        }
+            return input;
+            }
         private static List<Pos> SearchWord(string word)
         {
             if(word == "")
@@ -127,15 +139,44 @@ namespace OSaft.applications
                 {
                     if (index >= 0 && index < lines[i].Length)
                     {
-                        results.Add(new Pos
+                        switch (searchType)
                         {
-                            cursorX = index,
-                            cursorY = i,
-                            viewportX = 0,
-                            viewportY = 0
-                        });
+                            case 1: // backward
+                                if (i < searchPos.cursorY || (i == searchPos.cursorY && index < searchPos.cursorX))
+                                {
+                                    results.Add(new Pos
+                                    {
+                                        cursorX = index,
+                                        cursorY = i,
+                                        viewportX = 0,
+                                        viewportY = 0
+                                    });
+                                }
+                                break;
+                            case 2: // forward
+                                if (i > searchPos.cursorY || (i == searchPos.cursorY && index > searchPos.cursorX))
+                                {
+                                    results.Add(new Pos
+                                    {
+                                        cursorX = index,
+                                        cursorY = i,
+                                        viewportX = 0,
+                                        viewportY = 0
+                                    });
+                                }
+                                break;
+                            default: // normal
+                                results.Add(new Pos
+                                {
+                                    cursorX = index,
+                                    cursorY = i,
+                                    viewportX = 0,
+                                    viewportY = 0
+                                });
+                                break;
+                        }
+                        index = lines[i].IndexOf(word, index + word.Length);
                     }
-                    index = lines[i].IndexOf(word, index + word.Length);
                 }
             }
             return results;
@@ -157,14 +198,19 @@ namespace OSaft.applications
                 visibleHelp = true;
             }
         }
-
         private static void PrintViewport() {
             ClearViewport();
 
-            if (markBuffer != "")
+            if(markBuffer == "")
             {
-                Console.SetCursorPosition(0, 1);
-                Console.WriteLine($"Searching for: {markBuffer}");
+                Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                Console.Write(new string(' ', Console.WindowWidth - 1));
+            } else
+            {
+                Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                Console.Write(new string(' ', Console.WindowWidth - 1));
+                Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                Console.Write("Searching for: " + markBuffer);
             }
 
             // Move viewport to the marker
@@ -250,7 +296,7 @@ namespace OSaft.applications
             markers.Clear();
             undoStack.Add(new StackState { lines = new List<string>(lines), pos = pos});
             string buffer = "";
-            pos.Set(0, 0, 0, 0);
+            pos = new Pos(0, 0, 0, 0);
             visibleHelp = false;
 
             Console.ResetColor();
@@ -271,7 +317,7 @@ namespace OSaft.applications
 
                 switch (key.Key)
                 {
-                    //File Handling
+//File Handling
                     case ConsoleKey.S when ctrl:
                         //Input: Save current file
                         file = "";
@@ -288,7 +334,7 @@ namespace OSaft.applications
                         markBuffer = "";
                         Console.Clear();
                         return;
-                    //Editing
+//Editing
                     case ConsoleKey.K when ctrl:
                         AddUndoStack();
                         // Cut current line into cutbuffer
@@ -336,27 +382,112 @@ namespace OSaft.applications
                             redoStack.RemoveAt(redoStack.Count - 1);
                         }
                         break;
-                    //Search and Replace
+//Search and Replace
                     case ConsoleKey.W when ctrl:
                         // Start search input
+                        searchType = 0;
+                        searchPos = pos;
                         SearchInput();
                         break;
                     case ConsoleKey.B when ctrl:
                         // Start backward search
+                        searchType = 1;
+                        searchPos = pos;
+                        SearchInput();
                         break;
                     case ConsoleKey.F when ctrl:
-                        // Start forward search");
+                        // Start forward search;
+                        searchType = 2;
+                        searchPos = pos;
+                        SearchInput();
                         break;
                     case ConsoleKey.B when alt:
-                        // Find next occurrence backward
+                        // Find previous occurrence
+                        if (markers.Count > 0)
+                        {
+                            // Find index of the marker before the current position
+                            int previousIndex = -1;
+
+                            for (int i = 0; i < markers.Count; i++)
+                            {
+                                var m = markers[i];
+                                // if marker is before the current position
+                                if (m.cursorY < pos.cursorY || (m.cursorY == pos.cursorY && m.cursorX < pos.cursorX))
+                                {
+                                    previousIndex = i;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+
+                            // If none found, wrap to last
+                            if (previousIndex == -1)
+                            {
+                                previousIndex = markers.Count - 1;
+                            }
+
+                            // Move cursor to that marker
+                            pos.cursorX = markers[previousIndex].cursorX;
+                            pos.cursorY = markers[previousIndex].cursorY;
+                        }
                         break;
                     case ConsoleKey.F when alt:
-                        // Find next occurrence forward
+                        // Find next occurrence
+                        if (markers.Count > 0)
+                        {
+                            // Find the first marker that appears *after* the current position
+                            int nextIndex = -1;
+                            for (int i = 0; i < markers.Count; i++)
+                            {
+                                var m = markers[i];
+                                if (m.cursorY > pos.cursorY || (m.cursorY == pos.cursorY && m.cursorX > pos.cursorX))
+                                {
+                                    nextIndex = i;
+                                    break;
+                                }
+                            }
+
+                            // If none found, wrap around to the first match
+                            if (nextIndex == -1)
+                            {
+                                nextIndex = 0;
+                            }
+
+                            // Move cursor to that marker
+                            pos.cursorX = markers[nextIndex].cursorX;
+                            pos.cursorY = markers[nextIndex].cursorY;
+                        }
                         break;
                     case ConsoleKey.R when alt:
                         // Start a replacing session
+                        AddUndoStack();
+
+                        if (markBuffer == "")
+                        {
+                            searchType = 0;
+                            searchPos = pos;
+                            SearchInput();
+                        }
+
+                        Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                        Console.Write(new string(' ', Console.WindowWidth - 1));
+                        Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
+                        Console.Write("Replacing with: ");
+
+                        string replaceBuffer = SearchBar("Replacing with: ", "");
+                        if (replaceBuffer != "")
+                        {
+                            for (int i = 0; i < lines.Count; i++)
+                            {
+                                lines[i] = lines[i].Replace(markBuffer, replaceBuffer);
+                            }
+                            markers = SearchWord(markBuffer);
+                        }
+                        markBuffer = "";
                         break;
-                    //Deletion
+//Deletion
                     case ConsoleKey.H when ctrl:
                         AddUndoStack();
                         // Delete character before cursor
@@ -433,8 +564,8 @@ namespace OSaft.applications
                             lines[pos.cursorY] = lines[pos.cursorY].Remove(pos.cursorX, 1);
                         }
                         break;
-                    //Operations
-                    //Moving around
+// Operations
+// Moving around
                     case ConsoleKey.LeftArrow when ctrl:
                         // One word backward
                         while (pos.cursorX > 0 && lines[pos.cursorY][pos.cursorX - 1] == ' ')
@@ -539,9 +670,9 @@ namespace OSaft.applications
                         pos.cursorY = Math.Min(pos.cursorY + consoleHeight, lines.Count);
                         pos.viewportY = Math.Min(pos.viewportY + consoleHeight, lines.Count - consoleHeight);
                         break;
-                    // Special Movement
-                    // Information
-                    // Various
+// Special Movement
+// Information
+// Various
                     case ConsoleKey.X when alt:
                         // Toggle help visibility
                         ToggleHelp();
@@ -583,7 +714,7 @@ namespace OSaft.applications
                         }
                         break;
                 }
-                if(markBuffer != "")
+                if (markBuffer != "")
                 {
                     markers = SearchWord(markBuffer);
                 }
