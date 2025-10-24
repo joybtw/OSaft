@@ -27,7 +27,8 @@ namespace OSaft.usersystem
                 LoginUser();
                 return;
             }
-            
+            StartupScreen SScreen = new StartupScreen();
+            OSaftColortheme.ApplyTheme();
             // Erster Systemstart -> Root-User erstellen
             Console.WriteLine("This is the first boot of OSaft. Please create a user.");
 
@@ -57,7 +58,7 @@ namespace OSaft.usersystem
                 FileSystem.CreateDirectory("users");
             FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
-            FileSystem.CreateFile("/system/startscreen.cfg");
+            ToggleStartScreen.Toggle();
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
 
             OSaftColortheme.chcollor();

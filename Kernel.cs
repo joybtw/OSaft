@@ -2,7 +2,9 @@
 using OSaft.applications;
 using OSaft.filesystem;
 using OSaft.usersystem;
+using OSaftUtils;
 using System;
+using System.IO;
 using System.Threading;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
@@ -13,21 +15,21 @@ namespace OSaft
     {
         protected override void BeforeRun()
         {
+            // Filesystem
+            Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
+
+            OSaftColortheme.ApplyTheme();   
             SetKeyboardScanMap(new DE_Standard());
 
-            StartupScreen SScreen = new StartupScreen();
+            if (File.Exists(@"0:\system\startscreen.cfg")) { StartupScreen SScreen = new StartupScreen(); }
 
-            Console.Clear();
+            OSaftColortheme.ApplyTheme();
             Console.SetCursorPosition(0, 0);
 
             // Welcome Messages
-            Console.Clear();
-            OSaftUtils.OSaftColortheme.chcollor();
             Console.WriteLine("OSaft - OperatingSystem - All for Techies");
             Console.WriteLine("--------------------------------");
 
-            // Filesystem
-            Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
 
             // Commands Registry 
             Commands.CommandHelper.RegisterCommand(new Commands.CDCommand("cd"));
@@ -43,6 +45,7 @@ namespace OSaft
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ToggleStartScreenCommand("togglestartscreen"));
             Commands.CommandHelper.RegisterCommand(new Commands.ToggleClockCommand("toggleclock"));
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.UserCommand("user"));
