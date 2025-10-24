@@ -4,6 +4,7 @@ using OSaft.usersystem;
 using System;
 using System.IO;
 using System.IO.Enumeration;
+using OSaftUtils;
 
 namespace OSaft.commands
 {
@@ -207,6 +208,7 @@ namespace OSaft.commands
         }
         internal override void Execute(string[] args)
         {
+            OSaftColortheme.chcollor();
             if (args.Length > 0)
             {
                 if (UserDatabase.GetUserState(UserHelper.CurrentUser) != true)
@@ -245,6 +247,16 @@ namespace OSaft.commands
         internal override void Execute(string[] args)
         {
             if (args.Length == 0) { Clock.ToggleClock(); }
+            ExecuteParams(args);
+        }
+    }
+
+    public class ToggleStartScreenCommand : Command
+    {
+        public ToggleStartScreenCommand(string name) : base(name, "Toggles the start screen.") { }
+        internal override void Execute(string[] args)
+        {
+            if (args.Length == 0) { ToggleStartScreen.Toggle(); }
             ExecuteParams(args);
         }
     }
