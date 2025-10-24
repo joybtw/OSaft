@@ -57,6 +57,7 @@ namespace OSaft.usersystem
             FileSystem.CreateFile(@"system\root_init.sys");
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
 
+            OSaftUtils.OSaftColortheme.chcollor();
             Console.WriteLine("\nSudo user created successfully.");
             Console.WriteLine("--------------------------------");
 
@@ -69,6 +70,7 @@ namespace OSaft.usersystem
             List<User> users = UserDatabase.LoadAllUsers();
             if (users.Count == 0)
             {
+                OSaftUtils.OSaftColortheme.chcollor();
                 Console.WriteLine("No users found. Please reset filesystem (Skript on Discord)(to be changed).");
                 return;
             }
@@ -85,7 +87,7 @@ namespace OSaft.usersystem
                    // if (name == "dev") { return; }
                 }
                 User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
+                OSaftUtils.OSaftColortheme.chcollor();
                 if (found == null)
                 {
                     Console.WriteLine("User not found.");
@@ -93,9 +95,9 @@ namespace OSaft.usersystem
                     return;
                 }
                 Console.Write("Enter password: ");
-                Console.ForegroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 string password = Console.ReadLine();
-                Console.ResetColor();
+                OSaftUtils.OSaftColortheme.chcollor();
 
                 if ((found.PasswordHash == User.ComputeFNV1a(password + found.Salt)))
                 {
@@ -138,7 +140,7 @@ namespace OSaft.usersystem
                 sb += (u.Name + '|' + u.PasswordHash + '|' + u.Salt + '|' + (u.IsSuperuser ? '1' : '0') + '|' + u.Uid.ToString() + '\n');
             }
             FileSystem.WriteFile(user_db_path, sb);
-            
+            OSaftUtils.OSaftColortheme.chcollor();
             Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
         }
 

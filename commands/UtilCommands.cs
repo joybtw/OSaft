@@ -84,6 +84,7 @@ namespace OSaft.commands
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to editable fale", true, false, val =>
             {
                 FileEditor.EditFile(val);
+                OSaftUtils.OSaftColortheme.ApplyTheme();
             }));
         }
     }
@@ -234,7 +235,7 @@ namespace OSaft.commands
         public ClockCommand(string name) : base(name, "Shows the current time.") { }
         internal override void Execute(string[] args)
         {
-            if (args.Length == 0) { Clock.ShowTime(); }
+            if (args.Length == 0) { Console.WriteLine(Clock.ShowTime()); }
             ExecuteParams(args);
         }
      }

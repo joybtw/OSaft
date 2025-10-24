@@ -21,7 +21,8 @@ namespace OSaft
             Console.SetCursorPosition(0, 0);
 
             // Welcome Messages
-            Console.Clear();    
+            Console.Clear();
+            OSaftUtils.OSaftColortheme.chcollor();
             Console.WriteLine("OSaft - OperatingSystem - All for Techies");
             Console.WriteLine("--------------------------------");
 
@@ -53,11 +54,13 @@ namespace OSaft
 
             // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
+            
         }
 
         protected override void Run()
         {
             // Input Handling
+            OSaftUtils.OSaftColortheme.chcollor();
             Console.Write(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);
