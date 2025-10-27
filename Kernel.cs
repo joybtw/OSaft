@@ -2,10 +2,8 @@
 using OSaft.applications;
 using OSaft.filesystem;
 using OSaft.usersystem;
-using OSaftUtils;
+using OSaft.utils;
 using System;
-using System.IO;
-using System.Threading;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
 
@@ -18,12 +16,12 @@ namespace OSaft
             // Filesystem
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(FileSystem.Instance);
 
-            OSaftColortheme.ApplyTheme();   
+            ColorTheme.ApplyTheme();   
             SetKeyboardScanMap(new DE_Standard());
 
-            if (File.Exists(@"0:\system\startscreen.cfg")) { StartupScreen SScreen = new StartupScreen(); }
+            StartupScreen.Init();
 
-            OSaftColortheme.ApplyTheme();
+            ColorTheme.ApplyTheme();
             Console.SetCursorPosition(0, 0);
 
             // Welcome Messages
@@ -63,12 +61,10 @@ namespace OSaft
         protected override void Run()
         {
             // Input Handling
-            OSaftUtils.OSaftColortheme.chcollor();
+            ColorTheme.ChangeColor();
             Console.Write(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             String input = Console.ReadLine();
             Commands.CommandHelper.ExecuteCommand(input);
-
-            
         }
     }
 }

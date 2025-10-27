@@ -3,8 +3,7 @@ using OSaft.filesystem;
 using OSaft.usersystem;
 using System;
 using System.IO;
-using System.IO.Enumeration;
-using OSaftUtils;
+using OSaft.utils;
 
 namespace OSaft.commands
 {
@@ -85,7 +84,7 @@ namespace OSaft.commands
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to editable fale", true, false, val =>
             {
                 FileEditor.EditFile(val);
-                OSaftUtils.OSaftColortheme.ApplyTheme();
+                ColorTheme.ApplyTheme();
             }));
         }
     }
@@ -206,7 +205,7 @@ namespace OSaft.commands
         }
         internal override void Execute(string[] args)
         {
-            OSaftColortheme.chcollor();
+            ColorTheme.ChangeColor();
             if (args.Length > 0)
             {
                 if (UserDatabase.GetUserState(UserHelper.CurrentUser) != true)
@@ -254,7 +253,7 @@ namespace OSaft.commands
         public ToggleStartScreenCommand(string name) : base(name, "Toggles the start screen.") { }
         internal override void Execute(string[] args)
         {
-            if (args.Length == 0) { ToggleStartScreen.Toggle(); }
+            if (args.Length == 0) { StartupScreen.Toggle(); }
             ExecuteParams(args);
         }
     }

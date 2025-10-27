@@ -1,5 +1,4 @@
-﻿using Cosmos.HAL.BlockDevice.Registers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Sys = Cosmos.System;
@@ -115,19 +114,27 @@ namespace OSaft.filesystem {
             return drivePrefix + "\\" + string.Join("\\", finalParts.ToArray());
         }
 
-        public static FileStream CreateFile(string path) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+        public static FileStream CreateFile(string path, bool isPathAbs = false) {
+            if (isPathAbs)
+            {
+                path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            } else
+            {
+                path = ValidatePath(path, currentPath);
+            }
             try
             {
                 if (!File.Exists(path) && path.Contains('.'))
                 {
                     return File.Create(path);
-                } else
+                }
+                else
                 {
                     Console.WriteLine("CreateFile: " + path + " already exists or is not a file");
                 }
-                
-            } catch(Exception e)
+
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("CreateFile: Exception thrown: " + e.Message);
             }
@@ -189,8 +196,16 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void WriteFile(string path, string content) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+        public static void WriteFile(string path, string content, bool isPathAbs = false) {
+            if (isPathAbs)
+            {
+                path = ValidatePath(path, currentPath);
+            }
+            else
+            {
+                path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            }
+
             try
             {
                File.WriteAllText(path, content);
@@ -209,8 +224,15 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static string ReadFile(string path) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+        public static string ReadFile(string path, bool isPathAbs = false) {
+            if (isPathAbs)
+            {
+                path = ValidatePath(path, currentPath);
+            } else
+            {
+                path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            }
+  
             try
             {
                 return File.ReadAllText(path);

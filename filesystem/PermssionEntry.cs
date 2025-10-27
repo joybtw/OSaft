@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OSaft.usersystem
+namespace OSaft.filesystem
 {
     public class PermissionEntry
     {

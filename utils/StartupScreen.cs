@@ -1,25 +1,38 @@
 ﻿using Cosmos.System.Graphics;
 using Cosmos.System.Graphics.Fonts;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using OSaft.filesystem;
 using Sys = Cosmos.System;
 
-namespace OSaft
+namespace OSaft.utils
 {
-    public class StartupScreen
+    public static class StartupScreen
     {
         const string OS_TITLE = "OSaft";
         const string OS_VERSION = "v0.1";
-        public StartupScreen()
+        private static bool IsActive = false;
+        private static readonly string path = "0:\\system\\startscreen.cfg";
+
+        public static void Init()
         {
-            Canvas canvas = FullScreenCanvas.GetFullScreenCanvas();
-            canvas.Clear();
-            string orange = @"
+            if (!File.Exists(path)) {
+                FileSystem.CreateFile(path);
+                FileSystem.WriteFile(path, "1", true);
+                IsActive = true;
+            } else
+            {
+                string content = FileSystem.ReadFile(@"0:\system\startscreen.cfg", true) ?? "0";
+                IsActive = content == "1";
+            }
+
+            if (IsActive)
+            {
+                Canvas canvas = FullScreenCanvas.GetFullScreenCanvas();
+                canvas.Clear();
+                string orange = @"
                                                @@@@=    #@@##****@@                                 
                                               @%####@ *@##****#******@@                               
                                               @###*#@@##*****************@@                           
@@ -66,39 +79,40 @@ namespace OSaft
                                               \ \ \_\ \/\ \L\ \/\ \L\.\_\ \ \_/ \ \ \_ 
                                                \ \_____\ `\____\ \__/.\_\\ \_\   \ \__\
                                                 \/_____/\/_____/\/__/\/_/ \/_/    \/__/
-            ";
+                ";
 
-            // Aufteilen in Zeilen
-            string[] lines = orange.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                // Aufteilen in Zeilen
+                string[] lines = orange.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
-            // Startkoordinaten
-            int startX = 0;
-            int startY = 0;
-            int lineHeight = PCScreenFont.Default.Height; // Höhe einer Zeile in Pixeln
+                // Startkoordinaten
+                int startX = 0;
+                int startY = 0;
+                int lineHeight = PCScreenFont.Default.Height; // Höhe einer Zeile in Pixeln
 
-            // Schleife über jede Zeile
-            for (int i = 0; i < lines.Length; i++)
-            {
-                canvas.DrawString(
-                    lines[i],
-                    PCScreenFont.Default,
-                    new Pen(Color.Orange),
-                    new Sys.Graphics.Point(startX, startY + i * lineHeight)
-                );
+                // Schleife über jede Zeile
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    canvas.DrawString(
+                        lines[i],
+                        PCScreenFont.Default,
+                        new Pen(Color.Orange),
+                        new Sys.Graphics.Point(startX, startY + i * lineHeight)
+                    );
+                }
+
+                canvas.Display();
+                Thread.Sleep(10000);
+                canvas.Disable();
+
+                //---------------------------------------------------
+
+                ShowSplash();
+                WriteCenteredLine("Press any key to start...", Console.WindowHeight / 2 + 5, ConsoleColor.White);
+                Console.ReadKey(true);
             }
-
-            canvas.Display();
-            Thread.Sleep(10000);
-            canvas.Disable();
-
-            //---------------------------------------------------
-
-            ShowSplash();
-            WriteCenteredLine("Press any key to start...", Console.WindowHeight / 2 + 5, ConsoleColor.White);
-            Console.ReadKey(true);
         }
 
-        public void ShowSplash()
+        public static void ShowSplash()
         {
             int width = Console.WindowWidth;
             int height = Console.WindowHeight;
@@ -135,7 +149,7 @@ namespace OSaft
             WriteCenteredInBox(subtitle, boxX, boxY, boxW, 5, ConsoleColor.Gray);
         }
 
-        public void WriteCenteredInBox(string text, int boxX, int boxY, int boxW, int lineIndex, ConsoleColor color)
+        public static void WriteCenteredInBox(string text, int boxX, int boxY, int boxW, int lineIndex, ConsoleColor color)
         {
             int y = boxY + lineIndex;
             int x = boxX + (boxW - text.Length) / 2;
@@ -145,13 +159,20 @@ namespace OSaft
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public void WriteCenteredLine(string text, int y, ConsoleColor color)
+        public static void WriteCenteredLine(string text, int y, ConsoleColor color)
         {
             int x = (Console.WindowWidth - text.Length) / 2;
             Console.ForegroundColor = color;
             Console.SetCursorPosition(Math.Max(0, x), y);
             Console.Write(text);
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public static void Toggle()
+        {
+            IsActive = !IsActive;
+            string content = IsActive ? "1": "0";
+            FileSystem.WriteFile(path, content, true);
         }
 
     }
