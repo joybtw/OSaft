@@ -303,8 +303,13 @@ namespace OSaft.usersystem
             }
             users.Remove(found);
             SaveAllUsers(users);
-            FileSystem.DeleteDirectory($@"users\{name}");
-            Console.WriteLine("User removed successfully: " + name);
+            if (FileSystem.DeleteDirectory($@"users\{name}"))
+            {
+                Console.WriteLine("User removed successfully: " + name);
+            } else
+            {
+                Console.WriteLine("Couldn't removed User " + name + ". ");
+            }
         }
         public static bool VerifyUser(string name)
         {

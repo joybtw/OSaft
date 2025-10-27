@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cosmos.HAL.BlockDevice.Registers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Sys = Cosmos.System;
@@ -147,33 +148,44 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void DeleteDirectory(string path)
+        public static bool DeleteDirectory(string path)
         {
             path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            if (!Directory.Exists(path))
+            {
+                Console.WriteLine("DeleteDirectory: Directory \"" + path + "\" not found.");
+                return false;
+            }
             try
             {
                 Directory.Delete(path);
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine("DeleteDirectory: Exception thrown: " + e.Message);
+                return false;
             }
         }
 
-        public static void DeleteFile(string path)
+        public static bool DeleteFile(string path)
         {
             path = ValidatePath(currentPath + (path ?? ""), currentPath);
             if (!File.Exists(path))
             {
                 Console.WriteLine("DeleteFile: File \"" + path + "\" not found");
+                return false;
             }
+
             try
             {
                 File.Delete(path);
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine("DeleteFile: Exception thrown: " + e.Message);
+                return false;
             }
         }
 

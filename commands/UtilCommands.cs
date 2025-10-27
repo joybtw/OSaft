@@ -159,8 +159,7 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no file provided.");
                     return;
                 }
-                FileSystem.DeleteFile(val);
-                Console.WriteLine("File " + val + " was deleted.");
+                if (FileSystem.DeleteFile(val)) { Console.WriteLine("File " + val + " was deleted."); }
             }));
 
             ParameterList.Add(new CommandParameter("-d", "Delete a directory", false, true, val => {
@@ -169,8 +168,7 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no directory provided.");
                     return;
                 }
-                FileSystem.DeleteDirectory(val);
-                Console.WriteLine("Directory " + val + " was deleted.");
+                if (FileSystem.DeleteDirectory(val)) { Console.WriteLine("Directory " + val + " was deleted."); }
             }));
         }
     }
