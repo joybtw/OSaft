@@ -78,7 +78,7 @@ namespace OSaft.filesystem {
 
             if (!Directory.Exists(result))
             {
-                Console.WriteLine("Directory does not exist! (" + result + ")");
+                Console.WriteLine("Directory does not exist! / File already exists. (" + result + ")");
                 return currentPath;
             }
 
@@ -115,28 +115,40 @@ namespace OSaft.filesystem {
         }
 
         public static FileStream CreateFile(string path, bool isPathAbs = false) {
-            if (isPathAbs)
-            {
-                path = ValidatePath(currentPath + (path ?? ""), currentPath);
-            } else
-            {
-                path = ValidatePath(path, currentPath);
-            }
-            try
-            {
-                if (!File.Exists(path) && path.Contains('.'))
-                {
-                    return File.Create(path);
-                }
-                else
-                {
-                    Console.WriteLine("CreateFile: " + path + " already exists or is not a file");
-                }
 
-            }
-            catch (Exception e)
+            if (path.Contains('.'))
             {
-                Console.WriteLine("CreateFile: Exception thrown: " + e.Message);
+                string filename = Path.GetFileName(path);
+                path = Path.GetDirectoryName(path);
+                    
+                if (isPathAbs)
+                {
+                    path = ValidatePath(currentPath + (path ?? ""), currentPath);
+                } else
+                {
+                    path = ValidatePath(path, currentPath);
+                }
+                try
+                {
+                    path = path + "\\" + filename;
+                    if (!File.Exists(path))
+                    {
+                        return File.Create(path);
+                    }
+                    else
+                    {
+                        Console.WriteLine("CreateFile: " + path + " already exists or is not a file");
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("CreateFile: Exception thrown: " + e.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("CreateFile: You cannot create file without an extension.");
             }
             return null;
         }

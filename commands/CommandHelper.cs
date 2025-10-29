@@ -140,7 +140,8 @@ namespace OSaft.commands
             try
             {
                 if (string.IsNullOrEmpty(input)) { return; }
-                string[] args = input.Split(" ");
+                string[] args = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                
                 //Console.WriteLine("Executing command: " + args[0]);
                 //Console.WriteLine("With arguments: " + (args.Length > 1 ? string.Join(", ", args.Skip(1)) : "none"));
                 Command cmd = commands[args[0]];
