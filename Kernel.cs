@@ -62,8 +62,7 @@ namespace OSaft
         {
             // Input Handling
             ColorTheme.ChangeColor();
-            Console.Write(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
-            String input = Console.ReadLine();
+            string input = Shell.ReadLineWithHistory(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             Commands.CommandHelper.ExecuteCommand(input);
         }
     }
