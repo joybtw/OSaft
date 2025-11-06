@@ -141,10 +141,10 @@ namespace OSaft.utils
                             break;
                         }
 
-                    case ConsoleKey.Tab:
-                        {
-                            // Find Suggestion based on current input
-                        }
+                    //case ConsoleKey.Tab:
+                    //    {
+                    //        // Find Suggestion based on current input
+                    //    }
 
                     default:
                         {
