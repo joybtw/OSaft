@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace OSaft.commands
 {
+    /// <summary>
+    /// Base class of all Commandss
+    /// </summary>
+    /// <remarks>This class inheritates a basic command structure to all childs.</remarks>
     public abstract class Command
     {
         public string Name { get; private set;  }

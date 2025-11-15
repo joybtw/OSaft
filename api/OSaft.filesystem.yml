@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.filesystem
+  commentId: N:OSaft.filesystem
+  id: OSaft.filesystem
+  children:
+  - OSaft.filesystem.FileSystem
+  - OSaft.filesystem.PermissionEntry
+  langs:
+  - csharp
+  - vb
+  name: OSaft.filesystem
+  nameWithType: OSaft.filesystem
+  fullName: OSaft.filesystem
+  type: Namespace
+  assemblies:
+  - OSaft
+references:
+- uid: OSaft.filesystem.FileSystem
+  commentId: T:OSaft.filesystem.FileSystem
+  href: OSaft.filesystem.FileSystem.html
+  name: FileSystem
+  nameWithType: FileSystem
+  fullName: OSaft.filesystem.FileSystem
+- uid: OSaft.filesystem.PermissionEntry
+  commentId: T:OSaft.filesystem.PermissionEntry
+  href: OSaft.filesystem.PermissionEntry.html
+  name: PermissionEntry
+  nameWithType: PermissionEntry
+  fullName: OSaft.filesystem.PermissionEntry

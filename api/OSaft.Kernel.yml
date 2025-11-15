@@ -1,0 +1,660 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.Kernel
+  commentId: T:OSaft.Kernel
+  id: Kernel
+  parent: OSaft
+  children:
+  - OSaft.Kernel.BeforeRun
+  - OSaft.Kernel.Run
+  langs:
+  - csharp
+  - vb
+  name: Kernel
+  nameWithType: Kernel
+  fullName: OSaft.Kernel
+  type: Class
+  source:
+    remote:
+      path: Kernel.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: Kernel
+    path: Kernel.cs
+    startLine: 11
+  assemblies:
+  - OSaft
+  namespace: OSaft
+  syntax:
+    content: 'public class Kernel : Kernel'
+    content.vb: Public Class Kernel Inherits Kernel
+  inheritance:
+  - System.Object
+  - Cosmos.System.Kernel
+  inheritedMembers:
+  - Cosmos.System.Kernel.mDebugger
+  - Cosmos.System.Kernel.ClearScreen
+  - Cosmos.System.Kernel.mStarted
+  - Cosmos.System.Kernel.mStopped
+  - Cosmos.System.Kernel.GetTextScreen
+  - Cosmos.System.Kernel.GetKeyboardScanMap
+  - Cosmos.System.Kernel.SetKeyboardScanMap(Cosmos.System.ScanMapBase)
+  - Cosmos.System.Kernel.Start
+  - Cosmos.System.Kernel.OnBoot
+  - Cosmos.System.Kernel.AfterRun
+  - Cosmos.System.Kernel.Stop
+  - Cosmos.System.Kernel.Restart
+  - Cosmos.System.Kernel.PrintDebug(System.String)
+  - Cosmos.System.Kernel.InterruptsEnabled
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OSaft.Kernel.BeforeRun
+  commentId: M:OSaft.Kernel.BeforeRun
+  id: BeforeRun
+  parent: OSaft.Kernel
+  langs:
+  - csharp
+  - vb
+  name: BeforeRun()
+  nameWithType: Kernel.BeforeRun()
+  fullName: OSaft.Kernel.BeforeRun()
+  type: Method
+  source:
+    remote:
+      path: Kernel.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: BeforeRun
+    path: Kernel.cs
+    startLine: 13
+  assemblies:
+  - OSaft
+  namespace: OSaft
+  summary: Pre-run events
+  example: []
+  syntax:
+    content: protected override void BeforeRun()
+    content.vb: Protected Overrides Sub BeforeRun()
+  overridden: Cosmos.System.Kernel.BeforeRun
+  overload: OSaft.Kernel.BeforeRun*
+- uid: OSaft.Kernel.Run
+  commentId: M:OSaft.Kernel.Run
+  id: Run
+  parent: OSaft.Kernel
+  langs:
+  - csharp
+  - vb
+  name: Run()
+  nameWithType: Kernel.Run()
+  fullName: OSaft.Kernel.Run()
+  type: Method
+  source:
+    remote:
+      path: Kernel.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: Run
+    path: Kernel.cs
+    startLine: 60
+  assemblies:
+  - OSaft
+  namespace: OSaft
+  summary: Main kernel loop
+  example: []
+  syntax:
+    content: protected override void Run()
+    content.vb: Protected Overrides Sub Run()
+  overridden: Cosmos.System.Kernel.Run
+  overload: OSaft.Kernel.Run*
+references:
+- uid: OSaft
+  commentId: N:OSaft
+  href: OSaft.html
+  name: OSaft
+  nameWithType: OSaft
+  fullName: OSaft
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Cosmos.System.Kernel
+  commentId: T:Cosmos.System.Kernel
+  parent: Cosmos.System
+  isExternal: true
+  name: Kernel
+  nameWithType: Kernel
+  fullName: Cosmos.System.Kernel
+- uid: Cosmos.System.Kernel.mDebugger
+  commentId: F:Cosmos.System.Kernel.mDebugger
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: mDebugger
+  nameWithType: Kernel.mDebugger
+  fullName: Cosmos.System.Kernel.mDebugger
+- uid: Cosmos.System.Kernel.ClearScreen
+  commentId: F:Cosmos.System.Kernel.ClearScreen
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: ClearScreen
+  nameWithType: Kernel.ClearScreen
+  fullName: Cosmos.System.Kernel.ClearScreen
+- uid: Cosmos.System.Kernel.mStarted
+  commentId: F:Cosmos.System.Kernel.mStarted
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: mStarted
+  nameWithType: Kernel.mStarted
+  fullName: Cosmos.System.Kernel.mStarted
+- uid: Cosmos.System.Kernel.mStopped
+  commentId: F:Cosmos.System.Kernel.mStopped
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: mStopped
+  nameWithType: Kernel.mStopped
+  fullName: Cosmos.System.Kernel.mStopped
+- uid: Cosmos.System.Kernel.GetTextScreen
+  commentId: M:Cosmos.System.Kernel.GetTextScreen
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: GetTextScreen()
+  nameWithType: Kernel.GetTextScreen()
+  fullName: Cosmos.System.Kernel.GetTextScreen()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.GetTextScreen
+    name: GetTextScreen
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.GetTextScreen
+    name: GetTextScreen
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.GetKeyboardScanMap
+  commentId: M:Cosmos.System.Kernel.GetKeyboardScanMap
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: GetKeyboardScanMap()
+  nameWithType: Kernel.GetKeyboardScanMap()
+  fullName: Cosmos.System.Kernel.GetKeyboardScanMap()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.GetKeyboardScanMap
+    name: GetKeyboardScanMap
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.GetKeyboardScanMap
+    name: GetKeyboardScanMap
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.SetKeyboardScanMap(Cosmos.System.ScanMapBase)
+  commentId: M:Cosmos.System.Kernel.SetKeyboardScanMap(Cosmos.System.ScanMapBase)
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: SetKeyboardScanMap(ScanMapBase)
+  nameWithType: Kernel.SetKeyboardScanMap(ScanMapBase)
+  fullName: Cosmos.System.Kernel.SetKeyboardScanMap(Cosmos.System.ScanMapBase)
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.SetKeyboardScanMap(Cosmos.System.ScanMapBase)
+    name: SetKeyboardScanMap
+    isExternal: true
+  - name: (
+  - uid: Cosmos.System.ScanMapBase
+    name: ScanMapBase
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.SetKeyboardScanMap(Cosmos.System.ScanMapBase)
+    name: SetKeyboardScanMap
+    isExternal: true
+  - name: (
+  - uid: Cosmos.System.ScanMapBase
+    name: ScanMapBase
+    isExternal: true
+  - name: )
+- uid: Cosmos.System.Kernel.Start
+  commentId: M:Cosmos.System.Kernel.Start
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: Start()
+  nameWithType: Kernel.Start()
+  fullName: Cosmos.System.Kernel.Start()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.Start
+    name: Start
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.Start
+    name: Start
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.OnBoot
+  commentId: M:Cosmos.System.Kernel.OnBoot
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: OnBoot()
+  nameWithType: Kernel.OnBoot()
+  fullName: Cosmos.System.Kernel.OnBoot()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.OnBoot
+    name: OnBoot
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.OnBoot
+    name: OnBoot
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.AfterRun
+  commentId: M:Cosmos.System.Kernel.AfterRun
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: AfterRun()
+  nameWithType: Kernel.AfterRun()
+  fullName: Cosmos.System.Kernel.AfterRun()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.AfterRun
+    name: AfterRun
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.AfterRun
+    name: AfterRun
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.Stop
+  commentId: M:Cosmos.System.Kernel.Stop
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: Stop()
+  nameWithType: Kernel.Stop()
+  fullName: Cosmos.System.Kernel.Stop()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.Stop
+    name: Stop
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.Stop
+    name: Stop
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.Restart
+  commentId: M:Cosmos.System.Kernel.Restart
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: Restart()
+  nameWithType: Kernel.Restart()
+  fullName: Cosmos.System.Kernel.Restart()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.Restart
+    name: Restart
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.Restart
+    name: Restart
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Cosmos.System.Kernel.PrintDebug(System.String)
+  commentId: M:Cosmos.System.Kernel.PrintDebug(System.String)
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: PrintDebug(string)
+  nameWithType: Kernel.PrintDebug(string)
+  fullName: Cosmos.System.Kernel.PrintDebug(string)
+  nameWithType.vb: Kernel.PrintDebug(String)
+  fullName.vb: Cosmos.System.Kernel.PrintDebug(String)
+  name.vb: PrintDebug(String)
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.PrintDebug(System.String)
+    name: PrintDebug
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.PrintDebug(System.String)
+    name: PrintDebug
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: Cosmos.System.Kernel.InterruptsEnabled
+  commentId: P:Cosmos.System.Kernel.InterruptsEnabled
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: InterruptsEnabled
+  nameWithType: Kernel.InterruptsEnabled
+  fullName: Cosmos.System.Kernel.InterruptsEnabled
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Cosmos.System
+  commentId: N:Cosmos.System
+  isExternal: true
+  name: Cosmos.System
+  nameWithType: Cosmos.System
+  fullName: Cosmos.System
+  spec.csharp:
+  - uid: Cosmos
+    name: Cosmos
+    isExternal: true
+  - name: .
+  - uid: Cosmos.System
+    name: System
+    isExternal: true
+  spec.vb:
+  - uid: Cosmos
+    name: Cosmos
+    isExternal: true
+  - name: .
+  - uid: Cosmos.System
+    name: System
+    isExternal: true
+- uid: Cosmos.System.Kernel.BeforeRun
+  commentId: M:Cosmos.System.Kernel.BeforeRun
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: BeforeRun()
+  nameWithType: Kernel.BeforeRun()
+  fullName: Cosmos.System.Kernel.BeforeRun()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.BeforeRun
+    name: BeforeRun
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.BeforeRun
+    name: BeforeRun
+    isExternal: true
+  - name: (
+  - name: )
+- uid: OSaft.Kernel.BeforeRun*
+  commentId: Overload:OSaft.Kernel.BeforeRun
+  href: OSaft.Kernel.html#OSaft_Kernel_BeforeRun
+  name: BeforeRun
+  nameWithType: Kernel.BeforeRun
+  fullName: OSaft.Kernel.BeforeRun
+- uid: Cosmos.System.Kernel.Run
+  commentId: M:Cosmos.System.Kernel.Run
+  parent: Cosmos.System.Kernel
+  isExternal: true
+  name: Run()
+  nameWithType: Kernel.Run()
+  fullName: Cosmos.System.Kernel.Run()
+  spec.csharp:
+  - uid: Cosmos.System.Kernel.Run
+    name: Run
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Cosmos.System.Kernel.Run
+    name: Run
+    isExternal: true
+  - name: (
+  - name: )
+- uid: OSaft.Kernel.Run*
+  commentId: Overload:OSaft.Kernel.Run
+  href: OSaft.Kernel.html#OSaft_Kernel_Run
+  name: Run
+  nameWithType: Kernel.Run
+  fullName: OSaft.Kernel.Run

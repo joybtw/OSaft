@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.usersystem
+  commentId: N:OSaft.usersystem
+  id: OSaft.usersystem
+  children:
+  - OSaft.usersystem.User
+  - OSaft.usersystem.UserDatabase
+  - OSaft.usersystem.UserHelper
+  langs:
+  - csharp
+  - vb
+  name: OSaft.usersystem
+  nameWithType: OSaft.usersystem
+  fullName: OSaft.usersystem
+  type: Namespace
+  assemblies:
+  - OSaft
+references:
+- uid: OSaft.usersystem.User
+  commentId: T:OSaft.usersystem.User
+  href: OSaft.usersystem.User.html
+  name: User
+  nameWithType: User
+  fullName: OSaft.usersystem.User
+- uid: OSaft.usersystem.UserHelper
+  commentId: T:OSaft.usersystem.UserHelper
+  href: OSaft.usersystem.UserHelper.html
+  name: UserHelper
+  nameWithType: UserHelper
+  fullName: OSaft.usersystem.UserHelper
+- uid: OSaft.usersystem.UserDatabase
+  commentId: T:OSaft.usersystem.UserDatabase
+  href: OSaft.usersystem.UserDatabase.html
+  name: UserDatabase
+  nameWithType: UserDatabase
+  fullName: OSaft.usersystem.UserDatabase

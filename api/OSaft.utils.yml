@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.utils
+  commentId: N:OSaft.utils
+  id: OSaft.utils
+  children:
+  - OSaft.utils.ColorTheme
+  - OSaft.utils.Shell
+  - OSaft.utils.StartupScreen
+  langs:
+  - csharp
+  - vb
+  name: OSaft.utils
+  nameWithType: OSaft.utils
+  fullName: OSaft.utils
+  type: Namespace
+  assemblies:
+  - OSaft
+references:
+- uid: OSaft.utils.ColorTheme
+  commentId: T:OSaft.utils.ColorTheme
+  href: OSaft.utils.ColorTheme.html
+  name: ColorTheme
+  nameWithType: ColorTheme
+  fullName: OSaft.utils.ColorTheme
+- uid: OSaft.utils.Shell
+  commentId: T:OSaft.utils.Shell
+  href: OSaft.utils.Shell.html
+  name: Shell
+  nameWithType: Shell
+  fullName: OSaft.utils.Shell
+- uid: OSaft.utils.StartupScreen
+  commentId: T:OSaft.utils.StartupScreen
+  href: OSaft.utils.StartupScreen.html
+  name: StartupScreen
+  nameWithType: StartupScreen
+  fullName: OSaft.utils.StartupScreen

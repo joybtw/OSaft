@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft
+  commentId: N:OSaft
+  id: OSaft
+  children:
+  - OSaft.Kernel
+  langs:
+  - csharp
+  - vb
+  name: OSaft
+  nameWithType: OSaft
+  fullName: OSaft
+  type: Namespace
+  assemblies:
+  - OSaft
+references:
+- uid: OSaft.Kernel
+  commentId: T:OSaft.Kernel
+  href: OSaft.Kernel.html
+  name: Kernel
+  nameWithType: Kernel
+  fullName: OSaft.Kernel

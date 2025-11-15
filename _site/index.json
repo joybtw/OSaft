@@ -1,0 +1,212 @@
+{
+  "README.html": {
+    "href": "README.html",
+    "title": "OSaft - OperatingSystem: All for Techies | OSaft",
+    "summary": "OSaft - OperatingSystem: All for Techies Dieses Betriebssystem entsteht im Rahmen der Lehrveranstaltung \"Betriebssysteme\" im Studium \"Praktische Informatik\" an der Dualen Hochschule Gera-Eisenach (DHGE). Umgesetzt wird dieses mit dem COSMOS-Framework für C#. Folgende Versionen funktionieren stabil, um dieses Projekt zu entwickeln: - Windows 11 24H2 - DotNet SDK 6.0.424 - VMWare Workstation 17 Player - COSMOS User Kit - Visual Studio 2022"
+  },
+  "api/OSaft.Kernel.html": {
+    "href": "api/OSaft.Kernel.html",
+    "title": "Class Kernel | OSaft",
+    "summary": "Class Kernel Namespace OSaft Assembly OSaft.dll public class Kernel : Kernel Inheritance object Kernel Kernel Inherited Members Kernel.mDebugger Kernel.ClearScreen Kernel.mStarted Kernel.mStopped Kernel.GetTextScreen() Kernel.GetKeyboardScanMap() Kernel.SetKeyboardScanMap(ScanMapBase) Kernel.Start() Kernel.OnBoot() Kernel.AfterRun() Kernel.Stop() Kernel.Restart() Kernel.PrintDebug(string) Kernel.InterruptsEnabled object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods BeforeRun() Pre-run events protected override void BeforeRun() Run() Main kernel loop protected override void Run()"
+  },
+  "api/OSaft.applications.Clock.html": {
+    "href": "api/OSaft.applications.Clock.html",
+    "title": "Class Clock | OSaft",
+    "summary": "Class Clock Namespace OSaft.applications Assembly OSaft.dll public static class Clock Inheritance object Clock Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Fields IsActive public static bool IsActive Field Value bool Methods GetShortTime() public static string GetShortTime() Returns string ShowTime() public static string ShowTime() Returns string ToggleClock() public static void ToggleClock()"
+  },
+  "api/OSaft.applications.OSaftSecurity.html": {
+    "href": "api/OSaft.applications.OSaftSecurity.html",
+    "title": "Class OSaftSecurity | OSaft",
+    "summary": "Class OSaftSecurity Namespace OSaft.applications Assembly OSaft.dll public class OSaftSecurity Inheritance object OSaftSecurity Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods FNV1a(string) public static string FNV1a(string input) Parameters input string Returns string"
+  },
+  "api/OSaft.applications.html": {
+    "href": "api/OSaft.applications.html",
+    "title": "Namespace OSaft.applications | OSaft",
+    "summary": "Namespace OSaft.applications Classes Clock OSaftSecurity"
+  },
+  "api/OSaft.commands.CDCommand.html": {
+    "href": "api/OSaft.commands.CDCommand.html",
+    "title": "Class CDCommand | OSaft",
+    "summary": "Class CDCommand Namespace OSaft.commands Assembly OSaft.dll public class CDCommand : Command Inheritance object Command CDCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors CDCommand(string) public CDCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.ClearCommand.html": {
+    "href": "api/OSaft.commands.ClearCommand.html",
+    "title": "Class ClearCommand | OSaft",
+    "summary": "Class ClearCommand Namespace OSaft.commands Assembly OSaft.dll public class ClearCommand : Command Inheritance object Command ClearCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors ClearCommand(string) public ClearCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.ClockCommand.html": {
+    "href": "api/OSaft.commands.ClockCommand.html",
+    "title": "Class ClockCommand | OSaft",
+    "summary": "Class ClockCommand Namespace OSaft.commands Assembly OSaft.dll public class ClockCommand : Command Inheritance object Command ClockCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors ClockCommand(string) public ClockCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.Command.html": {
+    "href": "api/OSaft.commands.Command.html",
+    "title": "Class Command | OSaft",
+    "summary": "Class Command Namespace OSaft.commands Assembly OSaft.dll Base class of all Commandss public abstract class Command Inheritance object Command Derived CDCommand ClearCommand ClockCommand FSInfoCommand FileEditCommand FindCommand HelpCommand LSCommand MKDirCommand RMCommand RebootCommand RelogCommand ShutdownCommand ToggleClockCommand ToggleStartScreenCommand TouchCommand UserCommand VersionCommand Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Remarks This class inheritates a basic command structure to all childs. Constructors Command(string, string) public Command(string name, string description) Parameters name string description string Properties Description public string Description { get; } Property Value string Name public string Name { get; } Property Value string ParameterList public List<CommandParameter> ParameterList { get; protected set; } Property Value List<CommandParameter> Methods DefineParameters() protected virtual void DefineParameters() GetSyntax() public string GetSyntax() Returns string"
+  },
+  "api/OSaft.commands.CommandHelper.html": {
+    "href": "api/OSaft.commands.CommandHelper.html",
+    "title": "Class CommandHelper | OSaft",
+    "summary": "Class CommandHelper Namespace OSaft.commands Assembly OSaft.dll public class CommandHelper Inheritance object CommandHelper Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods ExecuteCommand(string) public static void ExecuteCommand(string input) Parameters input string RegisterCommand(Command) public static void RegisterCommand(Command command) Parameters command Command"
+  },
+  "api/OSaft.commands.CommandParameter.html": {
+    "href": "api/OSaft.commands.CommandParameter.html",
+    "title": "Class CommandParameter | OSaft",
+    "summary": "Class CommandParameter Namespace OSaft.commands Assembly OSaft.dll public class CommandParameter Inheritance object CommandParameter Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors CommandParameter(string, string, bool, bool, Action<string>) public CommandParameter(string name, string description, bool isRequired, bool expectsParameters, Action<string> action) Parameters name string description string isRequired bool expectsParameters bool action Action<string> Properties Action public Action<string> Action { get; } Property Value Action<string> Description public string Description { get; } Property Value string ExpectsParameters public bool ExpectsParameters { get; } Property Value bool IsRequired public bool IsRequired { get; } Property Value bool Name public string Name { get; } Property Value string"
+  },
+  "api/OSaft.commands.FSInfoCommand.html": {
+    "href": "api/OSaft.commands.FSInfoCommand.html",
+    "title": "Class FSInfoCommand | OSaft",
+    "summary": "Class FSInfoCommand Namespace OSaft.commands Assembly OSaft.dll public class FSInfoCommand : Command Inheritance object Command FSInfoCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors FSInfoCommand(string) public FSInfoCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.FileEditCommand.html": {
+    "href": "api/OSaft.commands.FileEditCommand.html",
+    "title": "Class FileEditCommand | OSaft",
+    "summary": "Class FileEditCommand Namespace OSaft.commands Assembly OSaft.dll public class FileEditCommand : Command Inheritance object Command FileEditCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors FileEditCommand(string) public FileEditCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.FindCommand.html": {
+    "href": "api/OSaft.commands.FindCommand.html",
+    "title": "Class FindCommand | OSaft",
+    "summary": "Class FindCommand Namespace OSaft.commands Assembly OSaft.dll public class FindCommand : Command Inheritance object Command FindCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors FindCommand(string) public FindCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.HelpCommand.html": {
+    "href": "api/OSaft.commands.HelpCommand.html",
+    "title": "Class HelpCommand | OSaft",
+    "summary": "Class HelpCommand Namespace OSaft.commands Assembly OSaft.dll public class HelpCommand : Command Inheritance object Command HelpCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors HelpCommand(string) public HelpCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.LSCommand.html": {
+    "href": "api/OSaft.commands.LSCommand.html",
+    "title": "Class LSCommand | OSaft",
+    "summary": "Class LSCommand Namespace OSaft.commands Assembly OSaft.dll public class LSCommand : Command Inheritance object Command LSCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors LSCommand(string) public LSCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.MKDirCommand.html": {
+    "href": "api/OSaft.commands.MKDirCommand.html",
+    "title": "Class MKDirCommand | OSaft",
+    "summary": "Class MKDirCommand Namespace OSaft.commands Assembly OSaft.dll public class MKDirCommand : Command Inheritance object Command MKDirCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors MKDirCommand(string) public MKDirCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.RMCommand.html": {
+    "href": "api/OSaft.commands.RMCommand.html",
+    "title": "Class RMCommand | OSaft",
+    "summary": "Class RMCommand Namespace OSaft.commands Assembly OSaft.dll public class RMCommand : Command Inheritance object Command RMCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors RMCommand(string) public RMCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.RebootCommand.html": {
+    "href": "api/OSaft.commands.RebootCommand.html",
+    "title": "Class RebootCommand | OSaft",
+    "summary": "Class RebootCommand Namespace OSaft.commands Assembly OSaft.dll public class RebootCommand : Command Inheritance object Command RebootCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors RebootCommand(string) public RebootCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.RelogCommand.html": {
+    "href": "api/OSaft.commands.RelogCommand.html",
+    "title": "Class RelogCommand | OSaft",
+    "summary": "Class RelogCommand Namespace OSaft.commands Assembly OSaft.dll public class RelogCommand : Command Inheritance object Command RelogCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors RelogCommand(string) public RelogCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.ShutdownCommand.html": {
+    "href": "api/OSaft.commands.ShutdownCommand.html",
+    "title": "Class ShutdownCommand | OSaft",
+    "summary": "Class ShutdownCommand Namespace OSaft.commands Assembly OSaft.dll public class ShutdownCommand : Command Inheritance object Command ShutdownCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors ShutdownCommand(string) public ShutdownCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.ToggleClockCommand.html": {
+    "href": "api/OSaft.commands.ToggleClockCommand.html",
+    "title": "Class ToggleClockCommand | OSaft",
+    "summary": "Class ToggleClockCommand Namespace OSaft.commands Assembly OSaft.dll public class ToggleClockCommand : Command Inheritance object Command ToggleClockCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors ToggleClockCommand(string) public ToggleClockCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.ToggleStartScreenCommand.html": {
+    "href": "api/OSaft.commands.ToggleStartScreenCommand.html",
+    "title": "Class ToggleStartScreenCommand | OSaft",
+    "summary": "Class ToggleStartScreenCommand Namespace OSaft.commands Assembly OSaft.dll public class ToggleStartScreenCommand : Command Inheritance object Command ToggleStartScreenCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors ToggleStartScreenCommand(string) public ToggleStartScreenCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.TouchCommand.html": {
+    "href": "api/OSaft.commands.TouchCommand.html",
+    "title": "Class TouchCommand | OSaft",
+    "summary": "Class TouchCommand Namespace OSaft.commands Assembly OSaft.dll public class TouchCommand : Command Inheritance object Command TouchCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors TouchCommand(string) public TouchCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.UserCommand.html": {
+    "href": "api/OSaft.commands.UserCommand.html",
+    "title": "Class UserCommand | OSaft",
+    "summary": "Class UserCommand Namespace OSaft.commands Assembly OSaft.dll public class UserCommand : Command Inheritance object Command UserCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors UserCommand(string) public UserCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.VersionCommand.html": {
+    "href": "api/OSaft.commands.VersionCommand.html",
+    "title": "Class VersionCommand | OSaft",
+    "summary": "Class VersionCommand Namespace OSaft.commands Assembly OSaft.dll public class VersionCommand : Command Inheritance object Command VersionCommand Inherited Members Command.Name Command.Description Command.ParameterList Command.GetSyntax() Command.DefineParameters() object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors VersionCommand(string) public VersionCommand(string name) Parameters name string"
+  },
+  "api/OSaft.commands.html": {
+    "href": "api/OSaft.commands.html",
+    "title": "Namespace OSaft.commands | OSaft",
+    "summary": "Namespace OSaft.commands Classes CDCommand ClearCommand ClockCommand Command Base class of all Commandss CommandHelper CommandParameter FSInfoCommand FileEditCommand FindCommand HelpCommand LSCommand MKDirCommand RMCommand RebootCommand RelogCommand ShutdownCommand ToggleClockCommand ToggleStartScreenCommand TouchCommand UserCommand VersionCommand"
+  },
+  "api/OSaft.filesystem.FileSystem.html": {
+    "href": "api/OSaft.filesystem.FileSystem.html",
+    "title": "Class FileSystem | OSaft",
+    "summary": "Class FileSystem Namespace OSaft.filesystem Assembly OSaft.dll public static class FileSystem Inheritance object FileSystem Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Fields Instance public static readonly CosmosVFS Instance Field Value CosmosVFS Properties CurrentPath public static string CurrentPath { get; set; } Property Value string Methods CreateDirectory(string) public static DirectoryInfo CreateDirectory(string path) Parameters path string Returns DirectoryInfo CreateFile(string, bool) public static FileStream CreateFile(string path, bool isPathAbs = false) Parameters path string isPathAbs bool Returns FileStream DeleteDirectory(string) public static bool DeleteDirectory(string path) Parameters path string Returns bool DeleteFile(string) public static bool DeleteFile(string path) Parameters path string Returns bool FindFile(string, string) public static string[] FindFile(string filename, string path) Parameters filename string path string Returns string[] ReadFile(string, bool) public static string ReadFile(string path, bool isPathAbs = false) Parameters path string isPathAbs bool Returns string WriteFile(string, string, bool) public static void WriteFile(string path, string content, bool isPathAbs = false) Parameters path string content string isPathAbs bool WriteFile(string, string[]) public static void WriteFile(string path, string[] content) Parameters path string content string[]"
+  },
+  "api/OSaft.filesystem.PermissionEntry.html": {
+    "href": "api/OSaft.filesystem.PermissionEntry.html",
+    "title": "Class PermissionEntry | OSaft",
+    "summary": "Class PermissionEntry Namespace OSaft.filesystem Assembly OSaft.dll public class PermissionEntry Inheritance object PermissionEntry Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors PermissionEntry(string, uint) public PermissionEntry(string path, uint owner) Parameters path string owner uint PermissionEntry(string, uint, List<uint>, List<uint>) public PermissionEntry(string path, uint owner, List<uint> read, List<uint> write) Parameters path string owner uint read List<uint> write List<uint> Properties OwnerUid public uint OwnerUid { get; set; } Property Value uint Path public string Path { get; set; } Property Value string ReadUids public List<uint> ReadUids { get; set; } Property Value List<uint> WriteUids public List<uint> WriteUids { get; set; } Property Value List<uint> Methods CanRead(uint) public bool CanRead(uint uid) Parameters uid uint Returns bool CanWrite(uint) public bool CanWrite(uint uid) Parameters uid uint Returns bool"
+  },
+  "api/OSaft.filesystem.html": {
+    "href": "api/OSaft.filesystem.html",
+    "title": "Namespace OSaft.filesystem | OSaft",
+    "summary": "Namespace OSaft.filesystem Classes FileSystem PermissionEntry"
+  },
+  "api/OSaft.html": {
+    "href": "api/OSaft.html",
+    "title": "Namespace OSaft | OSaft",
+    "summary": "Namespace OSaft Classes Kernel"
+  },
+  "api/OSaft.usersystem.User.html": {
+    "href": "api/OSaft.usersystem.User.html",
+    "title": "Class User | OSaft",
+    "summary": "Class User Namespace OSaft.usersystem Assembly OSaft.dll public class User Inheritance object User Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Constructors User(string, string, string, bool, uint, bool) public User(string newName, string password, string salt, bool sudo, uint id, bool hashed) Parameters newName string password string salt string sudo bool id uint hashed bool Properties IsSuperuser public bool IsSuperuser { get; } Property Value bool Name public string Name { get; } Property Value string PasswordHash public string PasswordHash { get; } Property Value string Salt public string Salt { get; } Property Value string Uid public uint Uid { get; } Property Value uint"
+  },
+  "api/OSaft.usersystem.UserDatabase.html": {
+    "href": "api/OSaft.usersystem.UserDatabase.html",
+    "title": "Class UserDatabase | OSaft",
+    "summary": "Class UserDatabase Namespace OSaft.usersystem Assembly OSaft.dll public static class UserDatabase Inheritance object UserDatabase Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods AddUser(string) public static void AddUser(string name) Parameters name string DBInit() public static void DBInit() GetUserID(string) public static uint GetUserID(string name) Parameters name string Returns uint GetUserState(string) public static bool GetUserState(string name) Parameters name string Returns bool ListUsers() public static void ListUsers() LoadAllUsers() public static List<User> LoadAllUsers() Returns List<User> RemoveUser(string) public static void RemoveUser(string name) Parameters name string SaveAllUsers(List<User>) public static void SaveAllUsers(List<User> users) Parameters users List<User> VerifyUser(string) public static bool VerifyUser(string name) Parameters name string Returns bool"
+  },
+  "api/OSaft.usersystem.UserHelper.html": {
+    "href": "api/OSaft.usersystem.UserHelper.html",
+    "title": "Class UserHelper | OSaft",
+    "summary": "Class UserHelper Namespace OSaft.usersystem Assembly OSaft.dll public static class UserHelper Inheritance object UserHelper Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties CurrentUser public static string CurrentUser { get; } Property Value string Methods Initialize() public static void Initialize() LoginUser() public static void LoginUser()"
+  },
+  "api/OSaft.usersystem.html": {
+    "href": "api/OSaft.usersystem.html",
+    "title": "Namespace OSaft.usersystem | OSaft",
+    "summary": "Namespace OSaft.usersystem Classes User UserDatabase UserHelper"
+  },
+  "api/OSaft.utils.ColorTheme.html": {
+    "href": "api/OSaft.utils.ColorTheme.html",
+    "title": "Class ColorTheme | OSaft",
+    "summary": "Class ColorTheme Namespace OSaft.utils Assembly OSaft.dll public static class ColorTheme Inheritance object ColorTheme Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Properties BackgroundColor public static ConsoleColor BackgroundColor { get; set; } Property Value ConsoleColor ForegroundColor public static ConsoleColor ForegroundColor { get; set; } Property Value ConsoleColor Methods ApplyTheme() public static void ApplyTheme() ChangeColor() public static void ChangeColor()"
+  },
+  "api/OSaft.utils.Shell.html": {
+    "href": "api/OSaft.utils.Shell.html",
+    "title": "Class Shell | OSaft",
+    "summary": "Class Shell Namespace OSaft.utils Assembly OSaft.dll public static class Shell Inheritance object Shell Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods ReadLineWithHistory(string) Line editor with history and cursor movement (no backspace control chars used). Keys: Left/Right, Home/End, Backspace, Delete, Up/Down, Enter. public static string ReadLineWithHistory(string prompt = \"> \") Parameters prompt string Returns string"
+  },
+  "api/OSaft.utils.StartupScreen.html": {
+    "href": "api/OSaft.utils.StartupScreen.html",
+    "title": "Class StartupScreen | OSaft",
+    "summary": "Class StartupScreen Namespace OSaft.utils Assembly OSaft.dll public static class StartupScreen Inheritance object StartupScreen Inherited Members object.Equals(object) object.Equals(object, object) object.GetHashCode() object.GetType() object.MemberwiseClone() object.ReferenceEquals(object, object) object.ToString() Methods Init() public static void Init() ShowSplash() public static void ShowSplash() Toggle() public static void Toggle() WriteCenteredInBox(string, int, int, int, int, ConsoleColor) public static void WriteCenteredInBox(string text, int boxX, int boxY, int boxW, int lineIndex, ConsoleColor color) Parameters text string boxX int boxY int boxW int lineIndex int color ConsoleColor WriteCenteredLine(string, int, ConsoleColor) public static void WriteCenteredLine(string text, int y, ConsoleColor color) Parameters text string y int color ConsoleColor"
+  },
+  "api/OSaft.utils.html": {
+    "href": "api/OSaft.utils.html",
+    "title": "Namespace OSaft.utils | OSaft",
+    "summary": "Namespace OSaft.utils Classes ColorTheme Shell StartupScreen"
+  },
+  "docs/getting-started.html": {
+    "href": "docs/getting-started.html",
+    "title": "Getting Started | OSaft",
+    "summary": "Getting Started"
+  },
+  "docs/introduction.html": {
+    "href": "docs/introduction.html",
+    "title": "Introduction | OSaft",
+    "summary": "Introduction"
+  },
+  "index.html": {
+    "href": "index.html",
+    "title": "This is the HOMEPAGE. | OSaft",
+    "summary": "This is the HOMEPAGE. Refer to Markdown for how to write markdown files. Quick Start Notes: Add images to the images folder if the file is referencing an image."
+  }
+}

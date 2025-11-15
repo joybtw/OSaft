@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.applications
+  commentId: N:OSaft.applications
+  id: OSaft.applications
+  children:
+  - OSaft.applications.Clock
+  - OSaft.applications.OSaftSecurity
+  langs:
+  - csharp
+  - vb
+  name: OSaft.applications
+  nameWithType: OSaft.applications
+  fullName: OSaft.applications
+  type: Namespace
+  assemblies:
+  - OSaft
+references:
+- uid: OSaft.applications.Clock
+  commentId: T:OSaft.applications.Clock
+  href: OSaft.applications.Clock.html
+  name: Clock
+  nameWithType: Clock
+  fullName: OSaft.applications.Clock
+- uid: OSaft.applications.OSaftSecurity
+  commentId: T:OSaft.applications.OSaftSecurity
+  href: OSaft.applications.OSaftSecurity.html
+  name: OSaftSecurity
+  nameWithType: OSaftSecurity
+  fullName: OSaft.applications.OSaftSecurity

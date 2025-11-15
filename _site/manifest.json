@@ -1,0 +1,630 @@
+{
+  "source_base_path": "C:/Users/jarno.niedling/Private/OSaft",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.Kernel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.Kernel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.Kernel",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.applications.Clock.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.applications.Clock.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.applications.Clock",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.applications.OSaftSecurity.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.applications.OSaftSecurity.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.applications.OSaftSecurity",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.applications.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.applications.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.applications",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.CDCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.CDCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.CDCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.ClearCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.ClearCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.ClearCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.ClockCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.ClockCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.ClockCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.Command.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.Command.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.Command",
+      "Summary": "<p sourcefile=\"api/OSaft.commands.Command.yml\" sourcestartlinenumber=\"1\">Base class of all Commandss</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.CommandHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.CommandHelper.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.CommandHelper",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.CommandParameter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.CommandParameter.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.CommandParameter",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.FSInfoCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.FSInfoCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.FSInfoCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.FileEditCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.FileEditCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.FileEditCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.FindCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.FindCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.FindCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.HelpCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.HelpCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.HelpCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.LSCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.LSCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.LSCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.MKDirCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.MKDirCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.MKDirCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.RMCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.RMCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.RMCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.RebootCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.RebootCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.RebootCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.RelogCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.RelogCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.RelogCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.ShutdownCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.ShutdownCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.ShutdownCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.ToggleClockCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.ToggleClockCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.ToggleClockCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.ToggleStartScreenCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.ToggleStartScreenCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.ToggleStartScreenCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.TouchCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.TouchCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.TouchCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.UserCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.UserCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.UserCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.VersionCommand.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.VersionCommand.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands.VersionCommand",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.commands.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.commands.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.commands",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.filesystem.FileSystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.filesystem.FileSystem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.filesystem.FileSystem",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.filesystem.PermissionEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.filesystem.PermissionEntry.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.filesystem.PermissionEntry",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.filesystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.filesystem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.filesystem",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.usersystem.User.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.usersystem.User.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.usersystem.User",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.usersystem.UserDatabase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.usersystem.UserDatabase.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.usersystem.UserDatabase",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.usersystem.UserHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.usersystem.UserHelper.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.usersystem.UserHelper",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.usersystem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.usersystem.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.usersystem",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.utils.ColorTheme.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.utils.ColorTheme.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.utils.ColorTheme",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.utils.Shell.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.utils.Shell.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.utils.Shell",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.utils.StartupScreen.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.utils.StartupScreen.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.utils.StartupScreen",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.utils.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.utils.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft.utils",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/OSaft.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/OSaft.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "OSaft",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/introduction.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/introduction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

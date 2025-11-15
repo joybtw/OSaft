@@ -1,0 +1,123 @@
+### YamlMime:TableOfContent
+items:
+- uid: OSaft
+  name: OSaft
+  type: Namespace
+  items:
+  - uid: OSaft.Kernel
+    name: Kernel
+    type: Class
+- uid: OSaft.applications
+  name: OSaft.applications
+  type: Namespace
+  items:
+  - uid: OSaft.applications.Clock
+    name: Clock
+    type: Class
+  - uid: OSaft.applications.OSaftSecurity
+    name: OSaftSecurity
+    type: Class
+- uid: OSaft.commands
+  name: OSaft.commands
+  type: Namespace
+  items:
+  - uid: OSaft.commands.CDCommand
+    name: CDCommand
+    type: Class
+  - uid: OSaft.commands.ClearCommand
+    name: ClearCommand
+    type: Class
+  - uid: OSaft.commands.ClockCommand
+    name: ClockCommand
+    type: Class
+  - uid: OSaft.commands.Command
+    name: Command
+    type: Class
+  - uid: OSaft.commands.CommandHelper
+    name: CommandHelper
+    type: Class
+  - uid: OSaft.commands.CommandParameter
+    name: CommandParameter
+    type: Class
+  - uid: OSaft.commands.FSInfoCommand
+    name: FSInfoCommand
+    type: Class
+  - uid: OSaft.commands.FileEditCommand
+    name: FileEditCommand
+    type: Class
+  - uid: OSaft.commands.FindCommand
+    name: FindCommand
+    type: Class
+  - uid: OSaft.commands.HelpCommand
+    name: HelpCommand
+    type: Class
+  - uid: OSaft.commands.LSCommand
+    name: LSCommand
+    type: Class
+  - uid: OSaft.commands.MKDirCommand
+    name: MKDirCommand
+    type: Class
+  - uid: OSaft.commands.RMCommand
+    name: RMCommand
+    type: Class
+  - uid: OSaft.commands.RebootCommand
+    name: RebootCommand
+    type: Class
+  - uid: OSaft.commands.RelogCommand
+    name: RelogCommand
+    type: Class
+  - uid: OSaft.commands.ShutdownCommand
+    name: ShutdownCommand
+    type: Class
+  - uid: OSaft.commands.ToggleClockCommand
+    name: ToggleClockCommand
+    type: Class
+  - uid: OSaft.commands.ToggleStartScreenCommand
+    name: ToggleStartScreenCommand
+    type: Class
+  - uid: OSaft.commands.TouchCommand
+    name: TouchCommand
+    type: Class
+  - uid: OSaft.commands.UserCommand
+    name: UserCommand
+    type: Class
+  - uid: OSaft.commands.VersionCommand
+    name: VersionCommand
+    type: Class
+- uid: OSaft.filesystem
+  name: OSaft.filesystem
+  type: Namespace
+  items:
+  - uid: OSaft.filesystem.FileSystem
+    name: FileSystem
+    type: Class
+  - uid: OSaft.filesystem.PermissionEntry
+    name: PermissionEntry
+    type: Class
+- uid: OSaft.usersystem
+  name: OSaft.usersystem
+  type: Namespace
+  items:
+  - uid: OSaft.usersystem.User
+    name: User
+    type: Class
+  - uid: OSaft.usersystem.UserDatabase
+    name: UserDatabase
+    type: Class
+  - uid: OSaft.usersystem.UserHelper
+    name: UserHelper
+    type: Class
+- uid: OSaft.utils
+  name: OSaft.utils
+  type: Namespace
+  items:
+  - uid: OSaft.utils.ColorTheme
+    name: ColorTheme
+    type: Class
+  - uid: OSaft.utils.Shell
+    name: Shell
+    type: Class
+  - uid: OSaft.utils.StartupScreen
+    name: StartupScreen
+    type: Class
+memberLayout: SamePage

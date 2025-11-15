@@ -1,0 +1,770 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.usersystem.UserDatabase
+  commentId: T:OSaft.usersystem.UserDatabase
+  id: UserDatabase
+  parent: OSaft.usersystem
+  children:
+  - OSaft.usersystem.UserDatabase.AddUser(System.String)
+  - OSaft.usersystem.UserDatabase.DBInit
+  - OSaft.usersystem.UserDatabase.GetUserID(System.String)
+  - OSaft.usersystem.UserDatabase.GetUserState(System.String)
+  - OSaft.usersystem.UserDatabase.ListUsers
+  - OSaft.usersystem.UserDatabase.LoadAllUsers
+  - OSaft.usersystem.UserDatabase.RemoveUser(System.String)
+  - OSaft.usersystem.UserDatabase.SaveAllUsers(System.Collections.Generic.List{OSaft.usersystem.User})
+  - OSaft.usersystem.UserDatabase.VerifyUser(System.String)
+  langs:
+  - csharp
+  - vb
+  name: UserDatabase
+  nameWithType: UserDatabase
+  fullName: OSaft.usersystem.UserDatabase
+  type: Class
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: UserDatabase
+    path: usersystem/UserHelper.cs
+    startLine: 121
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static class UserDatabase
+    content.vb: Public Module UserDatabase
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OSaft.usersystem.UserDatabase.DBInit
+  commentId: M:OSaft.usersystem.UserDatabase.DBInit
+  id: DBInit
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: DBInit()
+  nameWithType: UserDatabase.DBInit()
+  fullName: OSaft.usersystem.UserDatabase.DBInit()
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: DBInit
+    path: usersystem/UserHelper.cs
+    startLine: 125
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static void DBInit()
+    content.vb: Public Shared Sub DBInit()
+  overload: OSaft.usersystem.UserDatabase.DBInit*
+- uid: OSaft.usersystem.UserDatabase.SaveAllUsers(System.Collections.Generic.List{OSaft.usersystem.User})
+  commentId: M:OSaft.usersystem.UserDatabase.SaveAllUsers(System.Collections.Generic.List{OSaft.usersystem.User})
+  id: SaveAllUsers(System.Collections.Generic.List{OSaft.usersystem.User})
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: SaveAllUsers(List<User>)
+  nameWithType: UserDatabase.SaveAllUsers(List<User>)
+  fullName: OSaft.usersystem.UserDatabase.SaveAllUsers(System.Collections.Generic.List<OSaft.usersystem.User>)
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: SaveAllUsers
+    path: usersystem/UserHelper.cs
+    startLine: 134
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static void SaveAllUsers(List<User> users)
+    parameters:
+    - id: users
+      type: System.Collections.Generic.List{OSaft.usersystem.User}
+    content.vb: Public Shared Sub SaveAllUsers(users As List(Of User))
+  overload: OSaft.usersystem.UserDatabase.SaveAllUsers*
+  nameWithType.vb: UserDatabase.SaveAllUsers(List(Of User))
+  fullName.vb: OSaft.usersystem.UserDatabase.SaveAllUsers(System.Collections.Generic.List(Of OSaft.usersystem.User))
+  name.vb: SaveAllUsers(List(Of User))
+- uid: OSaft.usersystem.UserDatabase.LoadAllUsers
+  commentId: M:OSaft.usersystem.UserDatabase.LoadAllUsers
+  id: LoadAllUsers
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: LoadAllUsers()
+  nameWithType: UserDatabase.LoadAllUsers()
+  fullName: OSaft.usersystem.UserDatabase.LoadAllUsers()
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: LoadAllUsers
+    path: usersystem/UserHelper.cs
+    startLine: 148
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static List<User> LoadAllUsers()
+    return:
+      type: System.Collections.Generic.List{OSaft.usersystem.User}
+    content.vb: Public Shared Function LoadAllUsers() As List(Of User)
+  overload: OSaft.usersystem.UserDatabase.LoadAllUsers*
+- uid: OSaft.usersystem.UserDatabase.GetUserState(System.String)
+  commentId: M:OSaft.usersystem.UserDatabase.GetUserState(System.String)
+  id: GetUserState(System.String)
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: GetUserState(string)
+  nameWithType: UserDatabase.GetUserState(string)
+  fullName: OSaft.usersystem.UserDatabase.GetUserState(string)
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: GetUserState
+    path: usersystem/UserHelper.cs
+    startLine: 186
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static bool GetUserState(string name)
+    parameters:
+    - id: name
+      type: System.String
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function GetUserState(name As String) As Boolean
+  overload: OSaft.usersystem.UserDatabase.GetUserState*
+  nameWithType.vb: UserDatabase.GetUserState(String)
+  fullName.vb: OSaft.usersystem.UserDatabase.GetUserState(String)
+  name.vb: GetUserState(String)
+- uid: OSaft.usersystem.UserDatabase.GetUserID(System.String)
+  commentId: M:OSaft.usersystem.UserDatabase.GetUserID(System.String)
+  id: GetUserID(System.String)
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: GetUserID(string)
+  nameWithType: UserDatabase.GetUserID(string)
+  fullName: OSaft.usersystem.UserDatabase.GetUserID(string)
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: GetUserID
+    path: usersystem/UserHelper.cs
+    startLine: 199
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static uint GetUserID(string name)
+    parameters:
+    - id: name
+      type: System.String
+    return:
+      type: System.UInt32
+    content.vb: Public Shared Function GetUserID(name As String) As UInteger
+  overload: OSaft.usersystem.UserDatabase.GetUserID*
+  nameWithType.vb: UserDatabase.GetUserID(String)
+  fullName.vb: OSaft.usersystem.UserDatabase.GetUserID(String)
+  name.vb: GetUserID(String)
+- uid: OSaft.usersystem.UserDatabase.ListUsers
+  commentId: M:OSaft.usersystem.UserDatabase.ListUsers
+  id: ListUsers
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: ListUsers()
+  nameWithType: UserDatabase.ListUsers()
+  fullName: OSaft.usersystem.UserDatabase.ListUsers()
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: ListUsers
+    path: usersystem/UserHelper.cs
+    startLine: 212
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static void ListUsers()
+    content.vb: Public Shared Sub ListUsers()
+  overload: OSaft.usersystem.UserDatabase.ListUsers*
+- uid: OSaft.usersystem.UserDatabase.AddUser(System.String)
+  commentId: M:OSaft.usersystem.UserDatabase.AddUser(System.String)
+  id: AddUser(System.String)
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: AddUser(string)
+  nameWithType: UserDatabase.AddUser(string)
+  fullName: OSaft.usersystem.UserDatabase.AddUser(string)
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: AddUser
+    path: usersystem/UserHelper.cs
+    startLine: 229
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static void AddUser(string name)
+    parameters:
+    - id: name
+      type: System.String
+    content.vb: Public Shared Sub AddUser(name As String)
+  overload: OSaft.usersystem.UserDatabase.AddUser*
+  nameWithType.vb: UserDatabase.AddUser(String)
+  fullName.vb: OSaft.usersystem.UserDatabase.AddUser(String)
+  name.vb: AddUser(String)
+- uid: OSaft.usersystem.UserDatabase.RemoveUser(System.String)
+  commentId: M:OSaft.usersystem.UserDatabase.RemoveUser(System.String)
+  id: RemoveUser(System.String)
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: RemoveUser(string)
+  nameWithType: UserDatabase.RemoveUser(string)
+  fullName: OSaft.usersystem.UserDatabase.RemoveUser(string)
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: RemoveUser
+    path: usersystem/UserHelper.cs
+    startLine: 281
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static void RemoveUser(string name)
+    parameters:
+    - id: name
+      type: System.String
+    content.vb: Public Shared Sub RemoveUser(name As String)
+  overload: OSaft.usersystem.UserDatabase.RemoveUser*
+  nameWithType.vb: UserDatabase.RemoveUser(String)
+  fullName.vb: OSaft.usersystem.UserDatabase.RemoveUser(String)
+  name.vb: RemoveUser(String)
+- uid: OSaft.usersystem.UserDatabase.VerifyUser(System.String)
+  commentId: M:OSaft.usersystem.UserDatabase.VerifyUser(System.String)
+  id: VerifyUser(System.String)
+  parent: OSaft.usersystem.UserDatabase
+  langs:
+  - csharp
+  - vb
+  name: VerifyUser(string)
+  nameWithType: UserDatabase.VerifyUser(string)
+  fullName: OSaft.usersystem.UserDatabase.VerifyUser(string)
+  type: Method
+  source:
+    remote:
+      path: usersystem/UserHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: VerifyUser
+    path: usersystem/UserHelper.cs
+    startLine: 311
+  assemblies:
+  - OSaft
+  namespace: OSaft.usersystem
+  syntax:
+    content: public static bool VerifyUser(string name)
+    parameters:
+    - id: name
+      type: System.String
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function VerifyUser(name As String) As Boolean
+  overload: OSaft.usersystem.UserDatabase.VerifyUser*
+  nameWithType.vb: UserDatabase.VerifyUser(String)
+  fullName.vb: OSaft.usersystem.UserDatabase.VerifyUser(String)
+  name.vb: VerifyUser(String)
+references:
+- uid: OSaft.usersystem
+  commentId: N:OSaft.usersystem
+  href: OSaft.html
+  name: OSaft.usersystem
+  nameWithType: OSaft.usersystem
+  fullName: OSaft.usersystem
+  spec.csharp:
+  - uid: OSaft
+    name: OSaft
+    href: OSaft.html
+  - name: .
+  - uid: OSaft.usersystem
+    name: usersystem
+    href: OSaft.usersystem.html
+  spec.vb:
+  - uid: OSaft
+    name: OSaft
+    href: OSaft.html
+  - name: .
+  - uid: OSaft.usersystem
+    name: usersystem
+    href: OSaft.usersystem.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OSaft.usersystem.UserDatabase.DBInit*
+  commentId: Overload:OSaft.usersystem.UserDatabase.DBInit
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_DBInit
+  name: DBInit
+  nameWithType: UserDatabase.DBInit
+  fullName: OSaft.usersystem.UserDatabase.DBInit
+- uid: OSaft.usersystem.UserDatabase.SaveAllUsers*
+  commentId: Overload:OSaft.usersystem.UserDatabase.SaveAllUsers
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_SaveAllUsers_System_Collections_Generic_List_OSaft_usersystem_User__
+  name: SaveAllUsers
+  nameWithType: UserDatabase.SaveAllUsers
+  fullName: OSaft.usersystem.UserDatabase.SaveAllUsers
+- uid: System.Collections.Generic.List{OSaft.usersystem.User}
+  commentId: T:System.Collections.Generic.List{OSaft.usersystem.User}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<User>
+  nameWithType: List<User>
+  fullName: System.Collections.Generic.List<OSaft.usersystem.User>
+  nameWithType.vb: List(Of User)
+  fullName.vb: System.Collections.Generic.List(Of OSaft.usersystem.User)
+  name.vb: List(Of User)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: OSaft.usersystem.User
+    name: User
+    href: OSaft.usersystem.User.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: OSaft.usersystem.User
+    name: User
+    href: OSaft.usersystem.User.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: OSaft.usersystem.UserDatabase.LoadAllUsers*
+  commentId: Overload:OSaft.usersystem.UserDatabase.LoadAllUsers
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_LoadAllUsers
+  name: LoadAllUsers
+  nameWithType: UserDatabase.LoadAllUsers
+  fullName: OSaft.usersystem.UserDatabase.LoadAllUsers
+- uid: OSaft.usersystem.UserDatabase.GetUserState*
+  commentId: Overload:OSaft.usersystem.UserDatabase.GetUserState
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_GetUserState_System_String_
+  name: GetUserState
+  nameWithType: UserDatabase.GetUserState
+  fullName: OSaft.usersystem.UserDatabase.GetUserState
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: OSaft.usersystem.UserDatabase.GetUserID*
+  commentId: Overload:OSaft.usersystem.UserDatabase.GetUserID
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_GetUserID_System_String_
+  name: GetUserID
+  nameWithType: UserDatabase.GetUserID
+  fullName: OSaft.usersystem.UserDatabase.GetUserID
+- uid: System.UInt32
+  commentId: T:System.UInt32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.uint32
+  name: uint
+  nameWithType: uint
+  fullName: uint
+  nameWithType.vb: UInteger
+  fullName.vb: UInteger
+  name.vb: UInteger
+- uid: OSaft.usersystem.UserDatabase.ListUsers*
+  commentId: Overload:OSaft.usersystem.UserDatabase.ListUsers
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_ListUsers
+  name: ListUsers
+  nameWithType: UserDatabase.ListUsers
+  fullName: OSaft.usersystem.UserDatabase.ListUsers
+- uid: OSaft.usersystem.UserDatabase.AddUser*
+  commentId: Overload:OSaft.usersystem.UserDatabase.AddUser
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_AddUser_System_String_
+  name: AddUser
+  nameWithType: UserDatabase.AddUser
+  fullName: OSaft.usersystem.UserDatabase.AddUser
+- uid: OSaft.usersystem.UserDatabase.RemoveUser*
+  commentId: Overload:OSaft.usersystem.UserDatabase.RemoveUser
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_RemoveUser_System_String_
+  name: RemoveUser
+  nameWithType: UserDatabase.RemoveUser
+  fullName: OSaft.usersystem.UserDatabase.RemoveUser
+- uid: OSaft.usersystem.UserDatabase.VerifyUser*
+  commentId: Overload:OSaft.usersystem.UserDatabase.VerifyUser
+  href: OSaft.usersystem.UserDatabase.html#OSaft_usersystem_UserDatabase_VerifyUser_System_String_
+  name: VerifyUser
+  nameWithType: UserDatabase.VerifyUser
+  fullName: OSaft.usersystem.UserDatabase.VerifyUser

@@ -1,0 +1,613 @@
+### YamlMime:ManagedReference
+items:
+- uid: OSaft.commands.CommandParameter
+  commentId: T:OSaft.commands.CommandParameter
+  id: CommandParameter
+  parent: OSaft.commands
+  children:
+  - OSaft.commands.CommandParameter.#ctor(System.String,System.String,System.Boolean,System.Boolean,System.Action{System.String})
+  - OSaft.commands.CommandParameter.Action
+  - OSaft.commands.CommandParameter.Description
+  - OSaft.commands.CommandParameter.ExpectsParameters
+  - OSaft.commands.CommandParameter.IsRequired
+  - OSaft.commands.CommandParameter.Name
+  langs:
+  - csharp
+  - vb
+  name: CommandParameter
+  nameWithType: CommandParameter
+  fullName: OSaft.commands.CommandParameter
+  type: Class
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: CommandParameter
+    path: commands/CommandHelper.cs
+    startLine: 101
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public class CommandParameter
+    content.vb: Public Class CommandParameter
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: OSaft.commands.CommandParameter.Name
+  commentId: P:OSaft.commands.CommandParameter.Name
+  id: Name
+  parent: OSaft.commands.CommandParameter
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: CommandParameter.Name
+  fullName: OSaft.commands.CommandParameter.Name
+  type: Property
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: Name
+    path: commands/CommandHelper.cs
+    startLine: 104
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public string Name { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Name As String
+  overload: OSaft.commands.CommandParameter.Name*
+- uid: OSaft.commands.CommandParameter.Description
+  commentId: P:OSaft.commands.CommandParameter.Description
+  id: Description
+  parent: OSaft.commands.CommandParameter
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: CommandParameter.Description
+  fullName: OSaft.commands.CommandParameter.Description
+  type: Property
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: Description
+    path: commands/CommandHelper.cs
+    startLine: 105
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public string Description { get; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public ReadOnly Property Description As String
+  overload: OSaft.commands.CommandParameter.Description*
+- uid: OSaft.commands.CommandParameter.IsRequired
+  commentId: P:OSaft.commands.CommandParameter.IsRequired
+  id: IsRequired
+  parent: OSaft.commands.CommandParameter
+  langs:
+  - csharp
+  - vb
+  name: IsRequired
+  nameWithType: CommandParameter.IsRequired
+  fullName: OSaft.commands.CommandParameter.IsRequired
+  type: Property
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: IsRequired
+    path: commands/CommandHelper.cs
+    startLine: 106
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public bool IsRequired { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property IsRequired As Boolean
+  overload: OSaft.commands.CommandParameter.IsRequired*
+- uid: OSaft.commands.CommandParameter.ExpectsParameters
+  commentId: P:OSaft.commands.CommandParameter.ExpectsParameters
+  id: ExpectsParameters
+  parent: OSaft.commands.CommandParameter
+  langs:
+  - csharp
+  - vb
+  name: ExpectsParameters
+  nameWithType: CommandParameter.ExpectsParameters
+  fullName: OSaft.commands.CommandParameter.ExpectsParameters
+  type: Property
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: ExpectsParameters
+    path: commands/CommandHelper.cs
+    startLine: 107
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public bool ExpectsParameters { get; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public ReadOnly Property ExpectsParameters As Boolean
+  overload: OSaft.commands.CommandParameter.ExpectsParameters*
+- uid: OSaft.commands.CommandParameter.Action
+  commentId: P:OSaft.commands.CommandParameter.Action
+  id: Action
+  parent: OSaft.commands.CommandParameter
+  langs:
+  - csharp
+  - vb
+  name: Action
+  nameWithType: CommandParameter.Action
+  fullName: OSaft.commands.CommandParameter.Action
+  type: Property
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: Action
+    path: commands/CommandHelper.cs
+    startLine: 108
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public Action<string> Action { get; }
+    parameters: []
+    return:
+      type: System.Action{System.String}
+    content.vb: Public ReadOnly Property Action As Action(Of String)
+  overload: OSaft.commands.CommandParameter.Action*
+- uid: OSaft.commands.CommandParameter.#ctor(System.String,System.String,System.Boolean,System.Boolean,System.Action{System.String})
+  commentId: M:OSaft.commands.CommandParameter.#ctor(System.String,System.String,System.Boolean,System.Boolean,System.Action{System.String})
+  id: '#ctor(System.String,System.String,System.Boolean,System.Boolean,System.Action{System.String})'
+  parent: OSaft.commands.CommandParameter
+  langs:
+  - csharp
+  - vb
+  name: CommandParameter(string, string, bool, bool, Action<string>)
+  nameWithType: CommandParameter.CommandParameter(string, string, bool, bool, Action<string>)
+  fullName: OSaft.commands.CommandParameter.CommandParameter(string, string, bool, bool, System.Action<string>)
+  type: Constructor
+  source:
+    remote:
+      path: commands/CommandHelper.cs
+      branch: master
+      repo: https://github.com/joybtw/OSaft.git
+    id: .ctor
+    path: commands/CommandHelper.cs
+    startLine: 111
+  assemblies:
+  - OSaft
+  namespace: OSaft.commands
+  syntax:
+    content: public CommandParameter(string name, string description, bool isRequired, bool expectsParameters, Action<string> action)
+    parameters:
+    - id: name
+      type: System.String
+    - id: description
+      type: System.String
+    - id: isRequired
+      type: System.Boolean
+    - id: expectsParameters
+      type: System.Boolean
+    - id: action
+      type: System.Action{System.String}
+    content.vb: Public Sub New(name As String, description As String, isRequired As Boolean, expectsParameters As Boolean, action As Action(Of String))
+  overload: OSaft.commands.CommandParameter.#ctor*
+  nameWithType.vb: CommandParameter.New(String, String, Boolean, Boolean, Action(Of String))
+  fullName.vb: OSaft.commands.CommandParameter.New(String, String, Boolean, Boolean, System.Action(Of String))
+  name.vb: New(String, String, Boolean, Boolean, Action(Of String))
+references:
+- uid: OSaft.commands
+  commentId: N:OSaft.commands
+  href: OSaft.html
+  name: OSaft.commands
+  nameWithType: OSaft.commands
+  fullName: OSaft.commands
+  spec.csharp:
+  - uid: OSaft
+    name: OSaft
+    href: OSaft.html
+  - name: .
+  - uid: OSaft.commands
+    name: commands
+    href: OSaft.commands.html
+  spec.vb:
+  - uid: OSaft
+    name: OSaft
+    href: OSaft.html
+  - name: .
+  - uid: OSaft.commands
+    name: commands
+    href: OSaft.commands.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: OSaft.commands.CommandParameter.Name*
+  commentId: Overload:OSaft.commands.CommandParameter.Name
+  href: OSaft.commands.CommandParameter.html#OSaft_commands_CommandParameter_Name
+  name: Name
+  nameWithType: CommandParameter.Name
+  fullName: OSaft.commands.CommandParameter.Name
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: OSaft.commands.CommandParameter.Description*
+  commentId: Overload:OSaft.commands.CommandParameter.Description
+  href: OSaft.commands.CommandParameter.html#OSaft_commands_CommandParameter_Description
+  name: Description
+  nameWithType: CommandParameter.Description
+  fullName: OSaft.commands.CommandParameter.Description
+- uid: OSaft.commands.CommandParameter.IsRequired*
+  commentId: Overload:OSaft.commands.CommandParameter.IsRequired
+  href: OSaft.commands.CommandParameter.html#OSaft_commands_CommandParameter_IsRequired
+  name: IsRequired
+  nameWithType: CommandParameter.IsRequired
+  fullName: OSaft.commands.CommandParameter.IsRequired
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: OSaft.commands.CommandParameter.ExpectsParameters*
+  commentId: Overload:OSaft.commands.CommandParameter.ExpectsParameters
+  href: OSaft.commands.CommandParameter.html#OSaft_commands_CommandParameter_ExpectsParameters
+  name: ExpectsParameters
+  nameWithType: CommandParameter.ExpectsParameters
+  fullName: OSaft.commands.CommandParameter.ExpectsParameters
+- uid: OSaft.commands.CommandParameter.Action*
+  commentId: Overload:OSaft.commands.CommandParameter.Action
+  href: OSaft.commands.CommandParameter.html#OSaft_commands_CommandParameter_Action
+  name: Action
+  nameWithType: CommandParameter.Action
+  fullName: OSaft.commands.CommandParameter.Action
+- uid: System.Action{System.String}
+  commentId: T:System.Action{System.String}
+  parent: System
+  definition: System.Action`1
+  href: https://learn.microsoft.com/dotnet/api/system.action-1
+  name: Action<string>
+  nameWithType: Action<string>
+  fullName: System.Action<string>
+  nameWithType.vb: Action(Of String)
+  fullName.vb: System.Action(Of String)
+  name.vb: Action(Of String)
+  spec.csharp:
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Action`1
+  commentId: T:System.Action`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.action-1
+  name: Action<T>
+  nameWithType: Action<T>
+  fullName: System.Action<T>
+  nameWithType.vb: Action(Of T)
+  fullName.vb: System.Action(Of T)
+  name.vb: Action(Of T)
+  spec.csharp:
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Action`1
+    name: Action
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.action-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: OSaft.commands.CommandParameter.#ctor*
+  commentId: Overload:OSaft.commands.CommandParameter.#ctor
+  href: OSaft.commands.CommandParameter.html#OSaft_commands_CommandParameter__ctor_System_String_System_String_System_Boolean_System_Boolean_System_Action_System_String__
+  name: CommandParameter
+  nameWithType: CommandParameter.CommandParameter
+  fullName: OSaft.commands.CommandParameter.CommandParameter
+  nameWithType.vb: CommandParameter.New
+  fullName.vb: OSaft.commands.CommandParameter.New
+  name.vb: New
