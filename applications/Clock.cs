@@ -17,9 +17,14 @@ namespace OSaft.applications
         }
         public static string GetShortTime()
         {
+            if (IsActive == false)
+            {
+                return null;
+            }
             int h = RTC.Hour;
             int m = RTC.Minute;
             var now = $"{h:D2}:{m:D2}";
+            now += " - ";
             return now;
         }
         public static bool IsActive = true;
