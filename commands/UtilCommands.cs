@@ -9,14 +9,14 @@ namespace OSaft.commands
 {
     public class HelpCommand : Command
     {
-        public HelpCommand(string name) : base(name, "Displays all commands.")
+        public HelpCommand(string name) : base(name, "Displays all Commands.")
         {
             this.ParameterList = new();
         }
         internal override void Execute(string[] args)
         {
             Console.WriteLine("Alle Befehle: ");
-            foreach (Command command in CommandHelper.commands.Values)
+            foreach (Command command in CommandHelper.Commands.Values)
             {
                 Console.WriteLine(command.Name + " - " + command.Description);
             }

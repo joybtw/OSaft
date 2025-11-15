@@ -285,5 +285,10 @@ namespace OSaft.filesystem {
             return paths.ToArray();
         }
 
+        public static List<string> GetFileSuggestions()
+        {
+            return new List<string>();
+            // Todo: Implement file and folder suggestions based on current path and partial input
+        }
     }
 }
