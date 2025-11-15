@@ -1,3 +1,4 @@
+using OSaft.applications;
 using OSaft.filesystem;
 using OSaft.utils;
 using System;
@@ -27,7 +28,6 @@ namespace OSaft.usersystem
                 return;
             }
             ColorTheme.ApplyTheme();
-            // Erster Systemstart -> Root-User erstellen
             Console.WriteLine("This is the first boot of OSaft. Please create a user.");
 
             string name;
@@ -41,10 +41,11 @@ namespace OSaft.usersystem
             do
             {
                 Console.Write("Enter password: ");
-                Console.ForegroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 password = Console.ReadLine();
-                Console.ResetColor();
+                ColorTheme.ApplyTheme();
             } while (password == null);
+            Console.WriteLine("Getting ready. This may take a moment. May you get a cup of coffee.");
 
             User rootUser = new(name, password, null, true, 0, false);
 
@@ -56,7 +57,7 @@ namespace OSaft.usersystem
                 FileSystem.CreateDirectory("users");
             FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
-            StartupScreen.Toggle();
+            //StartupScreen.Toggle();
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
 
             ColorTheme.ChangeColor();
@@ -127,7 +128,9 @@ namespace OSaft.usersystem
         {
             if (!File.Exists(@"0:\system\users.db"))
             {
-                FileSystem.CreateFile(user_db_path);
+               
+                FileSystem.CreateFile(@"system\users.db");
+             
             }    
             
         }
@@ -142,6 +145,7 @@ namespace OSaft.usersystem
                 sb += (u.Name + '|' + u.PasswordHash + '|' + u.Salt + '|' + (u.IsSuperuser ? '1' : '0') + '|' + u.Uid.ToString() + '\n');
             }
             FileSystem.WriteFile(user_db_path, sb);
+            FileSystem.WriteFile(@"\system\root_init.sys", OSaftSecurity.FNV1a(sb));
             ColorTheme.ChangeColor();
             Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
         }
@@ -156,7 +160,14 @@ namespace OSaft.usersystem
                 Console.WriteLine("[UserDB] No content found in users.db");
                 return list;
             }
-
+            string hashCheck = FileSystem.ReadFile(@"\system\root_init.sys");
+            if (OSaftSecurity.FNV1a(content) != hashCheck)
+            {
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("[UserDB] Warning: users.db integrity check failed! Files could be corrupted!");
+                Console.WriteLine("No recovery available. You are on yourself. Good Luck!");
+                Console.WriteLine("--------------------------------");
+            }
             string[] lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             foreach (string line in lines)
             {
