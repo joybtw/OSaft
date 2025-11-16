@@ -158,10 +158,7 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no file provided.");
                     return;
                 }
-                if (FileSystem.ForbiddenPath(val)) { 
-                    Console.WriteLine(Name + ": Error: forbidden path."); 
-                    return;
-                }
+               
                 if (FileSystem.DeleteFile(val)) { Console.WriteLine("File " + val + " was deleted."); }
             }));
 
@@ -171,11 +168,7 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no directory provided.");
                     return;
                 }
-                if (FileSystem.ForbiddenPath(val))
-                {
-                    Console.WriteLine(Name + ": Error: forbidden path.");
-                    return;
-                }
+
                 if (FileSystem.DeleteDirectory(val)) { Console.WriteLine("Directory " + val + " was deleted."); }
             }));
         }
