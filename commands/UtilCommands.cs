@@ -158,6 +158,10 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no file provided.");
                     return;
                 }
+                if (FileSystem.ForbiddenPath(val)) { 
+                    Console.WriteLine(Name + ": Error: forbidden path."); 
+                    return;
+                }
                 if (FileSystem.DeleteFile(val)) { Console.WriteLine("File " + val + " was deleted."); }
             }));
 
@@ -165,6 +169,11 @@ namespace OSaft.commands
                 if (string.IsNullOrEmpty(val))
                 {
                     Console.WriteLine(Name + ": Error: no directory provided.");
+                    return;
+                }
+                if (FileSystem.ForbiddenPath(val))
+                {
+                    Console.WriteLine(Name + ": Error: forbidden path.");
                     return;
                 }
                 if (FileSystem.DeleteDirectory(val)) { Console.WriteLine("Directory " + val + " was deleted."); }
@@ -254,6 +263,16 @@ namespace OSaft.commands
         internal override void Execute(string[] args)
         {
             if (args.Length == 0) { StartupScreen.Toggle(); }
+            ExecuteParams(args);
+        }
+    }
+
+    public class CheckDBIntegrityCommand : Command
+    {
+        public CheckDBIntegrityCommand(string name) : base(name, "Checks the integrity of the user database.\n                           Unblocks/Blocks changes to DB depending on current\n                           integrity state.") { }
+        internal override void Execute(string[] args)
+        {
+            if (args.Length == 0) { UserDatabase.Chdbin(); }
             ExecuteParams(args);
         }
     }
