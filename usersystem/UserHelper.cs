@@ -47,7 +47,7 @@ namespace OSaft.usersystem
                 password = Console.ReadLine();
                 ColorTheme.ApplyTheme();
             } while (password == null);
-            Console.WriteLine("Getting ready. This may take a moment. May you get a cup of coffee.");
+            Console.WriteLine("Getting things ready. This may take a moment. May you get a cup of coffee.");
 
             User rootUser = new(name, password, null, true, 0, false);
 
@@ -61,6 +61,7 @@ namespace OSaft.usersystem
             FileSystem.CreateFile(@"system\root_init.sys");
             //StartupScreen.Toggle();
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
+            PermissionManager.CreateDefaultPermissions();
 
             ColorTheme.ChangeColor();
             Console.WriteLine("\nSudo user created successfully.");
@@ -76,7 +77,7 @@ namespace OSaft.usersystem
             if (users.Count == 0)
             {
                 ColorTheme.ChangeColor();
-                Console.WriteLine("No users found. Please reset filesystem (Skript on Discord)(to be changed).");
+                Console.WriteLine("No users found. Please reset filesystem.");
                 return;
             }
 
@@ -166,8 +167,8 @@ namespace OSaft.usersystem
         public static List<User> LoadAllUsers()
         {
             List<User> list = new();
-
-            string content = FileSystem.ReadFile(user_db_path);
+            
+            string content = FileSystem.ReadFile(@"\system\users.db");
             if (string.IsNullOrWhiteSpace(content))
             {
                 Console.WriteLine("[UserDB] No content found in users.db");
@@ -184,7 +185,8 @@ namespace OSaft.usersystem
                     Console.WriteLine("--------------------------------");
                     dbcheck = true;
                     dblocked = true;
-                } else { dblocked = false; }
+                }
+                else { dblocked = false; }
             }
             string[] lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             foreach (string line in lines)
@@ -238,7 +240,7 @@ namespace OSaft.usersystem
             {
                 throw new KeyNotFoundException("User not found: " + name);
             }
-            
+
         }
         public static void ListUsers()
         {
@@ -307,6 +309,7 @@ namespace OSaft.usersystem
             FileSystem.CreateDirectory($@"users\{name}");
             SaveAllUsers(users);
             if (dblocked == true) { return; }
+            PermissionManager.NewUser(newUser);
             Console.WriteLine("User added successfully: " + name);
 
         }
@@ -391,9 +394,9 @@ namespace OSaft.usersystem
                 dbcheck = true;
                 dblocked = true;
             }
-            else 
-            { 
-             dblocked = false;
+            else
+            {
+                dblocked = false;
                 Console.WriteLine("--------------------------------");
                 Console.WriteLine("[UserDB] Integrity check passed.");
                 Console.WriteLine("--------------------------------");

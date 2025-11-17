@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using Sys = Cosmos.System;
 
-namespace OSaft.filesystem {
+namespace OSaft.filesystem
+{
     public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
@@ -14,7 +15,8 @@ namespace OSaft.filesystem {
             set => currentPath = ValidatePath(value, currentPath);
         }
 
-        private static bool IsRoot(string path) {
+        private static bool IsRoot(string path)
+        {
             if (path.Contains(":\\"))
             {
                 DirectoryInfo info = new(path);
@@ -28,7 +30,7 @@ namespace OSaft.filesystem {
             if (string.IsNullOrWhiteSpace(currentPath))
             {
                 Console.WriteLine("Current Path cannot be null or empty");
-                return "0:\\"; 
+                return "0:\\";
             }
             if (string.IsNullOrWhiteSpace(newPath))
             {
@@ -114,17 +116,19 @@ namespace OSaft.filesystem {
             return drivePrefix + "\\" + string.Join("\\", finalParts.ToArray());
         }
 
-        public static FileStream CreateFile(string path, bool isPathAbs = false) {
+        public static FileStream CreateFile(string path, bool isPathAbs = false)
+        {
 
             if (path.Contains('.'))
             {
                 string filename = Path.GetFileName(path);
                 path = Path.GetDirectoryName(path);
-                    
+
                 if (isPathAbs)
                 {
                     path = ValidatePath(currentPath + (path ?? ""), currentPath);
-                } else
+                }
+                else
                 {
                     path = ValidatePath(path, currentPath);
                 }
@@ -154,7 +158,8 @@ namespace OSaft.filesystem {
         }
 
 
-        public static DirectoryInfo CreateDirectory(string path) {
+        public static DirectoryInfo CreateDirectory(string path)
+        {
             path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
@@ -208,7 +213,8 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void WriteFile(string path, string content, bool isPathAbs = false) {
+        public static void WriteFile(string path, string content, bool isPathAbs = false)
+        {
             if (isPathAbs)
             {
                 path = ValidatePath(path, currentPath);
@@ -220,8 +226,9 @@ namespace OSaft.filesystem {
 
             try
             {
-               File.WriteAllText(path, content);
-            } catch (Exception e) 
+                File.WriteAllText(path, content);
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("WriteFile: Exception thrown: " + e.Message);
             }
@@ -236,19 +243,22 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static string ReadFile(string path, bool isPathAbs = false) {
+        public static string ReadFile(string path, bool isPathAbs = false)
+        {
             if (isPathAbs)
             {
                 path = ValidatePath(path, currentPath);
-            } else
+            }
+            else
             {
                 path = ValidatePath(currentPath + (path ?? ""), currentPath);
             }
-  
+
             try
             {
                 return File.ReadAllText(path);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("ReadFile: Exception thrown: " + e.Message);
                 return null;
@@ -277,7 +287,8 @@ namespace OSaft.filesystem {
                 {
                     paths.AddRange(FindFile(filename, path + "\\" + dir));
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("Error: Accessing path: " + path + " (" + (string.IsNullOrEmpty(e.Message) ? "IO Error" : e.Message) + ")");
             }

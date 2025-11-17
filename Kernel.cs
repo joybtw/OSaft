@@ -4,6 +4,7 @@ using OSaft.filesystem;
 using OSaft.usersystem;
 using OSaft.utils;
 using System;
+using System.IO;
 using Commands = OSaft.commands;
 using Sys = Cosmos.System;
 
@@ -61,6 +62,7 @@ namespace OSaft
 
         protected override void Run()
         {
+
             // Input Handling
             ColorTheme.ChangeColor();
             string input = Shell.ReadLineWithHistory(Clock.GetShortTime() + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");

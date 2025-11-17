@@ -83,6 +83,17 @@ namespace OSaft.commands
         public FileEditCommand(string name) : base(name, "Opens the fileeditor for a existing file specified.") {
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to editable fale", true, false, val =>
             {
+                
+                if (!PermissionManager.CanWrite(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
+                {
+                    Console.WriteLine("Error: No permission to rewrite this file.");
+                    return;
+                }
+                if (!PermissionManager.CanRead(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
+                {
+                    Console.WriteLine("Error: No permission to read this file.");
+                    return;
+                }
                 FileEditor.EditFile(val);
                 ColorTheme.ApplyTheme();
             }));
@@ -114,6 +125,14 @@ namespace OSaft.commands
         }
 
         private static void LsExecute(string path) {
+   
+            //Console.WriteLine(FileSystem.ValidatePath(FileSystem.CurrentPath + (path ?? ""), FileSystem.CurrentPath));
+            if (!PermissionManager.CanRead(FileSystem.ValidatePath(FileSystem.CurrentPath + (path ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
+            {
+                Console.WriteLine("Error: No permission to read this directory.");
+                return;
+            }
+
             string[] directories = Directory.GetDirectories(FileSystem.CurrentPath + "\\" + path);
             string[] files = Directory.GetFiles(FileSystem.CurrentPath + "\\" + path);
             Console.WriteLine("Directories: " + string.Join(", ", directories));
@@ -134,6 +153,12 @@ namespace OSaft.commands
         public TouchCommand(string name) : base(name, "Creates a new file.") {
             this.ParameterList.Insert(0, new CommandParameter("path", "which file should be created", true, false, path =>
             {
+                if (!PermissionManager.CanWrite(FileSystem.ValidatePath(FileSystem.CurrentPath, FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
+                {
+                    Console.WriteLine("Error: No permission to write in this directory.");
+                    return;
+                }
+                PermissionManager.AddRights(FileSystem.ValidatePath(FileSystem.CurrentPath + (path ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser));
                 FileSystem.CreateFile(path);
             }));
         }
@@ -144,6 +169,12 @@ namespace OSaft.commands
         public MKDirCommand(string name) : base(name, "Creates a new directory.") {
             this.ParameterList.Insert(0, new CommandParameter("directory", "which directory should be created", true, false, path =>
             {
+                if (!PermissionManager.CanWrite(FileSystem.ValidatePath(FileSystem.CurrentPath, FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
+                {
+                    Console.WriteLine("Error: No permission to write in this directory.");
+                    return;
+                }
+                PermissionManager.AddRights(FileSystem.ValidatePath(FileSystem.CurrentPath + (path ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser));
                 FileSystem.CreateDirectory(path);
             }));
         }
@@ -158,8 +189,14 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no file provided.");
                     return;
                 }
-               
+                if (!PermissionManager.CanWrite(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
+                {
+                    Console.WriteLine("Error: No permission to write this directory.");
+                    return;
+                }
+
                 if (FileSystem.DeleteFile(val)) { Console.WriteLine("File " + val + " was deleted."); }
+                PermissionManager.RemoveEntry(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath));
             }));
 
             ParameterList.Add(new CommandParameter("-d", "Delete a directory", false, true, val => {
@@ -270,3 +307,5 @@ namespace OSaft.commands
         }
     }
 }
+
+// Gabriel was here <3
