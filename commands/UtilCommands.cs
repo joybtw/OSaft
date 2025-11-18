@@ -4,6 +4,7 @@ using OSaft.usersystem;
 using System;
 using System.IO;
 using OSaft.utils;
+using Cosmos.HAL.BlockDevice.Registers;
 
 namespace OSaft.commands
 {
@@ -306,6 +307,34 @@ namespace OSaft.commands
             ExecuteParams(args);
         }
     }
+    /* 
+    public class  ChangePermissionsCommand : Command
+    {
+        public ChangePermissionsCommand(string name) : base(name, "Creates, removes or lists a permissions.")
+        {  
+            this.ParameterList.Add(new CommandParameter("+r", "Gives reading permission to user", false, true, (path, user) => PermissionManager.ShouldRead(path, user));
+            this.ParameterList.Add(new CommandParameter("+w", "Gives writing permission to user", false, true, user => PermissionManager.ShouldWrite(path, user)));
+            this.ParameterList.Add(new CommandParameter("+wr", "Gives permission to user ", false, true, user => PermissionManager.ShouldBoth(path, user)));
+            this.ParameterList.Add(new CommandParameter("-r", "Removes reading permission from a user", false, true, user => PermissionManager.ShouldntRead(path, user)));
+            this.ParameterList.Add(new CommandParameter("-w", "Removes writing permission from a user", false, true, user => PermissionManager.ShouldntWrite(path, user)));
+            this.ParameterList.Add(new CommandParameter("-wr", "Removes permission from a user", false, true, user => PermissionManager.ShouldntBoth(path, user)));
+            this.ParameterList.Add(new CommandParameter("-list", "Shows Owner and own permissions", false, true, path => PermissionManager.Display(path)));
+        }
+
+        internal override void Execute(string[] args)
+        {
+            ColorTheme.ChangeColor();
+            if (args.Length > 0)
+            {
+                ExecuteParams(args);
+            }
+            else
+            {
+                Console.WriteLine("Please specify at least one argument.");
+            }
+        }
+        
+    }*/
 }
 
 // Gabriel was here <3

@@ -4,8 +4,11 @@ using OSaft.usersystem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Tracing;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 
 
@@ -21,15 +24,15 @@ namespace OSaft.filesystem
             {
                 new PermissionEntry("0:\\", 0)
             };
-            List <User> users = UserDatabase.LoadAllUsers();
+            List<User> users = UserDatabase.LoadAllUsers();
 
             User root = users.Find(u => u.Uid.Equals(0));
             permissions.Add(new PermissionEntry("0:\\system", 0));
             permissions.Add(new PermissionEntry("0:\\users", 0));
             permissions.Add(new PermissionEntry("0:\\users\\" + root.Name, 0));
             permissions.Add(new PermissionEntry("0:\\system\\startscreen.cfg", 0));
-           // permissions.Add(new PermissionEntry("\\system\\users.db", 0));
-           // permissions.Add(new PermissionEntry("\\system\\root_init.sys", 0));
+            // permissions.Add(new PermissionEntry("\\system\\users.db", 0));
+            // permissions.Add(new PermissionEntry("\\system\\root_init.sys", 0));
 
             /*
                foreach (User u in users.Skip(1))
@@ -47,9 +50,9 @@ namespace OSaft.filesystem
         {
             if (!File.Exists(@"0:\system\rights.db"))
             {
-                
+
                 FileSystem.CreateFile("system\\rights.db");
-                
+
                 //  ls.Add(new PermissionEntry(UserAccessControl, 0));
 
             }
@@ -102,12 +105,12 @@ namespace OSaft.filesystem
                     Console.WriteLine("[RightsDB] Error parsing user line: " + e.Message);
                 }
             }
-            return list;   
+            return list;
         }
         public static void AddReading(string path, uint user)
         {
             List<PermissionEntry> entries = LoadACR();
-            if (entries.Find(e => e.Path == path)==null)
+            if (entries.Find(e => e.Path == path) == null)
             {
                 entries.Add(new PermissionEntry(path, user));
             }
@@ -138,7 +141,8 @@ namespace OSaft.filesystem
             if (entries.Find(e => e.Path == path) == null)
             {
                 entries.Add(new PermissionEntry(path, user));
-            } else
+            }
+            else
             {
                 entries.Find(e => e.Path == path)?.ReadUids.Add(user);
                 entries.Find(e => e.Path == path)?.WriteUids.Add(user);
@@ -206,6 +210,109 @@ namespace OSaft.filesystem
             return false;
 
         }
+
+        public static void ShouldWrite(string path, string name)
+        {
+            if (!TestOwner(path))
+            {
+                Console.WriteLine("[RightsDB] Error: Not the owner.");
+                return;
+            }
+            UserDatabase.VerifyUser(UserHelper.CurrentUser);
+            uint uid = UserDatabase.GetUserID(name);
+            AddWriting(path, uid);
+        }
+        public static void ShouldRead(string path, string name)
+        {
+            if (!TestOwner(path))
+            {
+                Console.WriteLine("[RightsDB] Error: Not the owner.");
+                return;
+            }
+            UserDatabase.VerifyUser(UserHelper.CurrentUser);
+            uint uid = UserDatabase.GetUserID(name);
+            AddReading(path, uid);
+        }
+        public static void ShouldBoth(string path, string name)
+        {
+            if (!TestOwner(path))
+            {
+                Console.WriteLine("[RightsDB] Error: Not the owner.");
+                return;
+            }
+            UserDatabase.VerifyUser(UserHelper.CurrentUser);
+            uint uid = UserDatabase.GetUserID(name);
+            AddRights(path, uid);
+        }
+
+        public static void ShouldntWrite(string path, string name)
+        {
+            if (!TestOwner(path))
+            {
+                Console.WriteLine("[RightsDB] Error: Not the owner.");
+                return;
+            }
+            UserDatabase.VerifyUser(UserHelper.CurrentUser);
+            uint uid = UserDatabase.GetUserID(name);
+            RemoveWriting(path, uid);
+        }
+        public static void ShouldntRead(string path, string name)
+        {
+            if (!TestOwner(path))
+            {
+                Console.WriteLine("[RightsDB] Error: Not the owner.");
+                return;
+            }
+            UserDatabase.VerifyUser(UserHelper.CurrentUser);
+            uint uid = UserDatabase.GetUserID(name);
+            RemoveReading(path, uid);
+        }
+        public static void ShouldntBoth(string path, string name)
+        {
+            if (!TestOwner(path))
+            {
+                Console.WriteLine("[RightsDB] Error: Not the owner.");
+                return;
+            }
+            UserDatabase.VerifyUser(UserHelper.CurrentUser);
+            uint uid = UserDatabase.GetUserID(name);
+            RemoveRights(path, uid);
+        }
+
+        public static void Display(string path)
+        {
+            List<PermissionEntry> entries = LoadACR();
+            PermissionEntry entry = entries.Find(e => e.Path == path);
+            if (entry == null) { Console.WriteLine("[RightsDB] Error: Entry not found or no clearance."); return; }
+            string name = UserDatabase.GetUserName(entry.OwnerUid);
+            uint uid = UserDatabase.GetUserID(UserHelper.CurrentUser);
+            string Perms = "none";
+            if (entry.ReadUids.Contains(uid))
+            {
+                Perms = "r";
+                if (entry.WriteUids.Contains(uid)) { Perms += ", w"; }
+            }
+            else
+            {
+                if (entry.WriteUids.Contains(uid))
+                { Perms = "w"; }
+            }
+
+            Console.WriteLine("Path: " + entry.Path + "owner: " + name + "your permissions: " + Perms);
+        }
+        public static bool TestOwner(string path)
+        {
+            List<PermissionEntry> entries = LoadACR();
+            PermissionEntry entry = entries.Find(e => e.Path == path);
+            if (entry == null)
+            {
+                Console.WriteLine("[RightsDB] Error: Entry not found or no clearance."); return false;
+            }
+            string user = UserDatabase.GetUserName(entry.OwnerUid);
+            if (user == UserHelper.CurrentUser) { return true; }
+            return false;
+        }
+
 
     }
 }
