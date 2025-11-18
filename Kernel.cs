@@ -56,7 +56,6 @@ namespace OSaft
 
             // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
-            
         }
 
         protected override void Run()

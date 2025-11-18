@@ -43,7 +43,7 @@ namespace OSaft.filesystem {
             {
                 if (IsRoot(newPath))
                 {
-                    return currentPath;
+                    return newPath;
                 }
                 return NormalizeAbsolutePath(newPath);
             }
@@ -87,6 +87,11 @@ namespace OSaft.filesystem {
             return result;
         }
 
+        public static string TestPath(string path)
+        {
+            return ValidatePath(path, currentPath);
+        }
+
         private static string NormalizeAbsolutePath(string path)
         {
             List<string> parts = new(path.Split("\\", StringSplitOptions.RemoveEmptyEntries));
@@ -120,14 +125,9 @@ namespace OSaft.filesystem {
             {
                 string filename = Path.GetFileName(path);
                 path = Path.GetDirectoryName(path);
-                    
-                if (isPathAbs)
-                {
-                    path = ValidatePath(currentPath + (path ?? ""), currentPath);
-                } else
-                {
-                    path = ValidatePath(path, currentPath);
-                }
+                
+
+                path = ValidatePath(path, currentPath);
                 try
                 {
                     path = path + "\\" + filename;
@@ -208,16 +208,8 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void WriteFile(string path, string content, bool isPathAbs = false) {
-            if (isPathAbs)
-            {
-                path = ValidatePath(path, currentPath);
-            }
-            else
-            {
-                path = ValidatePath(currentPath + (path ?? ""), currentPath);
-            }
-
+        public static void WriteFile(string path, string content) {
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
             try
             {
                File.WriteAllText(path, content);
@@ -236,15 +228,9 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static string ReadFile(string path, bool isPathAbs = false) {
-            if (isPathAbs)
-            {
-                path = ValidatePath(path, currentPath);
-            } else
-            {
-                path = ValidatePath(currentPath + (path ?? ""), currentPath);
-            }
-  
+        public static string ReadFile(string path) {
+            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+
             try
             {
                 return File.ReadAllText(path);
@@ -288,7 +274,6 @@ namespace OSaft.filesystem {
         public static List<string> GetFileSuggestions()
         {
             return new List<string>();
-            // Todo: Implement file and folder suggestions based on current path and partial input
         }
     }
 }
