@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Metadata;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 
 namespace OSaft.usersystem
 {
@@ -167,13 +169,18 @@ namespace OSaft.usersystem
         public static List<User> LoadAllUsers()
         {
             List<User> list = new();
-            
-            string content = FileSystem.ReadFile(@"\system\users.db");
-            if (string.IsNullOrWhiteSpace(content))
+
+            string tmp = "";
+            if (FileSystem.CurrentPath != "0:\\")
             {
-                Console.WriteLine("[UserDB] No content found in users.db");
-                return list;
+                 tmp = FileSystem.CurrentPath;
+                FileSystem.CurrentPath = "0:\\";
             }
+
+
+            string content = FileSystem.ReadFile(@"\system\users.db");
+
+
             if (dbcheck == false)
             {
                 string hashCheck = FileSystem.ReadFile(@"\system\root_init.sys");
@@ -240,7 +247,18 @@ namespace OSaft.usersystem
             {
                 throw new KeyNotFoundException("User not found: " + name);
             }
-
+        }
+        public static string GetUserName(uint uid)
+        {
+            List<User> users = LoadAllUsers();
+            User found = users.Find(u => u.Uid == uid);
+            if (found != null) {
+                return found.Name;
+            }
+            else
+            {
+                throw new KeyNotFoundException("UserID not found: " + uid);
+            }
         }
         public static void ListUsers()
         {
@@ -375,7 +393,7 @@ namespace OSaft.usersystem
             }
             else
             {
-                Console.WriteLine("Incorrect password. Access denied for user: " + name);
+                Console.WriteLine("Incorrect password. Access denied.");
                 Console.WriteLine("--------------------------------");
                 return false;
             }
