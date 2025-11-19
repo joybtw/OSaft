@@ -225,7 +225,7 @@ namespace OSaft.filesystem {
 
         public static void WriteFile(string path, string[] content)
         {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             foreach (string s in content)
             {
                 WriteFile(path, s);

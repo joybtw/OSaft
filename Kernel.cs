@@ -37,7 +37,7 @@ namespace OSaft
             Commands.CommandHelper.RegisterCommand(new Commands.FileEditCommand("edit"));
             Commands.CommandHelper.RegisterCommand(new Commands.FindCommand("find"));
             Commands.CommandHelper.RegisterCommand(new Commands.FSInfoCommand("fsinfo"));
-            Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("help"));
+            Commands.CommandHelper.RegisterCommand(new Commands.HelpCommand("rtfm"));
             Commands.CommandHelper.RegisterCommand(new Commands.LSCommand("ls"));
             Commands.CommandHelper.RegisterCommand(new Commands.MKDirCommand("mkdir"));
             Commands.CommandHelper.RegisterCommand(new Commands.RelogCommand("logout"));

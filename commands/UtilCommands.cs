@@ -4,6 +4,7 @@ using OSaft.usersystem;
 using System;
 using System.IO;
 using OSaft.utils;
+using OSaft.filesystem;
 
 namespace OSaft.commands
 {
@@ -158,7 +159,7 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no file provided.");
                     return;
                 }
-               
+
                 if (FileSystem.DeleteFile(val)) { Console.WriteLine("File " + val + " was deleted."); }
             }));
 
@@ -170,6 +171,11 @@ namespace OSaft.commands
                 }
 
                 if (FileSystem.DeleteDirectory(val)) { Console.WriteLine("Directory " + val + " was deleted."); }
+            }));
+
+            ParameterList.Add(new CommandParameter("--errortest", "Just a test. To be removed.", false, false, val =>
+            {
+                new Error(Name, "Dies ist ein Test-Error!", Error.criticality.Info, true).CreateNewLog();
             }));
         }
     }
