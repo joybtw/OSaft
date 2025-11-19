@@ -1,4 +1,5 @@
-﻿using OSaft.filesystem;
+﻿using Cosmos.Core;
+using OSaft.filesystem;
 using System;
 using System.Collections.Generic;
 
@@ -6,6 +7,7 @@ namespace OSaft.applications
 {
     internal class FileEditor
     {
+        /*
         struct Pos
         {
             public int cursorX;
@@ -719,6 +721,65 @@ namespace OSaft.applications
                     markers = SearchWord(markBuffer);
                 }
                 PrintViewport();
+            }
+        }
+        */
+        struct Pos
+        {
+            public int x;
+            public int y;
+            public Pos(int iX, int iY)
+            {
+                x = iX;
+                y = iY;
+            }
+        }
+        private static readonly Pos consoleStart = new Pos(0, 3);
+        private static readonly Pos consoleEnd = new Pos(Console.WindowWidth - 1, Console.WindowHeight - 4);
+        private static readonly int consoleWidth = consoleEnd.x - consoleStart.x + 1;
+        private static readonly int consoleHeight = consoleEnd.y - consoleStart.y + 1;
+
+        private static void printViewport(Pos cursorPos, Pos viewportPos, String file)
+        {
+            Console.Clear();
+            Console.SetCursorPosition(consoleStart.x, consoleStart.y);
+            Console.WriteLine(file);
+            Console.SetCursorPosition(cursorPos.x, cursorPos.y);
+        }
+
+        public static void EditFile(string path)
+        {
+            string file = FileSystem.ReadFile(path);
+            Console.ResetColor();
+            Console.Clear();
+            Pos CursorPos = new Pos(0, 0);
+            Pos ViewportPos = new Pos(0, 0);
+
+            printViewport(CursorPos, ViewportPos, file);
+
+            while (true)
+            {
+                var key = Console.ReadKey(true);
+                bool ctrl = (key.Modifiers & ConsoleModifiers.Control) != 0;
+                // bool shift = (key.Modifiers & ConsoleModifiers.Shift) != 0;
+                bool alt = (key.Modifiers & ConsoleModifiers.Alt) != 0;
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.X when ctrl:
+                        Console.Clear();
+                        return;
+                     case ConsoleKey.Enter:
+                        file += "\n";
+                        break;
+                    default:
+                        if (!char.IsControl(key.KeyChar) && key.KeyChar != '\0')
+                        {
+                            file += key.KeyChar.ToString();
+                        }
+                        break;
+                }
+                printViewport(CursorPos, ViewportPos, file);
             }
         }
     }
