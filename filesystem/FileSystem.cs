@@ -87,9 +87,16 @@ namespace OSaft.filesystem {
             return result;
         }
 
-        public static string TestPath(string path)
+        internal static string ValidatePath(string path)
         {
-            return ValidatePath(path, currentPath);
+            if (Path.IsPathRooted(path)) // absolute path
+            {
+                return ValidatePath(path, currentPath);
+            }
+            else // relative path
+            {
+                return ValidatePath(currentPath + (path ?? ""), currentPath);
+            }
         }
 
         private static string NormalizeAbsolutePath(string path)
@@ -124,10 +131,7 @@ namespace OSaft.filesystem {
             if (path.Contains('.'))
             {
                 string filename = Path.GetFileName(path);
-                path = Path.GetDirectoryName(path);
-                
-
-                path = ValidatePath(path, currentPath);
+                path = ValidatePath(Path.GetDirectoryName(path));
                 try
                 {
                     path = path + "\\" + filename;
@@ -155,7 +159,7 @@ namespace OSaft.filesystem {
 
 
         public static DirectoryInfo CreateDirectory(string path) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             try
             {
                 return Directory.CreateDirectory(path);
@@ -169,7 +173,7 @@ namespace OSaft.filesystem {
 
         public static bool DeleteDirectory(string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             if (!Directory.Exists(path))
             {
                 Console.WriteLine("DeleteDirectory: Directory \"" + path + "\" not found.");
@@ -189,7 +193,7 @@ namespace OSaft.filesystem {
 
         public static bool DeleteFile(string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             if (!File.Exists(path))
             {
                 Console.WriteLine("DeleteFile: File \"" + path + "\" not found");
@@ -209,7 +213,7 @@ namespace OSaft.filesystem {
         }
 
         public static void WriteFile(string path, string content) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             try
             {
                File.WriteAllText(path, content);
@@ -229,12 +233,12 @@ namespace OSaft.filesystem {
         }
 
         public static string ReadFile(string path) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
-
+            path = ValidatePath(path);
             try
             {
                 return File.ReadAllText(path);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("ReadFile: Exception thrown: " + e.Message);
                 return null;
@@ -245,7 +249,7 @@ namespace OSaft.filesystem {
         {
             if (string.IsNullOrEmpty(filename)) { return Array.Empty<string>(); }
             path ??= currentPath;
-            path = ValidatePath(path, currentPath);
+            path = ValidatePath(path);
             List<string> paths = new();
 
             try
