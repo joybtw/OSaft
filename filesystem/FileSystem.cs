@@ -43,7 +43,7 @@ namespace OSaft.filesystem {
             {
                 if (IsRoot(newPath))
                 {
-                    return currentPath;
+                    return newPath;
                 }
                 return NormalizeAbsolutePath(newPath);
             }
@@ -87,6 +87,18 @@ namespace OSaft.filesystem {
             return result;
         }
 
+        internal static string ValidatePath(string path)
+        {
+            if (Path.IsPathRooted(path)) // absolute path
+            {
+                return ValidatePath(path, currentPath);
+            }
+            else // relative path
+            {
+                return ValidatePath(currentPath + (path ?? ""), currentPath);
+            }
+        }
+
         private static string NormalizeAbsolutePath(string path)
         {
             List<string> parts = new(path.Split("\\", StringSplitOptions.RemoveEmptyEntries));
@@ -119,15 +131,7 @@ namespace OSaft.filesystem {
             if (path.Contains('.'))
             {
                 string filename = Path.GetFileName(path);
-                path = Path.GetDirectoryName(path);
-                    
-                if (isPathAbs)
-                {
-                    path = ValidatePath(currentPath + (path ?? ""), currentPath);
-                } else
-                {
-                    path = ValidatePath(path, currentPath);
-                }
+                path = ValidatePath(Path.GetDirectoryName(path));
                 try
                 {
                     path = path + "\\" + filename;
@@ -155,7 +159,7 @@ namespace OSaft.filesystem {
 
 
         public static DirectoryInfo CreateDirectory(string path) {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             try
             {
                 return Directory.CreateDirectory(path);
@@ -169,7 +173,7 @@ namespace OSaft.filesystem {
 
         public static bool DeleteDirectory(string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             if (!Directory.Exists(path))
             {
                 Console.WriteLine("DeleteDirectory: Directory \"" + path + "\" not found.");
@@ -189,7 +193,7 @@ namespace OSaft.filesystem {
 
         public static bool DeleteFile(string path)
         {
-            path = ValidatePath(currentPath + (path ?? ""), currentPath);
+            path = ValidatePath(path);
             if (!File.Exists(path))
             {
                 Console.WriteLine("DeleteFile: File \"" + path + "\" not found");
@@ -208,16 +212,8 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static void WriteFile(string path, string content, bool isPathAbs = false) {
-            if (isPathAbs)
-            {
-                path = ValidatePath(path, currentPath);
-            }
-            else
-            {
-                path = ValidatePath(currentPath + (path ?? ""), currentPath);
-            }
-
+        public static void WriteFile(string path, string content) {
+            path = ValidatePath(path);
             try
             {
                File.WriteAllText(path, content);
@@ -236,19 +232,13 @@ namespace OSaft.filesystem {
             }
         }
 
-        public static string ReadFile(string path, bool isPathAbs = false) {
-            if (isPathAbs)
-            {
-                path = ValidatePath(path, currentPath);
-            } else
-            {
-                path = ValidatePath(currentPath + (path ?? ""), currentPath);
-            }
-  
+        public static string ReadFile(string path) {
+            path = ValidatePath(path);
             try
             {
                 return File.ReadAllText(path);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("ReadFile: Exception thrown: " + e.Message);
                 return null;
@@ -259,7 +249,7 @@ namespace OSaft.filesystem {
         {
             if (string.IsNullOrEmpty(filename)) { return Array.Empty<string>(); }
             path ??= currentPath;
-            path = ValidatePath(path, currentPath);
+            path = ValidatePath(path);
             List<string> paths = new();
 
             try
@@ -285,5 +275,9 @@ namespace OSaft.filesystem {
             return paths.ToArray();
         }
 
+        public static List<string> GetFileSuggestions()
+        {
+            return new List<string>();
+        }
     }
 }

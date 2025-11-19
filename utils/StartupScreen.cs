@@ -20,11 +20,11 @@ namespace OSaft.utils
         {
             if (!File.Exists(path)) {
                 FileSystem.CreateFile(path);
-                FileSystem.WriteFile(path, "1", true);
+                FileSystem.WriteFile(path, "1");
                 IsActive = true;
             } else
             {
-                string content = FileSystem.ReadFile(@"0:\system\startscreen.cfg", true) ?? "0";
+                string content = FileSystem.ReadFile(@"0:\system\startscreen.cfg") ?? "0";
                 IsActive = content == "1";
             }
 
@@ -172,7 +172,7 @@ namespace OSaft.utils
         {
             IsActive = !IsActive;
             string content = IsActive ? "1": "0";
-            FileSystem.WriteFile(path, content, true);
+            FileSystem.WriteFile(path, content);
         }
 
     }

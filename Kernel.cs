@@ -30,6 +30,7 @@ namespace OSaft
 
 
             // Commands Registry 
+            Commands.CommandHelper.RegisterCommand(new Commands.CheckDBIntegrityCommand("check_database_integrity"));
             Commands.CommandHelper.RegisterCommand(new Commands.CDCommand("cd"));
             Commands.CommandHelper.RegisterCommand(new Commands.ClearCommand("clear"));
             Commands.CommandHelper.RegisterCommand(new Commands.ClockCommand("clock"));
@@ -43,8 +44,8 @@ namespace OSaft
             Commands.CommandHelper.RegisterCommand(new Commands.RMCommand("rm"));
             Commands.CommandHelper.RegisterCommand(new Commands.RebootCommand("reboot"));
             Commands.CommandHelper.RegisterCommand(new Commands.ShutdownCommand("shutdown"));
-            Commands.CommandHelper.RegisterCommand(new Commands.ToggleStartScreenCommand("togglestartscreen"));
-            Commands.CommandHelper.RegisterCommand(new Commands.ToggleClockCommand("toggleclock"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ToggleStartScreenCommand("toggle_startscreen"));
+            Commands.CommandHelper.RegisterCommand(new Commands.ToggleClockCommand("toggle_clock"));
             Commands.CommandHelper.RegisterCommand(new Commands.TouchCommand("touch"));
             Commands.CommandHelper.RegisterCommand(new Commands.UserCommand("user"));
             Commands.CommandHelper.RegisterCommand(new Commands.VersionCommand("version"));
@@ -55,14 +56,13 @@ namespace OSaft
 
             // FileSystem Init
             FileSystem.CurrentPath = "0:\\";
-            
         }
 
         protected override void Run()
         {
             // Input Handling
             ColorTheme.ChangeColor();
-            string input = Shell.ReadLineWithHistory(Clock.GetShortTime() + " - " + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
+            string input = Shell.ReadLineWithHistory(Clock.GetShortTime() + UserHelper.CurrentUser + "@" + FileSystem.CurrentPath + "> ");
             Commands.CommandHelper.ExecuteCommand(input);
         }
     }

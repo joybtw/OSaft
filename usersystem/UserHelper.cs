@@ -1,8 +1,11 @@
+
+using OSaft.applications;
 using OSaft.filesystem;
 using OSaft.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Metadata;
 
 namespace OSaft.usersystem
 {
@@ -27,7 +30,6 @@ namespace OSaft.usersystem
                 return;
             }
             ColorTheme.ApplyTheme();
-            // Erster Systemstart -> Root-User erstellen
             Console.WriteLine("This is the first boot of OSaft. Please create a user.");
 
             string name;
@@ -41,10 +43,11 @@ namespace OSaft.usersystem
             do
             {
                 Console.Write("Enter password: ");
-                Console.ForegroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 password = Console.ReadLine();
-                Console.ResetColor();
+                ColorTheme.ApplyTheme();
             } while (password == null);
+            Console.WriteLine("Getting ready. This may take a moment. May you get a cup of coffee.");
 
             User rootUser = new(name, password, null, true, 0, false);
 
@@ -56,7 +59,7 @@ namespace OSaft.usersystem
                 FileSystem.CreateDirectory("users");
             FileSystem.CreateDirectory(@"users\" + name);
             FileSystem.CreateFile(@"system\root_init.sys");
-            StartupScreen.Toggle();
+            //StartupScreen.Toggle();
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
 
             ColorTheme.ChangeColor();
@@ -86,7 +89,7 @@ namespace OSaft.usersystem
                     //Console.WriteLine("Skip Login with 'dev'");
                     Console.Write("Enter user name: ");
                     name = Console.ReadLine();
-                   // if (name == "dev") { return; }
+                    // if (name == "dev") { return; }
                 }
                 User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                 ColorTheme.ChangeColor();
@@ -122,26 +125,40 @@ namespace OSaft.usersystem
     public static class UserDatabase
     {
         private static readonly string user_db_path = @"\system\users.db";
+        private static bool dbcheck = false;
+        private static bool dblocked = false;
 
         public static void DBInit()
         {
             if (!File.Exists(@"0:\system\users.db"))
             {
-                FileSystem.CreateFile(user_db_path);
-            }    
-            
+
+                FileSystem.CreateFile(@"system\users.db");
+
+            }
+
         }
 
         public static void SaveAllUsers(List<User> users)
         {
-           DBInit();
+            DBInit();
 
             string sb = "";
             foreach (User u in users)
             {
                 sb += (u.Name + '|' + u.PasswordHash + '|' + u.Salt + '|' + (u.IsSuperuser ? '1' : '0') + '|' + u.Uid.ToString() + '\n');
             }
+            if (dblocked == true)
+            {
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("[UserDB] ERROR: Changes rejected! Changes are currently blocked.");
+                Console.WriteLine("--------------------------------");
+                dbcheck = false;
+                return;
+            }
             FileSystem.WriteFile(user_db_path, sb);
+            FileSystem.WriteFile(@"\system\root_init.sys", OSaftSecurity.FNV1a(sb));
+            dbcheck = false;
             ColorTheme.ChangeColor();
             Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
         }
@@ -156,7 +173,19 @@ namespace OSaft.usersystem
                 Console.WriteLine("[UserDB] No content found in users.db");
                 return list;
             }
-
+            if (dbcheck == false)
+            {
+                string hashCheck = FileSystem.ReadFile(@"\system\root_init.sys");
+                if (OSaftSecurity.FNV1a(content) != hashCheck)
+                {
+                    Console.WriteLine("--------------------------------");
+                    Console.WriteLine("[UserDB] Warning: users.db integrity check failed! Files could be corrupted!");
+                    Console.WriteLine("No recovery available. You are on yourself. Good Luck!");
+                    Console.WriteLine("--------------------------------");
+                    dbcheck = true;
+                    dblocked = true;
+                } else { dblocked = false; }
+            }
             string[] lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             foreach (string line in lines)
             {
@@ -209,6 +238,7 @@ namespace OSaft.usersystem
             {
                 throw new KeyNotFoundException("User not found: " + name);
             }
+            
         }
         public static void ListUsers()
         {
@@ -238,10 +268,10 @@ namespace OSaft.usersystem
             string password;
             do
             {
-                Console.Write("Enter password for "+ name +": ");
+                Console.Write("Enter password for " + name + ": ");
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 password = Console.ReadLine();
-                ColorTheme.ChangeColor(); 
+                ColorTheme.ChangeColor();
             } while (password == null);
 
             bool sudo = false;
@@ -276,15 +306,16 @@ namespace OSaft.usersystem
             users.Add(newUser);
             FileSystem.CreateDirectory($@"users\{name}");
             SaveAllUsers(users);
+            if (dblocked == true) { return; }
             Console.WriteLine("User added successfully: " + name);
-          
+
         }
         public static void RemoveUser(string name)
         {
             if (name == UserHelper.CurrentUser)
             {
-                Console.WriteLine("You can't delete yourself!"); 
-                return; 
+                Console.WriteLine("You can't delete yourself!");
+                return;
             }
             List<User> users = LoadAllUsers();
             User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -301,10 +332,12 @@ namespace OSaft.usersystem
             }
             users.Remove(found);
             SaveAllUsers(users);
+            if (dblocked == true) { return; }
             if (FileSystem.DeleteDirectory($@"users\{name}"))
             {
                 Console.WriteLine("User removed successfully: " + name);
-            } else
+            }
+            else
             {
                 Console.WriteLine("Couldn't removed User " + name + ". ");
             }
@@ -312,18 +345,27 @@ namespace OSaft.usersystem
         public static bool VerifyUser(string name)
         {
             List<User> users = LoadAllUsers();
-            User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
+            User found;
+            try
+            {
+                found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            }
+            catch
+            {
+                Console.WriteLine("User not found: " + name);
+                return false;
+            }
             Console.WriteLine("Verifying user: " + name);
 
-                Console.Write("Enter password for user " + name + ": ");
-                Console.ForegroundColor = ConsoleColor.Black;
-                string password = Console.ReadLine();
-                Console.ResetColor();
+            Console.Write("Enter password for user " + name + ": ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            string password = Console.ReadLine();
+            ColorTheme.ChangeColor();
 
             if ((found.PasswordHash == User.ComputeFNV1a(password + found.Salt)))
             {
-                ColorTheme.ChangeColor();   
+                ColorTheme.ChangeColor();
                 Console.WriteLine("User verified successfully: " + name);
                 Console.WriteLine("--------------------------------");
                 return true;
@@ -335,6 +377,27 @@ namespace OSaft.usersystem
                 return false;
             }
         }
+
+        public static void Chdbin()
+        {
+            string content = FileSystem.ReadFile(user_db_path);
+            string hashCheck = FileSystem.ReadFile(@"\system\root_init.sys");
+            if (OSaftSecurity.FNV1a(content) != hashCheck)
+            {
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("[UserDB] Warning: users.db integrity check failed! Files could be corrupted!");
+                Console.WriteLine("No recovery available. You are on yourself. Good Luck!");
+                Console.WriteLine("--------------------------------");
+                dbcheck = true;
+                dblocked = true;
+            }
+            else 
+            { 
+             dblocked = false;
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine("[UserDB] Integrity check passed.");
+                Console.WriteLine("--------------------------------");
+            }
+        }
     }
 }
-

@@ -10,14 +10,14 @@ namespace OSaft.commands
 {
     public class HelpCommand : Command
     {
-        public HelpCommand(string name) : base(name, "Displays all commands.")
+        public HelpCommand(string name) : base(name, "Displays all Commands.")
         {
             this.ParameterList = new();
         }
         internal override void Execute(string[] args)
         {
             Console.WriteLine("Alle Befehle: ");
-            foreach (Command command in CommandHelper.commands.Values)
+            foreach (Command command in CommandHelper.Commands.Values)
             {
                 Console.WriteLine(command.Name + " - " + command.Description);
             }
@@ -169,6 +169,7 @@ namespace OSaft.commands
                     Console.WriteLine(Name + ": Error: no directory provided.");
                     return;
                 }
+
                 if (FileSystem.DeleteDirectory(val)) { Console.WriteLine("Directory " + val + " was deleted."); }
             }));
 
@@ -261,6 +262,16 @@ namespace OSaft.commands
         internal override void Execute(string[] args)
         {
             if (args.Length == 0) { StartupScreen.Toggle(); }
+            ExecuteParams(args);
+        }
+    }
+
+    public class CheckDBIntegrityCommand : Command
+    {
+        public CheckDBIntegrityCommand(string name) : base(name, "Checks the integrity of the user database.\n                           Unblocks/Blocks changes to DB depending on current\n                           integrity state.") { }
+        internal override void Execute(string[] args)
+        {
+            if (args.Length == 0) { UserDatabase.Chdbin(); }
             ExecuteParams(args);
         }
     }
