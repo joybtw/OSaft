@@ -64,6 +64,7 @@ namespace OSaft.filesystem
             {
                 FileSystem.WriteFile(rights_db, final);
                 FileSystem.WriteFile(db_hash, OSaftSecurity.FNV1a(final));
+                Console.WriteLine("[RightsDB] Saved " + list.Count + " entries");
 
             }
             catch (Exception e)
