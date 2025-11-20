@@ -1,5 +1,4 @@
-﻿
-using OSaft.commands;
+﻿using OSaft.commands;
 using OSaft.filesystem;
 using System;
 using System.Collections.Generic;
@@ -268,12 +267,6 @@ namespace OSaft.utils
 
         private static List<string> GetSugggestions(string[] tokens)
         {
-            // First token: command names
-            foreach (string token in tokens)
-            {
-                Console.WriteLine("Token: " + token);
-            }
-
             List<string> suggestions = new();
             if (tokens.Length <= 1) { suggestions.AddRange(CommandHelper.Commands.Keys.ToList()); }
             else

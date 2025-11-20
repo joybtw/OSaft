@@ -173,7 +173,7 @@ namespace OSaft.utils
         public static void Toggle()
         {
             IsActive = !IsActive;
-            string content = IsActive ? "1" : "0";
+            string content = IsActive ? "1": "0";
             FileSystem.WriteFile(path, content);
         }
 
