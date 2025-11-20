@@ -3,6 +3,7 @@ using OSaft.filesystem;
 using OSaft.usersystem;
 using OSaft.utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,6 +38,7 @@ namespace OSaft.filesystem
                 permissions.Add(new PermissionEntry($@"0:\users\{root.Name}\", root.Uid));
 
             SavePermissions(permissions);
+            Console.WriteLine("[RightsDB] Saved " + permissions.Count + " entries");
         }
 
         public static void SavePermissions(List<PermissionEntry> list)
@@ -64,7 +66,6 @@ namespace OSaft.filesystem
             {
                 FileSystem.WriteFile(rights_db, final);
                 FileSystem.WriteFile(db_hash, OSaftSecurity.FNV1a(final));
-                Console.WriteLine("[RightsDB] Saved " + list.Count + " entries");
 
             }
             catch (Exception e)
@@ -158,6 +159,7 @@ namespace OSaft.filesystem
                 e.ReadUids.Add(user);
 
             SavePermissions(entries);
+            Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
         }
 
         public static void AddWriting(string path, uint user)
@@ -169,6 +171,7 @@ namespace OSaft.filesystem
                 e.WriteUids.Add(user);
 
             SavePermissions(entries);
+            Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
         }
 
         public static void AddRights(string path, uint user)
@@ -193,6 +196,7 @@ namespace OSaft.filesystem
             if (e != null) e.WriteUids.Remove(user);
 
             SavePermissions(entries);
+            Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
         }
 
         public static void RemoveRights(string path, uint user)
@@ -209,6 +213,7 @@ namespace OSaft.filesystem
             {
                 entries.Remove(e);
                 SavePermissions(entries);
+                Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
                 return;
             }
             throw new Exception("internal error");
@@ -255,6 +260,7 @@ namespace OSaft.filesystem
             if (e == null)
                 return false;
                 uint uid = UserDatabase.GetUserID(UserHelper.CurrentUser);
+            Console.WriteLine(e.OwnerUid+ " + " +uid);
             return e.OwnerUid == uid;
         }
 
@@ -278,6 +284,7 @@ namespace OSaft.filesystem
             e.OwnerUid = newUid;
 
             SavePermissions(entries);
+            Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
         }
 
         public static void Display(string path)
