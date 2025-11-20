@@ -126,7 +126,7 @@ namespace OSaft.filesystem {
             return drivePrefix + "\\" + string.Join("\\", finalParts.ToArray());
         }
 
-        public static FileStream CreateFile(string path, bool isPathAbs = false) {
+        public static FileStream CreateFile(string path) {
 
             if (path.Contains('.'))
             {
