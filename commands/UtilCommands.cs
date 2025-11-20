@@ -224,6 +224,11 @@ namespace OSaft.commands
                     PermissionManager.RemoveEntry(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath));
                 }
             }));
+
+            ParameterList.Add(new CommandParameter("--errortest", "Just a test. To be removed.", false, false, val =>
+            {
+                new Error(Name, "Dies ist ein Test-Error!", Error.criticality.Info, true).CreateNewLog();
+            }));
         }
     }
 

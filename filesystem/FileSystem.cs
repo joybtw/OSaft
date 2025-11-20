@@ -129,8 +129,7 @@ namespace OSaft.filesystem
             return drivePrefix + "\\" + string.Join("\\", finalParts.ToArray());
         }
 
-        public static FileStream CreateFile(string path, bool isPathAbs = false)
-        {
+        public static FileStream CreateFile(string path) {
 
             if (path.Contains('.'))
             {
@@ -162,8 +161,7 @@ namespace OSaft.filesystem
         }
 
 
-        public static DirectoryInfo CreateDirectory(string path)
-        {
+        public static DirectoryInfo CreateDirectory(string path) {
             path = ValidatePath(path);
             try
             {
@@ -217,8 +215,7 @@ namespace OSaft.filesystem
             }
         }
 
-        public static void WriteFile(string path, string content)
-        {
+        public static void WriteFile(string path, string content) {
             path = ValidatePath(path);
             try
             {
@@ -239,8 +236,7 @@ namespace OSaft.filesystem
             }
         }
 
-        public static string ReadFile(string path)
-        {
+        public static string ReadFile(string path) {
             path = ValidatePath(path);
             try
             {
