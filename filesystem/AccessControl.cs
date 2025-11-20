@@ -271,7 +271,6 @@ namespace OSaft.filesystem
                 Console.WriteLine("[RightsDB] Error: Not the owner.");
                 return;
             }
-
             List<PermissionEntry> entries = LoadACR();
             PermissionEntry e = entries.Find(x => x.Path == path);
             if (e == null)
