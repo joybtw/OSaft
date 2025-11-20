@@ -462,7 +462,7 @@ namespace OSaft.commands
 
 
                 default:
-                    throw new Exception("Error: invalid permstring try: +r, +w, +rw, -r, -w or -rw  = " + permString + " + " + path + " + " + user);
+                    throw new Exception("Error: invalid permstring try: +r, +w, +rw, -r, -w or -rw  = ");
 
             }
         }
@@ -481,7 +481,9 @@ namespace OSaft.commands
    
     public class ShowRightsCommand : Command
     {
-        public ShowRightsCommand(string name) : base(name, "Displays Owner of a directory and the permissions of the current user for it. ") { }
+        public ShowRightsCommand(string name) : base(name, "Displays Owner of a directory and the permissions of the current user for it. ") { 
+        
+        }
         internal override void Execute(string[] args)
         {
             string path = "";
@@ -490,6 +492,7 @@ namespace OSaft.commands
             {
                 path = args[0];
                 path = FileSystem.ValidatePath(path, FileSystem.CurrentPath);
+
             }
             PermissionManager.Display(path);
             ExecuteParams(args);
