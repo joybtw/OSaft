@@ -1,11 +1,10 @@
 ﻿using Cosmos.System.Graphics;
 using Cosmos.System.Graphics.Fonts;
-using OSaft.filesystem;
-using OSaft.usersystem;
 using System;
-using System.Drawing;
 using System.IO;
+using System.Drawing;
 using System.Threading;
+using OSaft.filesystem;
 using Sys = Cosmos.System;
 
 namespace OSaft.utils
@@ -22,13 +21,13 @@ namespace OSaft.utils
             if (!File.Exists(path))
             {
                 FileSystem.CreateFile(path);
-                FileSystem.WriteFile(path, "StartScreen = true\n", true);
+                FileSystem.WriteFile(path, "1");
                 IsActive = true;
             }
             else
             {
-                string content = FileSystem.ReadFile(@"0:\system\startscreen.cfg", true) ?? "StartScreen = false\n";
-                IsActive = content == "StartScreen = true\n";
+                string content = FileSystem.ReadFile(@"0:\system\startscreen.cfg") ?? "0";
+                IsActive = content == "1";
             }
 
             if (IsActive)
@@ -173,17 +172,9 @@ namespace OSaft.utils
 
         public static void Toggle()
         {
-            {
-
-                if (!PermissionManager.CanWrite(path, UserDatabase.GetUserID(UserHelper.CurrentUser)))
-                {
-                    Console.WriteLine("Error: No permission to use this command.");
-                    return;
-                }
-                IsActive = !IsActive;
-                string content = IsActive ? "StartScreen = true\n" : "StartScreen = false\n";
-                FileSystem.WriteFile(path, content, true);
-            }
+            IsActive = !IsActive;
+            string content = IsActive ? "1" : "0";
+            FileSystem.WriteFile(path, content);
         }
 
     }

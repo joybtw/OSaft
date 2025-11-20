@@ -5,6 +5,7 @@ using OSaft.utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
@@ -54,13 +55,13 @@ namespace OSaft.usersystem
             User rootUser = new(name, password, null, true, 0, false);
 
 
-            if (!Directory.Exists("system"))
-                FileSystem.CreateDirectory("system");
+            if (!Directory.Exists("0:\\system"))
+                FileSystem.CreateDirectory("0:\\system");
 
-            if (!Directory.Exists("users"))
-                FileSystem.CreateDirectory("users");
-            FileSystem.CreateDirectory(@"users\" + name);
-            FileSystem.CreateFile(@"system\root_init.sys");
+            if (!Directory.Exists("0:\\users"))
+                FileSystem.CreateDirectory("0\\users\\");
+            FileSystem.CreateDirectory(@"0:\users\" + name);
+            FileSystem.CreateFile(@"0:\system\root_init.sys");
             //StartupScreen.Toggle();
             UserDatabase.SaveAllUsers(new List<User> { rootUser });
             PermissionManager.CreateDefaultPermissions();
@@ -127,16 +128,16 @@ namespace OSaft.usersystem
 
     public static class UserDatabase
     {
-        private static readonly string user_db_path = @"\system\users.db";
+        private static readonly string user_db_path = @"0:\system\users.db";
         private static bool dbcheck = false;
         private static bool dblocked = false;
 
         public static void DBInit()
         {
-            if (!File.Exists(@"0:\system\users.db"))
+            if (!File.Exists(user_db_path))
             {
 
-                FileSystem.CreateFile(@"system\users.db");
+                FileSystem.CreateFile(user_db_path);
 
             }
 
@@ -160,7 +161,7 @@ namespace OSaft.usersystem
                 return;
             }
             FileSystem.WriteFile(user_db_path, sb);
-            FileSystem.WriteFile(@"\system\root_init.sys", OSaftSecurity.FNV1a(sb));
+            FileSystem.WriteFile(@"0:\system\root_init.sys", (OSaftSecurity.FNV1a(sb)));
             dbcheck = false;
             ColorTheme.ChangeColor();
             Console.WriteLine("[UserDB] Saved " + users.Count + " user(s)");
@@ -170,20 +171,12 @@ namespace OSaft.usersystem
         {
             List<User> list = new();
 
-            string tmp = "";
-            if (FileSystem.CurrentPath != "0:\\")
-            {
-                 tmp = FileSystem.CurrentPath;
-                FileSystem.CurrentPath = "0:\\";
-            }
-
-
-            string content = FileSystem.ReadFile(@"\system\users.db");
+            string content = File.ReadAllText(user_db_path);
 
 
             if (dbcheck == false)
             {
-                string hashCheck = FileSystem.ReadFile(@"\system\root_init.sys");
+                string hashCheck = FileSystem.ReadFile(@"0:\system\root_init.sys");
                 if (OSaftSecurity.FNV1a(content) != hashCheck)
                 {
                     Console.WriteLine("--------------------------------");
@@ -241,7 +234,9 @@ namespace OSaft.usersystem
             User found = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (found != null)
             {
-                return found.Uid;
+                uint uid = found.Uid;
+                return uid;
+                
             }
             else
             {
@@ -252,7 +247,8 @@ namespace OSaft.usersystem
         {
             List<User> users = LoadAllUsers();
             User found = users.Find(u => u.Uid == uid);
-            if (found != null) {
+            if (found != null)
+            {
                 return found.Name;
             }
             else
@@ -366,7 +362,6 @@ namespace OSaft.usersystem
         public static bool VerifyUser(string name)
         {
             List<User> users = LoadAllUsers();
-
             User found;
             try
             {
@@ -399,10 +394,124 @@ namespace OSaft.usersystem
             }
         }
 
+        public static void ChangePw()
+        {
+            string name = UserHelper.CurrentUser;
+            if (!VerifyUser(name)) { return; }
+            List<User> users = LoadAllUsers();
+            User user = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            
+            string password;
+            do
+            {
+                Console.Write("Enter new password for " + name + ": ");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                password = Console.ReadLine();
+                ColorTheme.ChangeColor();
+            } while (password == null);
+
+            User newUser = new(name, password, null, user.IsSuperuser, (uint)user.Uid, false);
+            users.Remove(user);
+            users.Add(newUser);
+            SaveAllUsers(users);
+            if (dblocked == true) { return; }
+            Console.WriteLine("Password changed successful: " + name);
+            UserHelper.LoginUser();
+        }
+
+        public static void ChangeName(string oldname, string newname)
+        {
+            if (GetUserState(UserHelper.CurrentUser) != true)
+            {
+                Console.WriteLine("Error: No permission!");
+                return;
+            }
+            if (oldname == UserHelper.CurrentUser) {
+                Console.WriteLine("Can not change name of current active user.");
+                return; }
+
+            List <User> users = LoadAllUsers();
+
+            User user = users.Find(u => u.Name.Equals(oldname, StringComparison.OrdinalIgnoreCase));
+
+            User newUser = new(newname, user.PasswordHash, user.Salt, user.IsSuperuser, (uint)user.Uid, true);
+            users.Remove(user);
+            users.Add(newUser);
+            SaveAllUsers(users);
+            if (dblocked == true) { return; }
+            Console.WriteLine("Name changed successful: " + newname);
+
+        }
+
+        public static void MakeSudo(string name)
+        {
+            if (GetUserState(UserHelper.CurrentUser) != true)
+            {
+                Console.WriteLine("Error: No permission!");
+                return;
+            }
+            if (!VerifyUser(UserHelper.CurrentUser)) { return; }
+
+            List<User> users = LoadAllUsers();
+
+            User user = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (user.IsSuperuser == true)
+            {
+                Console.WriteLine("User is alreader a sudo user.");
+                return;
+            }
+            User newUser = new(user.Name, user.PasswordHash, user.Salt, true, (uint)user.Uid, true);
+            users.Remove(user);
+            users.Add(newUser);
+            SaveAllUsers(users);
+            if (dblocked == true) { return; }
+
+            PermissionManager.AddWriting("0:\\", newUser.Uid);
+            PermissionManager.AddWriting("0:\\users\\", newUser.Uid);
+            PermissionManager.AddRights("0:\\system\\", newUser.Uid);
+            PermissionManager.AddRights("0:\\system\\startscreen.cfg", newUser.Uid);
+
+            Console.WriteLine(user.Name + " is now a sudo user. ");
+        }
+
+        public static void DeSudo(string name)
+        {
+
+            if (GetUserState(UserHelper.CurrentUser) != true)
+            {
+                Console.WriteLine("Error: No permission!");
+                return;
+            }
+            if (!VerifyUser(UserHelper.CurrentUser)) { return; }
+            List<User> users = LoadAllUsers();
+
+            User user = users.Find(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+
+            if (user.Uid == 0) { Console.WriteLine("You can't kill the gardener!"); return; }
+            if (user.IsSuperuser == false)
+            {
+                Console.WriteLine("User is alreader a normal user.");
+                return;
+            }
+            User newUser = new(user.Name, user.PasswordHash, user.Salt, false, (uint)user.Uid, true);
+            users.Remove(user);
+            users.Add(newUser);
+            SaveAllUsers(users);
+            if (dblocked == true) { return; }
+
+            PermissionManager.RemoveWriting("0:\\", newUser.Uid);
+            PermissionManager.RemoveWriting("0:\\users\\", newUser.Uid);
+            PermissionManager.RemoveRights("0:\\system\\", newUser.Uid);
+            PermissionManager.RemoveRights("0:\\system\\startscreen.cfg", newUser.Uid);
+
+            Console.WriteLine(user.Name + " is now a normal user. ");
+        }
+
+
         public static void Chdbin()
         {
             string content = FileSystem.ReadFile(user_db_path);
-            string hashCheck = FileSystem.ReadFile(@"\system\root_init.sys");
+            string hashCheck = FileSystem.ReadFile(@"0:\system\root_init.sys");
             if (OSaftSecurity.FNV1a(content) != hashCheck)
             {
                 Console.WriteLine("--------------------------------");
