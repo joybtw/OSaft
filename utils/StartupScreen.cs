@@ -18,11 +18,13 @@ namespace OSaft.utils
 
         public static void Init()
         {
-            if (!File.Exists(path)) {
+            if (!File.Exists(path))
+            {
                 FileSystem.CreateFile(path);
                 FileSystem.WriteFile(path, "1");
                 IsActive = true;
-            } else
+            }
+            else
             {
                 string content = FileSystem.ReadFile(@"0:\system\startscreen.cfg") ?? "0";
                 IsActive = content == "1";

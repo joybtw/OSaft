@@ -1,9 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Sys = Cosmos.System;
 
-namespace OSaft.filesystem {
+namespace OSaft.filesystem
+{
     public static class FileSystem
     {
         public static readonly Sys.FileSystem.CosmosVFS Instance = new();
@@ -14,7 +16,8 @@ namespace OSaft.filesystem {
             set => currentPath = ValidatePath(value, currentPath);
         }
 
-        private static bool IsRoot(string path) {
+        private static bool IsRoot(string path)
+        {
             if (path.Contains(":\\"))
             {
                 DirectoryInfo info = new(path);
@@ -28,7 +31,7 @@ namespace OSaft.filesystem {
             if (string.IsNullOrWhiteSpace(currentPath))
             {
                 Console.WriteLine("Current Path cannot be null or empty");
-                return "0:\\"; 
+                return "0:\\";
             }
             if (string.IsNullOrWhiteSpace(newPath))
             {
@@ -216,8 +219,9 @@ namespace OSaft.filesystem {
             path = ValidatePath(path);
             try
             {
-               File.WriteAllText(path, content);
-            } catch (Exception e) 
+                File.WriteAllText(path, content);
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("WriteFile: Exception thrown: " + e.Message);
             }
@@ -267,7 +271,8 @@ namespace OSaft.filesystem {
                 {
                     paths.AddRange(FindFile(filename, path + "\\" + dir));
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine("Error: Accessing path: " + path + " (" + (string.IsNullOrEmpty(e.Message) ? "IO Error" : e.Message) + ")");
             }
