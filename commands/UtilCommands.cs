@@ -84,7 +84,7 @@ namespace OSaft.commands
         public FileEditCommand(string name) : base(name, "Opens the fileeditor for a existing file specified.")
         {
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to editable fale", true, false, val =>
-            {
+            { /*
                 
                  if (!PermissionManager.CanWrite(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
                  {
@@ -96,6 +96,7 @@ namespace OSaft.commands
                      Console.WriteLine("Error: No permission to read this file.");
                      return;
                  }
+                */
                 FileEditor.EditFile(val);
 
                 ColorTheme.ApplyTheme();
@@ -505,14 +506,24 @@ namespace OSaft.commands
         private string path;
         private string user;
         public ChangeOwnerCommand(string name) : base(name, "Exchanges the owner of a file or directory") 
-        {
+        {/*
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to permission", true, false, (val) => path = val));
             this.ParameterList.Insert(1, new CommandParameter("user", "User for permission", true, false, (val) => user = val));
+            */
         }
 
         internal override void Execute(string[] args)
         {
-            if (args.Length > 0) { 
+            string path = FileSystem.ValidatePath(args[0], FileSystem.CurrentPath);
+            string user = args[1];
+            Console.WriteLine("path + user");
+            if (args.Length > 0) {
+                if (!PermissionManager.TestOwner(path))
+                {
+                    Console.WriteLine("[RightsDB] Error: Not the owner.");
+                    return;
+                }
+
                 PermissionManager.ChangeOwner(path, user);
                 ExecuteParams(args);
             }

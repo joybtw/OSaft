@@ -162,7 +162,7 @@ namespace OSaft.filesystem
             Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
         }
 
-        public static void AddWriting(string path, uint user)
+        public static void AddWriting(string path, uint user, bool skip =false)
         {
             List<PermissionEntry> entries = LoadACR();
             PermissionEntry e = GetOrCreate(entries, path, user);
@@ -171,13 +171,17 @@ namespace OSaft.filesystem
                 e.WriteUids.Add(user);
 
             SavePermissions(entries);
-            Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
+            if (!skip)
+            {
+                Console.WriteLine("[RightsDB] Saved " + entries.Count + " entries");
+            }
         }
 
         public static void AddRights(string path, uint user)
         {
             AddReading(path, user);
-            AddWriting(path, user);
+            bool skip = true;
+            AddWriting(path, user, skip);
         }
 
         public static void RemoveReading(string path, uint user)
