@@ -50,7 +50,7 @@ namespace OSaft.usersystem
                 password = Console.ReadLine();
                 ColorTheme.ApplyTheme();
             } while (password == null);
-            Console.WriteLine("Getting things ready. This may take a moment. May you get a cup of coffee.");
+            Console.WriteLine("Getting things ready. This may take a moment. May you get a glass of juice.");
 
             User rootUser = new(name, password, null, true, 0, false);
 

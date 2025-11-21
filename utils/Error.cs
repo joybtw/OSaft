@@ -14,6 +14,7 @@ using OSaft.usersystem;
 namespace OSaft.filesystem
 {
 
+
     public class Error
     {
         public enum criticality
@@ -41,15 +42,15 @@ namespace OSaft.filesystem
 
         private void CreateLogFileIfNotExists()
         {
-            string dirPath = "logs";
+            string dirPath = @"0:\logs\";
             //validierung, ob log-directory existiert
-            if (!Directory.Exists(@"0:\" + dirPath))
+            if (!Directory.Exists(dirPath))
             {
                 FileSystem.CreateDirectory(dirPath);
             }
-            string filePath = dirPath + @"\" + this.ProgName + ".log";
+            string filePath = dirPath + this.ProgName + ".log";
 
-            if (!File.Exists(@"0:\" + filePath))
+            if (!File.Exists(filePath))
             {
                 FileSystem.CreateFile(filePath);
 
@@ -64,8 +65,8 @@ namespace OSaft.filesystem
 
         public void CreateNewLog()
         {
-            string dirPath = "logs";
-            string filePath = dirPath + @"\" + this.ProgName + ".log";
+            string dirPath = @"0:\logs\";
+            string filePath = dirPath + this.ProgName + ".log";
             string enumstring = GetCriticalityString(Crit);
             string message = Clock.ShowTime() + " [" + enumstring + "] " + this.ProgName + ": " + this.Message;
 
@@ -74,16 +75,16 @@ namespace OSaft.filesystem
                 Console.WriteLine(message);
             }
 
-            if (File.Exists(@"0:\" + filePath))
+            if (File.Exists(filePath))
             {
-                string oldfilecontent = File.ReadAllText(@"0:\" + filePath);
+                string oldfilecontent = File.ReadAllText(filePath);
                 string newfilecontent = string.Concat(oldfilecontent, "\n", message);
-                FileSystem.WriteFile((@"0:\" + filePath), newfilecontent);
+                FileSystem.WriteFile((filePath), newfilecontent);
             }
 
             if (Crit == criticality.VeryCritical)
             {
-                string[] logfilecontent = File.ReadAllLines(@"0:\" + filePath);
+                string[] logfilecontent = File.ReadAllLines(filePath);
                 //string logfilecontent = File.ReadAllText(@"0:\" + filePath);
                 ErrorScreen.init(this.ProgName, logfilecontent);
             }
