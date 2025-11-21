@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OSaft.utils;
 using OSaft.applications;
+using OSaft.usersystem;
 
 
 namespace OSaft.filesystem
@@ -51,6 +52,13 @@ namespace OSaft.filesystem
             if (!File.Exists(@"0:\" + filePath))
             {
                 FileSystem.CreateFile(filePath);
+
+                List<User> users = UserDatabase.LoadAllUsers();
+                foreach (User user in users)
+                {
+                    PermissionManager.AddReading(filePath, user.Uid);
+                }
+
             }
         }
 
@@ -65,7 +73,7 @@ namespace OSaft.filesystem
             {
                 Console.WriteLine(message);
             }
-            
+
             if (File.Exists(@"0:\" + filePath))
             {
                 string oldfilecontent = File.ReadAllText(@"0:\" + filePath);

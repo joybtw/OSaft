@@ -59,7 +59,7 @@ namespace OSaft.applications
             for (int Y = console[2]; Y <= console[3]; Y++)
             {
                 Console.SetCursorPosition(console[0], Y);
-                Console.Write(new string(' ', consoleWidth));
+                Console.WriteLine(new string(' ', consoleWidth));
             }
             // Console.CursorVisible = true;
         }
@@ -238,7 +238,7 @@ namespace OSaft.applications
                     Console.Write("");
                 }
 
-                // Mark words of the search results
+               /* // Mark words of the search results
                 if (markers.Count > 0 && !string.IsNullOrEmpty(markBuffer))
                 {
                     foreach (Pos mpos in markers)
@@ -272,8 +272,9 @@ namespace OSaft.applications
                             }
                         }
                     }
-                }
-            }
+                }*/
+            } 
+               
             CursorToConsole(pos);
         }
         private static void AddUndoStack()
