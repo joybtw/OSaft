@@ -107,7 +107,7 @@ namespace OSaft.commands
         public bool IsRequired { get; }
         public bool ExpectsParameters { get; }
         public Action<string> Action { get; }
-        
+
 
         public CommandParameter(string name, string description, bool isRequired, bool expectsParameters, Action<string> action) //Konstruktor
         {
@@ -126,13 +126,13 @@ namespace OSaft.commands
 
     public class CommandHelper
     {
-        internal readonly static Dictionary<string, Command> commands = new();
+        public static Dictionary<string, Command> Commands { get; private set; } = new();
 
         public static void RegisterCommand(Command command)
         {
-            if (!commands.ContainsKey(command.Name))
+            if (!Commands.ContainsKey(command.Name))
             {
-                commands.Add(command.Name, command);
+                Commands.Add(command.Name, command);
             } else
             {
                 Console.WriteLine("Command " + command.Name + " already exists.");
@@ -148,7 +148,7 @@ namespace OSaft.commands
                 
                 //Console.WriteLine("Executing command: " + args[0]);
                 //Console.WriteLine("With arguments: " + (args.Length > 1 ? string.Join(", ", args.Skip(1)) : "none"));
-                Command cmd = commands[args[0]];
+                Command cmd = Commands[args[0]];
                 string[] cmdArgs = args.Length > 1 ? args.Skip(1).ToArray() : Array.Empty<string>();
                 if (cmd.HasRequiredParamCount(cmdArgs))
                 {
