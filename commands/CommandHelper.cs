@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OSaft.filesystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace OSaft.commands
 {
@@ -91,6 +93,14 @@ namespace OSaft.commands
         //definition einer methode DefineParameters, um in erbenden Klassen (z.b. RMCommand) die Parameter zu registrieren
         //virtual: methode tut im standardfall nichts, kann aber aus erbenden Klassen überschrieben werden: protected override void DefineParameters() { }
         protected virtual void DefineParameters() { }
+
+
+        internal void Log(string message, bool print = false, Error.criticality c = Error.criticality.Info)
+        {
+            new Error(this.Name, message, c, print).CreateNewLog();
+        }
+
+
     }
 
     //-------------------------------------------------------------------------
@@ -148,6 +158,7 @@ namespace OSaft.commands
                 string[] cmdArgs = args.Length > 1 ? args.Skip(1).ToArray() : Array.Empty<string>();
                 if (cmd.HasRequiredParamCount(cmdArgs))
                 {
+                    cmd.Log("Command executed");
                     cmd.Execute(cmdArgs);
                 }
                 else //Fehlermeldung: Syntax für aktuellen Command
