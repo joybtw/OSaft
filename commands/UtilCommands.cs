@@ -152,7 +152,7 @@ namespace OSaft.commands
 
     public class RMCommand : Command
     {
-        public RMCommand(string name) : base(name, "Removes a file (-f) or directory (-d).") {
+        public RMCommand(string name) : base(name, "Removes a file (-f) or directory (-d).") { 
             ParameterList.Add(new CommandParameter("-f", "Delete a file", false, true, val => {
                 if (string.IsNullOrEmpty(val))
                 {
@@ -175,8 +175,10 @@ namespace OSaft.commands
 
             ParameterList.Add(new CommandParameter("--errortest", "Just a test. To be removed.", false, false, val =>
             {
-                new Error(Name, "Dies ist ein Test-Error!", Error.criticality.Info, true).CreateNewLog();
+                new Error(Name, "Dies ist ein Test-Error!", Error.criticality.VeryCritical, true).CreateNewLog();
             }));
+
+            
         }
     }
 
@@ -245,6 +247,7 @@ namespace OSaft.commands
             if (args.Length == 0) { Console.WriteLine(Clock.ShowTime()); }
             ExecuteParams(args);
         }
+
      }
     public class ToggleClockCommand : Command
     {
