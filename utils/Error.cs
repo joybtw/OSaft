@@ -43,7 +43,7 @@ namespace OSaft.filesystem
         {
             string dirPath = "logs";
             //validierung, ob log-directory existiert
-            if (!Directory.Exists("0:\\" + dirPath))
+            if (!Directory.Exists(@"0:\" + dirPath))
             {
                 FileSystem.CreateDirectory(dirPath);
             }
@@ -83,7 +83,8 @@ namespace OSaft.filesystem
 
             if (Crit == criticality.VeryCritical)
             {
-                string logfilecontent = File.ReadAllText(@"0:\" + filePath);
+                string[] logfilecontent = File.ReadAllLines(@"0:\" + filePath);
+                //string logfilecontent = File.ReadAllText(@"0:\" + filePath);
                 ErrorScreen.init(this.ProgName, logfilecontent);
             }
         }

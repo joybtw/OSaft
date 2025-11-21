@@ -8,7 +8,7 @@ namespace OSaft.utils
 {
     public static class ErrorScreen
     {
-        public static void init(string progname, string logs)
+        public static void init(string progname, string[] logs)
         {
             Canvas canvas = FullScreenCanvas.GetFullScreenCanvas();
             canvas.Clear(Color.Red);
@@ -38,7 +38,15 @@ namespace OSaft.utils
                     new Sys.Graphics.Point(startX, startY + i * lineHeight)
                 );
             }
-            canvas.DrawString(("Very Critical Error occured when executing " + progname + ": " + logs), PCScreenFont.Default, new Pen(Color.Black), new Sys.Graphics.Point(startX + 20, startY + (lines.Length + 1) * lineHeight));
+
+            canvas.DrawString(("Very Critical Error occured when executing " + progname + ". Please view the logs to evaluate the issue:"), PCScreenFont.Default, new Pen(Color.Black), new Sys.Graphics.Point(startX + 20, startY + (lines.Length + 1) * lineHeight));
+
+            foreach (string l in logs)
+            {
+                canvas.DrawString((l), PCScreenFont.Default, new Pen(Color.Black), new Sys.Graphics.Point(startX + 20, startY + (lines.Length + 1) * lineHeight));
+                startY += lineHeight + 10;
+            }
+
             canvas.Display();
 
         }
