@@ -84,8 +84,8 @@ namespace OSaft.commands
         public FileEditCommand(string name) : base(name, "Opens the fileeditor for a existing file specified.")
         {
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to editable fale", true, false, val =>
-            { /*
-                
+            { 
+               
                  if (!PermissionManager.CanWrite(FileSystem.ValidatePath(FileSystem.CurrentPath + (val ?? ""), FileSystem.CurrentPath), UserDatabase.GetUserID(UserHelper.CurrentUser)))
                  {
                      Console.WriteLine("Error: No permission to rewrite this file.");
@@ -96,7 +96,7 @@ namespace OSaft.commands
                      Console.WriteLine("Error: No permission to read this file.");
                      return;
                  }
-                */
+                
                 FileEditor.EditFile(val);
 
                 ColorTheme.ApplyTheme();
@@ -228,7 +228,7 @@ namespace OSaft.commands
 
             ParameterList.Add(new CommandParameter("--errortest", "Just a test. To be removed.", false, false, val =>
             {
-                new Error(Name, "Dies ist ein Test-Error!", Error.criticality.VeryCritical, true).CreateNewLog();
+                new Error(Name, "This is an error test!", Error.criticality.VeryCritical, true).CreateNewLog();
             }));
 
             
@@ -520,11 +520,6 @@ namespace OSaft.commands
             string user = args[1];
             Console.WriteLine("path + user");
             if (args.Length > 0) {
-                if (!PermissionManager.TestOwner(path))
-                {
-                    Console.WriteLine("[RightsDB] Error: Not the owner.");
-                    return;
-                }
 
                 PermissionManager.ChangeOwner(path, user);
                 ExecuteParams(args);
