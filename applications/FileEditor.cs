@@ -52,7 +52,7 @@ namespace OSaft.applications
         {
             Console.SetCursorPosition(pos.cursorX - pos.viewportX + console[0], pos.cursorY - pos.viewportY + console[2]);
         }
-        
+        /*
         private static void ClearViewport()
         {
             // Console.CursorVisible = false;
@@ -63,7 +63,7 @@ namespace OSaft.applications
             }
             // Console.CursorVisible = true;
         }
-
+*/
         private static void SearchInput()
         {
             Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
@@ -199,7 +199,7 @@ namespace OSaft.applications
             }
         }
         private static void PrintViewport() {
-            ClearViewport();
+            //ClearViewport();
 
             if(markBuffer == "")
             {

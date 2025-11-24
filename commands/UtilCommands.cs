@@ -78,7 +78,7 @@ namespace OSaft.commands
             }
         }
     }
-
+    
     public class FileEditCommand : Command
     {
         public FileEditCommand(string name) : base(name, "Opens the fileeditor for a existing file specified.")
@@ -505,8 +505,7 @@ namespace OSaft.commands
 
    public class ChangeOwnerCommand : Command
         {
-        private string path;
-        private string user;
+       
         public ChangeOwnerCommand(string name) : base(name, "Exchanges the owner of a file or directory") 
         {/*
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to permission", true, false, (val) => path = val));

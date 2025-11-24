@@ -70,10 +70,11 @@ namespace OSaft.filesystem
             }
             catch (Exception e)
             {
-                Console.WriteLine("[RightsDB] Error saving rights: " + e.Message);
+                Console.WriteLine("[RightsDB] Error´: saving rights: " + e.Message);
             }
             dbcheck = false;
         }
+        
 
         public static List<PermissionEntry> LoadACR()
         {
@@ -244,6 +245,7 @@ namespace OSaft.filesystem
         {
             List<PermissionEntry> entries = LoadACR();
             PermissionEntry e = entries.Find(x => x.Path == path);
+            if ((e == null)) return false;
             if (e.ReadUids.Contains(uid)) return true;
             return false;
         }
@@ -252,6 +254,7 @@ namespace OSaft.filesystem
         {
             List<PermissionEntry> entries = LoadACR();
             PermissionEntry e = entries.Find(x => x.Path == path);
+            if ((e == null)) return false;
             if (e.WriteUids.Contains(uid)) return true;
             return false;
         }
