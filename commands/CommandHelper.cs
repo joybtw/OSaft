@@ -147,7 +147,6 @@ namespace OSaft.commands
         {
             try
             {
-                if (input == "error") { throw new FieldAccessException("Test exception for error handling."); }
                 if (string.IsNullOrEmpty(input)) { return; }
                 string[] args = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
