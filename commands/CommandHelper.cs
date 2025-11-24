@@ -2,14 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace OSaft.commands
 {
+    /// <summary>
+    /// Base class of all Commandss
+    /// </summary>
+    /// <remarks>This class inheritates a basic command structure to all childs.</remarks>
     public abstract class Command
     {
-        public string Name { get; private set;  }
-        public string Description { get; private set;  }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
         public List<CommandParameter> ParameterList { get; protected set; } //Erstellen einer Liste "ParameterList" mit CommandParameter-Objekten
 
         public Command(string name, string description)
@@ -71,12 +74,14 @@ namespace OSaft.commands
                         {
                             value = args[i + 1];
                             i++;
-                        } else
+                        }
+                        else
                         {
                             Console.WriteLine("Please provide a value after parameter \"" + param.Name + "\"");
                             return;
                         }
-                    } else
+                    }
+                    else
                     {
                         value = args[i];
                     }
@@ -93,14 +98,6 @@ namespace OSaft.commands
         //definition einer methode DefineParameters, um in erbenden Klassen (z.b. RMCommand) die Parameter zu registrieren
         //virtual: methode tut im standardfall nichts, kann aber aus erbenden Klassen überschrieben werden: protected override void DefineParameters() { }
         protected virtual void DefineParameters() { }
-
-
-        internal void Log(string message, bool print = false, Error.criticality c = Error.criticality.Info)
-        {
-            new Error(this.Name, message, c, print).CreateNewLog();
-        }
-
-
     }
 
     //-------------------------------------------------------------------------
@@ -139,7 +136,8 @@ namespace OSaft.commands
             if (!Commands.ContainsKey(command.Name))
             {
                 Commands.Add(command.Name, command);
-            } else
+            }
+            else
             {
                 Console.WriteLine("Command " + command.Name + " already exists.");
             }
@@ -151,24 +149,28 @@ namespace OSaft.commands
             {
                 if (string.IsNullOrEmpty(input)) { return; }
                 string[] args = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                
+
                 //Console.WriteLine("Executing command: " + args[0]);
                 //Console.WriteLine("With arguments: " + (args.Length > 1 ? string.Join(", ", args.Skip(1)) : "none"));
                 Command cmd = Commands[args[0]];
                 string[] cmdArgs = args.Length > 1 ? args.Skip(1).ToArray() : Array.Empty<string>();
                 if (cmd.HasRequiredParamCount(cmdArgs))
                 {
-                    cmd.Log("Command executed");
                     cmd.Execute(cmdArgs);
                 }
                 else //Fehlermeldung: Syntax für aktuellen Command
-                { 
+                {
                     Console.WriteLine("Syntax: " + cmd.GetSyntax());
                 }
             }
             catch (KeyNotFoundException e)
             {
                 Console.WriteLine("Befehl nicht gefunden: ( Fehler: " + e.Message.ToString() + ")");
+            }
+            catch (Exception e)
+            {
+                // string progname, string message, criticality crit, bool print
+                new Error("system", "Command execution of " + input + " failed. \n Exception: " + e.Message.ToString(), Error.criticality.Critical, true);
             }
         }
 
