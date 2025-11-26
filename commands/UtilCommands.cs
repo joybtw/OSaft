@@ -354,7 +354,6 @@ namespace OSaft.commands
         {
             this.ParameterList.Add(new CommandParameter("-a", "Adds the user state", false, true, user => UserDatabase.MakeSudo(user)));
             this.ParameterList.Add(new CommandParameter("-r", "Removes the user state", false, true, user => UserDatabase.DeSudo(user)));
-
         }
         internal override void Execute(string[] args)
         {
@@ -503,33 +502,24 @@ namespace OSaft.commands
     }
 
    public class ChangeOwnerCommand : Command
-        {
+   {
+        string path;
+        string user;
        
-        public ChangeOwnerCommand(string name) : base(name, "Exchanges the owner of a file or directory") 
-        {/*
+        public ChangeOwnerCommand(string name) : base(name, "Exchanges the owner of a file or directory")
+        {
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to permission", true, false, (val) => path = val));
             this.ParameterList.Insert(1, new CommandParameter("user", "User for permission", true, false, (val) => user = val));
-            */
         }
 
         internal override void Execute(string[] args)
         {
-            string path = FileSystem.ValidatePath(args[0], FileSystem.CurrentPath);
-            string user = args[1];
-            Console.WriteLine("path + user");
-            if (args.Length > 0) {
-
-                PermissionManager.ChangeOwner(path, user);
-                ExecuteParams(args);
-            }
-            
+            ExecuteParams(args);
+            path = FileSystem.ValidatePath(path);
+            if (!path.EndsWith("\\")) { path += "\\"; }
+            PermissionManager.ChangeOwner(path, user);
         }
-
-
     }
- 
-
-
 }
 
 // Gabriel was here <3

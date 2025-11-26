@@ -264,9 +264,9 @@ namespace OSaft.filesystem
             List<PermissionEntry> entries = LoadACR();
 
             PermissionEntry e = entries.Find(x => x.Path == path);
-            if (e == null)
-                return false;
-                uint uid = UserDatabase.GetUserID(UserHelper.CurrentUser);
+            if (e == null) { return false; }
+            
+            uint uid = UserDatabase.GetUserID(UserHelper.CurrentUser);
             Console.WriteLine(e.OwnerUid+ " + " +uid);
             return e.OwnerUid == uid;
         }
