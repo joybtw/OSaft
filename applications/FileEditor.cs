@@ -35,6 +35,8 @@ namespace OSaft.applications
         private static readonly int[] console = { 0, Console.WindowWidth - 1, 3, Console.WindowHeight-4 }; // minX, maxX, minY, maxY -> Area of the Console that is for printing
         private static readonly int consoleWidth = console[1] - console[0] + 1;
         private static readonly int consoleHeight = console[3] - console[2] + 1;
+        private static readonly int viewportX = 0;
+        private static readonly int viewportWidth = Console.WindowWidth;
         private static bool visibleHelp;
         private static Pos searchInputPos = new(0, 1, 0, 0);
 
@@ -200,7 +202,6 @@ namespace OSaft.applications
         }
         private static void PrintViewport() {
             //ClearViewport();
-
             if(markBuffer == "")
             {
                 Console.SetCursorPosition(searchInputPos.cursorX, searchInputPos.cursorY);
@@ -233,9 +234,11 @@ namespace OSaft.applications
                 Console.SetCursorPosition(console[0], console[2]+ (Y - pos.viewportY));
 
                 if (length > 0) {
-                    Console.Write(line.Substring(start, length));
+                    line = line.Substring(start, length);
+                    line = line.PadRight(consoleWidth, ' ');
+                    Console.Write(line);
                 } else {
-                    Console.Write("");
+                    Console.Write(new string(' ', consoleWidth));
                 }
 
                /* // Mark words of the search results
