@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using OSaft.utils;
 using Cosmos.HAL.BlockDevice.Registers;
+using System.Runtime.CompilerServices;
 
 namespace OSaft.commands
 {
@@ -318,27 +319,25 @@ namespace OSaft.commands
 
     public class ChangeNameCommand : Command
     {
-        public ChangeNameCommand(string name) : base(name, "Changes the name of an user.") { }
+        private static string username;
+        private static string newName;
+        public ChangeNameCommand(string name) : base(name, "Changes the name of an user.") {
+            this.ParameterList.Insert(0, new CommandParameter("name", "The user name which should be changed", true, false, user => username = user));
+            this.ParameterList.Insert(1, new CommandParameter("newName", "The new name of the user which should be renamed.", true, false, name => newName = name));
+        }
+
         internal override void Execute(string[] args)
         {
-            if (args.Length > 0)
-            {
-                if (!string.IsNullOrWhiteSpace(args[0])) { Console.WriteLine("Please provide a valid username"); return; }
-                if (!string.IsNullOrWhiteSpace(args[1])) { Console.WriteLine("New name can't be null or whitespace."); return; }
-                UserDatabase.ChangeName(args[0], args[1]);
-            }
-            else
-            {
-                Console.WriteLine("Syntax: chname <oldname> <newname>");
-                ExecuteParams(args);
-            }
-
+            ExecuteParams(args);
+            if (string.IsNullOrWhiteSpace(username)) { Console.WriteLine("Please provide a valid username"); return; }
+            if (string.IsNullOrWhiteSpace(newName)) { Console.WriteLine("New name can't be null or whitespace."); return; }
+            UserDatabase.ChangeName(username, newName);
         }
     }
 
     public class ChangePasswordCommand : Command
     {
-        public ChangePasswordCommand(string name) : base(name, "Changes the current user's name.")
+        public ChangePasswordCommand(string name) : base(name, "Changes the current user's password.")
         { }
         internal override void Execute(string[] args)
         {
@@ -355,7 +354,6 @@ namespace OSaft.commands
         {
             this.ParameterList.Add(new CommandParameter("-a", "Adds the user state", false, true, user => UserDatabase.MakeSudo(user)));
             this.ParameterList.Add(new CommandParameter("-r", "Removes the user state", false, true, user => UserDatabase.DeSudo(user)));
-
         }
         internal override void Execute(string[] args)
         {
@@ -504,33 +502,24 @@ namespace OSaft.commands
     }
 
    public class ChangeOwnerCommand : Command
-        {
+   {
+        string path;
+        string user;
        
-        public ChangeOwnerCommand(string name) : base(name, "Exchanges the owner of a file or directory") 
-        {/*
+        public ChangeOwnerCommand(string name) : base(name, "Exchanges the owner of a file or directory")
+        {
             this.ParameterList.Insert(0, new CommandParameter("path", "Path to permission", true, false, (val) => path = val));
             this.ParameterList.Insert(1, new CommandParameter("user", "User for permission", true, false, (val) => user = val));
-            */
         }
 
         internal override void Execute(string[] args)
         {
-            string path = FileSystem.ValidatePath(args[0], FileSystem.CurrentPath);
-            string user = args[1];
-            Console.WriteLine("path + user");
-            if (args.Length > 0) {
-
-                PermissionManager.ChangeOwner(path, user);
-                ExecuteParams(args);
-            }
-            
+            ExecuteParams(args);
+            path = FileSystem.ValidatePath(path);
+            if (!path.EndsWith("\\")) { path += "\\"; }
+            PermissionManager.ChangeOwner(path, user);
         }
-
-
     }
- 
-
-
 }
 
 // Gabriel was here <3
